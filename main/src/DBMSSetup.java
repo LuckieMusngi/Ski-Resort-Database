@@ -67,11 +67,9 @@ public class DBMSSetup {
         "Member",
         "SkiPass",
         "GearRental",
-
         "Equipment",
         "EquipmentUpdate",
         "GearRentalUpdate",
-        
         "Trail",
         "Lift",
         "LessonOrder",
@@ -82,7 +80,6 @@ public class DBMSSetup {
         "Lodge",
         "IncomeSource",
         "Shuttle",
-
         // relation entities
         "LessonToOrder",
         "TrailLift",
@@ -112,7 +109,8 @@ public class DBMSSetup {
         + "returnStatus varchar(50), "
         + "status varchar(50), "
         + "skiPassID integer, "
-        + "primary key (rentalID))",
+        + "primary key (rentalID),"
+        + "foreign key (skiPassID) references SkiPass(skiPassID))",
         // Equipment: EquipmentID, type, size, status
 
         // Equipment Update: equipmentUpdateID, equipmentID, type, notes
@@ -121,21 +119,24 @@ public class DBMSSetup {
         + "equipmentID integer, "
         + "type varchar(20), "
         + "notes varchar(50), "
-        + "primary key (equipmentUpdateID))",
+        + "primary key (equipmentUpdateID),"
+        + "foreign key (equipmentID) references Equipment(equipmentID))",
         // Gear Rental Update: rentalUpdateID, rentalID, type, notes
         "create table GearRentalUpdate ("
         + "rentalUpdateID integer, "
         + "rentalID integer, "
         + "type varchar(20), "
         + "notes varchar(200), "
-        + "primary key (rentalUpdateID))",
+        + "primary key (rentalUpdateID),"
+        + "foreign key (rentalID) references GearRental(rentalID))",
         // Trail: trailName, location, difficulty, category, status
         "create table Trail ("
         + "trailName varchar(50), "
         + "location varchar(50), "
         + "difficulty varchar(20), "
         + "category varchar(20), "
-        + "status varchar(10))",
+        + "status varchar(10))"
+        + "primary key (trailName)",
         // Lift: liftName, ability level, openTime, closeTime, status
 
         // LessonOrder: lessonOrderID, memberID, lessonsPurchased, remainingSessions
@@ -144,7 +145,8 @@ public class DBMSSetup {
         + "memberID integer, "
         + "lessonsPurchased integer, "
         + "remainingSessions integer, "
-        + "primary key (lessonOrderID))",
+        + "primary key (lessonOrderID),"
+        + "foreign key (memberID) references Member(memberID))",
         // Lesson: LessonID, lessonName, EmployeeID
 
         // LessonSession: SessionID, Date, startTime, endTime, lessonID
@@ -154,7 +156,8 @@ public class DBMSSetup {
         + "startTime time, "
         + "endTime time, "
         + "lessonID integer, "
-        + "primary key (sessionID))",
+        + "primary key (sessionID),"
+        + "foreign key (lessonID) references Lesson(lessonID))",
         // Instructor: EmployeeID, Certification level
 
         // Employee: EmployeeID, Name, age, sex, race, monthly salary, job title
@@ -176,7 +179,9 @@ public class DBMSSetup {
         + "lodgeID integer, "
         + "sourceName varchar(50), "
         + "dailyIncome integer, "
-        + "primary key (sourceID))" // Shuttle: shuttleID, location, capacity, status
+        + "primary key (sourceID),"
+        + "foreign key (lodgeID) references Lodge(lodgeID))"
+        // Shuttle: shuttleID, location, capacity, status
     };
 
     private static void makeTables(Connection dbconn) {
