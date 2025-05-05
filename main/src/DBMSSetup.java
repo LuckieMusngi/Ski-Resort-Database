@@ -75,7 +75,7 @@ public class DBMSSetup {
         return dbconn;
     }
 
-    // #endregion Main methods
+// #endregion Main methods
 // #region // * Table Creation
     // #region Tables creation consts
     static final String[] tableNames = new String[]{
@@ -308,7 +308,7 @@ public class DBMSSetup {
         }
     }
 
-    // #endregion Table Creation
+// #endregion Table Creation
 // #region // * Add/Update/Delete
     // * Member: memberID, name, phone#, email, dob, emergency contact
     // adds a member to the database
@@ -440,21 +440,7 @@ public class DBMSSetup {
         }
     }
 
-    // * the goat: adds a row to the table with the given name and values
-    // doesn't work on lift and trail tables (bc. no id primary key)
-    private static int addToTable(Connection dbconn, String tableName, String[] values) {
-        int id = generateRandomID(dbconn, tableName, "ID"); // Generate a random ID for the new entry
-
-        String sql = "INSERT INTO " + tableName + " VALUES (" + id + ", " + String.join(", ", values) + ")";
-        try (Statement stmt = dbconn.createStatement()) {
-            stmt.executeUpdate(sql);
-            return id; // Return the generated ID
-        } catch (SQLException e) {
-            System.err.println("Error adding to table " + tableName + ": " + e.getMessage());
-            return -1; // Return -1 in case of an error
-        }
-    }
-
+    
     // * generate a random ID for a table (columnName should be the ID column)
     // this is a helper for the add methods
     private static int generateRandomID(Connection dbconn, String tableName, String columnName) {
@@ -490,8 +476,32 @@ public class DBMSSetup {
         }
     }
 
-    // #endregion Add/Update/Delete
+// #endregion Add/Update/Delete
+// #region Populate tables
+// * the goat: adds a row to the table with the given name and values
+// doesn't work on lift and trail tables (bc. no id primary key)
+private static int addToTable(Connection dbconn, String tableName, String idName, String[] values) {
+    int id = generateRandomID(dbconn, tableName, idName); // Generate a random ID for the new entry
+
+    String sql = "INSERT INTO " + tableName + " VALUES (" + id + ", " + String.join(", ", values) + ")";
+    try (Statement stmt = dbconn.createStatement()) {
+        stmt.executeUpdate(sql);
+        return id; // Return the generated ID
+    } catch (SQLException e) {
+        System.err.println("Error adding to table " + tableName + ": " + e.getMessage());
+        return -1; // Return -1 in case of an error
+    }
+}
+
+// #region // * Populate tables
+private static final String[] populateStatements = new String[]{ 
+    // Member inserts: name, phone#, email, dob, emergency contact
+    "INSERT INTO Member Values (John Doe, 2344234234, johnDoe@gmail.com, '1990-05-15', 1234567890)",
+    "INSERT INTO Member Values (Gavin Borquez, 5202629618, gavin.borquez@gmail.com, '2006-10-17', borquezgabriel@gmail.com)",
+    "INSERT INTO Member Values (Ahen Dridman, 5120000100, we.will.lose.wahwahwah@gmail.com, '2000-01-01', 1234567890",
+    "INSERT INTO Member Values (Thegor Rilla, 5329999999, a.whole.gorilla@gmail.com, '1999-12-31', 1234567890)",
+    "INSERT INTO Member Values (Andrew Johnson, 5206683030, ajbecerra@arizona.edu, '2000-01-01', lmusngi@arizona.edu)"
+};
 
 // #endregion Populate tables
-
 }
