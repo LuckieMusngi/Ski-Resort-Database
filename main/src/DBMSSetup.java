@@ -729,4 +729,356 @@ public class DBMSSetup {
     // * random entity generator ------------------------------------------------------------------------------
 
     // #endregion Populate tables
+
+    // update region
+    // * update member in the database
+    public static boolean updateMember(Connection conn, int memberId, String newPhone, String newEmail,
+            String newEmergencyContact) {
+        String sql = "UPDATE Member SET phoneNumber = ?, email = ?, emergencyContact = ? WHERE memberID = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setDouble(1, Double.parseDouble(newPhone));
+            pstmt.setString(2, newEmail);
+            pstmt.setString(3, newEmergencyContact);
+            pstmt.setInt(4, memberId);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating member: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean updateSkiPassUsage(Connection conn, int skiPassId, int newRemainingUses) {
+        // Check if pass is valid
+        String sqlCheck = "SELECT expirationDate, remainingUses FROM SkiPass WHERE skiPassID = ? AND expirationDate >= CURRENT_DATE";
+        try (PreparedStatement pstmt = conn.prepareStatement(sqlCheck)) {
+            pstmt.setInt(1, skiPassId); // get ski pass ID to update
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    Date expirationDate = rs.getDate("expirationDate");
+                    int remainingUses = rs.getInt("remainingUses");
+
+                    // Check if the pass is valid
+                    if (expirationDate.after(new java.util.Date()) && remainingUses >= 0) {
+                        // update remaining uses
+                        String updateSql = "UPDATE SkiPass SET remainingUses = ? WHERE skiPassID = ?";
+                        try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+                            updateStmt.setInt(1, newRemainingUses); // Set the new remaining uses value
+                            updateStmt.setInt(2, skiPassId); // Set the ski pass ID
+                            return updateStmt.executeUpdate() > 0; // Execute the update
+                        }
+                    } else {
+                        System.out.println("Ski pass is either expired or has no remaining uses.");
+                        return false;
+                    }
+                } else {
+                    System.out.println("Ski pass not found.");
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error updating ski pass usage: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // Updates equipment type and size, and logs the change
+    public static boolean updateEquipment(Connection conn, int equipmentId, String newType, String newSize) {
+        String sql = "UPDATE Equipment SET type = ?, size = ? WHERE equipmentID = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, newType);
+            pstmt.setString(2, newSize);
+            pstmt.setInt(3, equipmentId);
+
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                // Log the update in the equipmentUpdate table
+                String note = String.format("Updated equipment type to '%s' and size to '%s'", newType, newSize);
+                logEquipmentUpdate(conn, equipmentId, note);
+                return true;
+            } else {
+                System.out.println("No equipment found with ID: " + equipmentId);
+                return false;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error updating equipment: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // * update lesson order in the database
+    public static boolean updateLessonUsage(Connection conn, int lessonOrderId, int newRemainingSessions) {
+        // Check if lesson order is valid
+        String sql = "UPDATE LessonOrder SET remainingSessions = ? WHERE orderID = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, newRemainingSessions); // Set the new remaining sessions value
+            pstmt.setInt(2, lessonOrderId); // Set the lesson order ID
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating lesson usage: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // * update rental in the database
+    public static boolean updateEquipmentRental(Connection conn, int rentalId, boolean isReturned) {
+        String updateSql = "UPDATE EquipmentRental SET returnStatus = ? WHERE rentalID = ?";
+        // Check if rental is valid
+        try (PreparedStatement pstmt = conn.prepareStatement(updateSql)) {
+            // get rental ID to update and set return status
+            pstmt.setBoolean(1, isReturned);
+            pstmt.setInt(2, rentalId);
+            int rowsUpdated = pstmt.executeUpdate();
+            // if updated successfully, log the change
+            if (rowsUpdated > 0) {
+                logGearRentalUpdate(conn, rentalId, "UPDATE", "Return status updated to " + isReturned);
+                return true;
+            } else {
+                System.out.println("No rental record updated.");
+                return false;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error updating equipment rental: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // end region
+
+    // delete region
+    // * delete member in the database
+    public static boolean deleteMember(Connection conn, int memberId) {
+        try {
+            // Check active ski passes
+            String activeSkiPass = "SELECT COUNT(*) FROM SkiPass WHERE memberID = ? AND expirationDate >= CURRENT_DATE";
+            String activeRental = "SELECT COUNT(*) FROM EquipmentRental WHERE memberID = ? AND returnStatus = 'not returned'";
+            String activeLesson = "SELECT COUNT(*) FROM LessonOrder WHERE memberID = ? AND usedStatus = 'unused'";
+
+            // dont close if ski pass, rental, or lesson is active
+            if (hasOpenRecords(conn, activeSkiPass, memberId) || hasOpenRecords(conn, activeRental, memberId)
+                    || hasOpenRecords(conn, activeLesson, memberId)) {
+                System.out.println("Cannot delete member: active ski passes, open rentals, or unused lessons exist.");
+                return false;
+            }
+
+            // Delete skiPass data, lift usage, rental history, and lesson history
+            conn.setAutoCommit(false);
+            try (Statement stmt = conn.createStatement()) {
+                stmt.executeUpdate("DELETE FROM LessonOrder WHERE memberID = " + memberId); // Delete lessons
+                stmt.executeUpdate("DELETE FROM EquipmentRental WHERE memberID = " + memberId); // Delete rentals
+                stmt.executeUpdate("DELETE FROM SkiPass WHERE memberID = " + memberId); // Delete ski passes
+                stmt.executeUpdate("DELETE FROM Member WHERE memberID = " + memberId); // Delete member
+                conn.commit();
+                return true;
+            } catch (SQLException e) {
+                conn.rollback();
+                System.err.println("Error during deletion: " + e.getMessage());
+                return false;
+            } finally {
+                conn.setAutoCommit(true);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error checking/deleting member: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean deleteSkiPass(Connection conn, int skiPassId) {
+        // Check if pass is not expired and has remaining uses
+        String checkPassSql = "SELECT expirationDate, remainingUses, status FROM SkiPass WHERE skiPassID = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(checkPassSql)) {
+            pstmt.setInt(1, skiPassId); // Select the ski pass ID for review
+            try (ResultSet res = pstmt.executeQuery()) {
+                if (res.next()) {
+                    Date expirationDate = res.getDate("expirationDate"); // Get the expiration date
+                    int remainingUses = res.getInt("remainingUses"); // Get the remaining uses
+                    String status = res.getString("status"); // Get the current status
+
+                    // Check if the pass is already archived
+                    if ("archived".equals(status)) {
+                        System.out.println("Ski pass is already archived.");
+                        return true; // No further action needed
+                    }
+
+                    // Check if the ski pass is still valid (has remaining uses or not expired)
+                    if (remainingUses > 0 || expirationDate.after(new java.util.Date())) {
+                        System.out.println(
+                                "Ski pass cannot be archived. It is either still valid or has remaining uses.");
+                        return false;
+                    }
+
+                    // Archive the ski pass by updating the status to 'archived'
+                    String archiveSql = "UPDATE SkiPass SET status = 'archived' WHERE skiPassID = ?";
+                    try (PreparedStatement archiveStmt = conn.prepareStatement(archiveSql)) {
+                        archiveStmt.setInt(1, skiPassId);
+                        int rowsUpdated = archiveStmt.executeUpdate();
+                        return rowsUpdated > 0; // Return true if the pass was successfully archived
+                    }
+                } else {
+                    System.out.println("Ski pass not found.");
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error archiving ski pass: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean deleteEquipment(Connection conn, int equipmentId) {
+        // Check if equipment is rented or reserved
+        String checkSql = "SELECT rentalStatus FROM EquipmentInventory WHERE equipmentID = ?";
+        try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
+            checkStmt.setInt(1, equipmentId);
+            // Check if the equipment is rented or reserved
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next()) {
+                    String status = rs.getString("rentalStatus");
+                    if ("rented".equalsIgnoreCase(status) || "reserved".equalsIgnoreCase(status)) {
+                        System.out.println("Cannot delete equipment: it is currently rented or reserved.");
+                        return false;
+                    }
+
+                    // Mark equipment as archived
+                    String archiveSql = "UPDATE EquipmentInventory SET status = 'archived' WHERE equipmentID = ?";
+                    try (PreparedStatement archiveStmt = conn.prepareStatement(archiveSql)) {
+                        archiveStmt.setInt(1, equipmentId);
+                        int updated = archiveStmt.executeUpdate();
+                        if (updated > 0) {
+                            logEquipmentUpdate(conn, equipmentId, "Equipment marked as archived.");
+                            return true;
+                        } else {
+                            System.out.println("Equipment deletion failed.");
+                            return false;
+                        }
+                    }
+                } else {
+                    System.out.println("Equipment not found.");
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error deleting equipment: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // * delete lesson order in the database
+    public static boolean deleteLessonOrder(Connection conn, int OrderId) {
+        String checkSql = "SELECT remainingSessions, totalSessions FROM LessonOrder WHERE orderID = ?";
+        // compare remaining sessions to total sessions
+        // if remaining sessions < total sessions, return false
+        // else delete the lesson order
+        try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
+            checkStmt.setInt(1, OrderId);
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next()) {
+                    int remaining = rs.getInt("remainingSessions");
+                    int total = rs.getInt("totalSessions");
+                    // check if remaining sessions are less than total sessions
+                    if (remaining < total) {
+                        System.out.println("Cannot delete: some sessions have already been used.");
+                        return false;
+                    }
+                    // lessons purchased are not used, so delete the lesson order
+                    String deleteSql = "DELETE FROM LessonOrder WHERE orderID = ?";
+                    try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
+                        deleteStmt.setInt(1, OrderId);
+                        return deleteStmt.executeUpdate() > 0;
+                    }
+                } else {
+                    System.out.println("Lesson Order not found.");
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error deleting lesson Order: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // * delete rental in the database
+    public static boolean deleteEquipmentRental(Connection conn, int rentalId) {
+        String checkSql = "SELECT returnStatus FROM EquipmentRental WHERE rentalID = ?";
+        try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
+            checkStmt.setInt(1, rentalId);
+            ResultSet rs = checkStmt.executeQuery();
+            // check if rental has been used
+            if (rs.next()) {
+                boolean isReturned = rs.getBoolean("returnStatus");
+                if (isReturned) {
+                    System.out.println("Cannot delete rental: equipment has already been returned/used.");
+                    return false;
+                }
+            } else {
+                System.out.println("Rental record not found.");
+                return false;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error checking rental status: " + e.getMessage());
+            return false;
+        }
+
+        // Proceed to delete
+        String deleteSql = "DELETE FROM EquipmentRental WHERE rentalID = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(deleteSql)) {
+            pstmt.setInt(1, rentalId);
+            int rowsDeleted = pstmt.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                logGearRentalUpdate(conn, rentalId, "DELETE", "Rental record deleted.");
+                return true;
+            } else {
+                System.out.println("No rental record deleted.");
+                return false;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error deleting equipment rental: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // end region
+
+    // * update/delete helpers
+
+    // checks if the member has open records in the database
+    // returns true if there are open records, false otherwise
+    private static boolean hasOpenRecords(Connection conn, String sql, int memberId) throws SQLException {
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, memberId); // Set the member ID in the prepared statement
+            try (ResultSet res = pstmt.executeQuery()) {
+                res.next();
+                return res.getInt(1) > 0; // Check if there are any open records
+            }
+        }
+    }
+
+    // Logs the equipment update in the equipmentUpdate table
+    public static void logEquipmentUpdate(Connection conn, int equipmentId, String note) {
+        String sql = "INSERT INTO equipmentUpdate (equipmentID, updateDate, notes) VALUES (?, CURRENT_DATE, ?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, equipmentId); // Set the equipment ID
+            pstmt.setString(2, note); // Set the note for the update
+            pstmt.executeUpdate(); // update changelog
+        } catch (SQLException e) {
+            System.err.println("Error logging equipment update: " + e.getMessage());
+        }
+    }
+
+    // * Logs the gear rental update in the gearRentalUpdate table
+    // * rentalID, type, notes, number
+    public static void logGearRentalUpdate(Connection conn, int rentalId, String type, String notes) {
+        String sql = "INSERT INTO gearRentalUpdate (rentalID, type, notes, number) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, rentalId);
+            pstmt.setString(2, type);
+            pstmt.setString(3, notes);
+            pstmt.setInt(4, 1); // or some logic to determine version or change number
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error logging gear rental update: " + e.getMessage());
+        }
+    }
+
 }
