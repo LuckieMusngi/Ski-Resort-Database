@@ -18,6 +18,10 @@
 import java.io.IOException;
 import java.sql.*;
 
+// TODO: add constraints to tables
+// TODO: add modify w/ constaints to tables
+// TODO: add delete w/ constaints to tables
+
 public class DBMSSetup {
 
     static final boolean printDebug = false; // set to true to print debug messages
@@ -312,7 +316,7 @@ public class DBMSSetup {
     // #region // * Add/Update/Delete
     // * Member: memberID, name, phone#, email, dob, emergency contact
     // adds a member to the database
-    private static void addMember(Connection dbconn, String name, String phone, String email, java.sql.Date dob,
+    private static int addMember(Connection dbconn, String name, String phone, String email, java.sql.Date dob,
             String emergencyContact) {
         int memberID = generateRandomID(dbconn, "Member", "memberID");
 
@@ -331,15 +335,17 @@ public class DBMSSetup {
                 System.out.println("Member added: " + memberID + ", " + name + ", " + email + ", " + dob + ", "
                         + emergencyContact);
             }
+            return memberID; // Return the generated memberID
         } catch (SQLException e) {
             System.err.println("Error adding member: " + e.getMessage());
         }
+        return -1; // error
     }
 
     // * Ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses,
     // remainingUses, passType, status, memberID, rentalID
     // adds a ski pass to the database
-    private static void addSkiPass(Connection dbconn, int price, java.sql.Date timeOfPurchase, java.sql.Date expDate,
+    private static int addSkiPass(Connection dbconn, int price, java.sql.Date timeOfPurchase, java.sql.Date expDate,
             int totalUses, int remainingUses, String passType, String status, int memberID, int rentalID) {
         int skiPassID = generateRandomID(dbconn, "SkiPass", "skiPassID");
 
@@ -357,19 +363,21 @@ public class DBMSSetup {
             pstmt.setInt(10, rentalID);
 
             pstmt.executeUpdate();
-
+            
             if (printDebug) {
                 System.out.println("SkiPass added: " + skiPassID + ", " + price + ", " + expDate + ", " + totalUses
-                        + ", " + remainingUses + ", " + passType + ", " + status + ", " + memberID + ", " + rentalID);
+                + ", " + remainingUses + ", " + passType + ", " + status + ", " + memberID + ", " + rentalID);
             }
+            return skiPassID; // Return the generated skiPassID
         } catch (SQLException e) {
             System.err.println("Error adding SkiPass: " + e.getMessage());
         }
+        return -1; // error
     }
 
     // * Lesson Order: lessonOrderID, memberID, lessonsPurchased, remainingSessions
     // adds a lesson order to the database
-    private static void addLessonOrder(Connection dbconn, int memberID, int lessonsPurchased, int remainingSessions) {
+    private static int addLessonOrder(Connection dbconn, int memberID, int lessonsPurchased, int remainingSessions) {
         int lessonOrderID = generateRandomID(dbconn, "LessonOrder", "lessonOrderID");
 
         try (PreparedStatement pstmt = dbconn.prepareStatement(
@@ -380,19 +388,22 @@ public class DBMSSetup {
             pstmt.setInt(4, remainingSessions);
 
             pstmt.executeUpdate();
+            
 
             if (printDebug) {
                 System.out.println("LessonOrder added: " + lessonOrderID + ", " + memberID + ", " + lessonsPurchased
                         + ", " + remainingSessions);
             }
+            return lessonOrderID; // Return the generated lessonOrderID
         } catch (SQLException e) {
             System.err.println("Error adding LessonOrder: " + e.getMessage());
         }
+        return -1; // error
     }
 
     // * Add equipment to the database
     // * Equipment: equipmentID, type, size, status
-    public static void addEquipment(Connection conn, String type, String size, String status) {
+    public static int addEquipment(Connection conn, String type, String size, String status) {
         try {
             int equipmentID = generateRandomID(conn, "Equipment", "equipmentID"); // generate ID for the new equipment
 
@@ -407,15 +418,17 @@ public class DBMSSetup {
                 if (rowsInserted > 0) {
                     System.out.println("Successfully added equipment with ID " + equipmentID);
                 }
+                return equipmentID; // Return the generated equipmentID
             }
         } catch (SQLException e) {
             System.err.println("Error adding equipment: " + e.getMessage());
         }
+        return -1; // error
     }
 
     // * Add gearRental to the database
     // * GearRental: rentalID, startDate, expDate, return status, status, skiPassID
-    public static void addGearRental(Connection conn, int rentalID, java.sql.Date startDate, java.sql.Date expDate,
+    public static int addGearRental(Connection conn, int rentalID, java.sql.Date startDate, java.sql.Date expDate,
             String returnStatus, String status, int skiPassID) {
         try {
 
@@ -434,10 +447,12 @@ public class DBMSSetup {
                 if (rowsInserted > 0) {
                     System.out.println("Successfully added gear rental with ID " + rentalID);
                 }
+                return rentalID; // Return the generated rentalID
             }
         } catch (SQLException e) {
             System.err.println("Error adding gear rental: " + e.getMessage());
         }
+        return -1; // error
     }
 
     // * generate a random ID for a table (columnName should be the ID column)
@@ -540,12 +555,18 @@ public class DBMSSetup {
     }
 
     public static void addMyEntities(Connection dbconn) {
-        // * Member inserts: name, phone#, email, dob, emergency contact
-        addMember(dbconn, "John Doe", "2344234234", "johnDoe@gmail.com", java.sql.Date.valueOf("1990-05-15"), "1234567890");
+        // * John doe
+        int mID1 = addMember(dbconn, "John Doe", "2344234234", "johnDoe@gmail.com", java.sql.Date.valueOf("1990-05-15"), "1234567890");
+        
+        // ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses,
+        // remainingUses, passType, status, memberID, rentalID
+        int skiPass1 = addSkiPass(dbconn, 300, java.sql.Date.valueOf("2023-10-01"), java.sql.Date.valueOf("2024-10-01"), 10, 10, 
+        "Season", "Active", mID1, -1);
+        
         addMember(dbconn, "Gavin Borquez", "5202629618", "gavin.borquez@gmail.com", java.sql.Date.valueOf("2006-10-17"), "borquezgabriel@gmail.com");
         addMember(dbconn, "Ahen Dridman", "5120000100", "we.will.lose.wahwahwah@gmail.com", java.sql.Date.valueOf("2000-01-01"), "1234567890");
         addMember(dbconn, "Thegor Rilla", "5329999999", "a.whole.gorilla@gmail.com", java.sql.Date.valueOf("2000-01-01"), "1234567890");
-        addMember(dbconn, "Andrew Johnson", "5206683030", "ajbecerra@arizona.edu", java.sql.Date.valueOf("2000-01-01"), "lmusngi@arizona.edu");
+        addMember(dbconn, "Andrew Johnson", "5206683030", "ajbecerra@arizona.edu", java.sql.Date.valueOf("2000-05-14"), "lmusngi@arizona.edu");
         
         // * 
     }
