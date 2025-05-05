@@ -3,7 +3,7 @@ Collaborative database project between Luckie Musngi and Aj Becerra
 
 This is the final project for our Database Design class.
 
-We were given the following application domain and a list of queries that must be possible"
+We were given the following application domain and a list of queries that must be possible:
 
 "As a ski resort striving to stand out in the local tourism market, we have recently expanded our
 facilities to include a comprehensive entertainment and leisure area. This aims to enhance the
