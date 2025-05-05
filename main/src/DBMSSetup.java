@@ -24,11 +24,26 @@ import java.util.Random;
 // TODO: add delete w/ constaints to tables
 public class DBMSSetup {
 
-    static final boolean printDebug = false; // set to true to print debug messages
+    static final boolean printDebug = true; // set to true to print debug messages
 
     // #region // * Main methods
     public static void main(String[] args) throws Exception {
         Connection dbconn = getDbconn(); // connect to the database
+
+        forceDropTables(dbconn); // drop all tables in the database
+        makeTables(dbconn); // create tables in the database
+        addForeignKeys(dbconn); // add foreign key constraints
+
+        Random rand = new Random(); // random number generator
+        rand.setSeed(0); // set seed for reproducibility
+
+        for (int i = 0; i < 20; i++) {
+            int memberID = addRandomMember(dbconn, rand); // add a random member to the database
+            int skiPassID = addRandomSkiPass(dbconn, rand, memberID);
+        }
+
+        printTableContents(dbconn, "Member"); // print the contents of the Member table
+        printTableContents(dbconn, "SkiPass"); // print the contents of the SkiPass table
     }
 
     // * gets and returns a connection to the database
@@ -77,6 +92,32 @@ public class DBMSSetup {
         }
 
         return dbconn;
+    }
+
+    // * Prints the contents of a table
+    private static void printTableContents(Connection dbconn, String tableName) {
+        String query = "SELECT * FROM " + tableName;
+        try (Statement stmt = dbconn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnCount = metaData.getColumnCount();
+
+            // Print column headers
+            for (int i = 1; i <= columnCount; i++) {
+                System.out.print(metaData.getColumnName(i) + "\t");
+            }
+            System.out.println();
+
+            // Print rows
+            while (rs.next()) {
+                for (int i = 1; i <= columnCount; i++) {
+                    System.out.print(rs.getString(i) + "\t");
+                }
+                System.out.println();
+            }
+        } catch (SQLException e) {
+            System.err.println("Error printing table contents for " + tableName + ": " + e.getMessage());
+        }
     }
 
     // #endregion Main methods
@@ -128,12 +169,10 @@ public class DBMSSetup {
         + "expDate DATE NOT NULL, "
         + "totalUses INTEGER, "
         + "remainingUses INTEGER, "
-        + "passType VARCHAR2(20), "
-        + "status VARCHAR2(10), "
+        + "passType VARCHAR(20), "
+        + "status VARCHAR(10), "
         + "memberID INTEGER, "
-        + "rentalID INTEGER)"
-        + "FOREIGN KEY (memberID) REFERENCES Member(memberID), "
-        + "FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID))",
+        + "rentalID INTEGER)",
         // Gear Rental: rentalID, startDate, expDate, return status, status, skiPassID
         "CREATE TABLE GearRental ("
         + "rentalID INTEGER, "
@@ -141,31 +180,28 @@ public class DBMSSetup {
         + "returnStatus VARCHAR(50), "
         + "status VARCHAR(50), "
         + "skiPassID INTEGER, "
-        + "PRIMARY KEY (rentalID), "
-        + "FOREIGN KEY (skiPassID) REFERENCES SkiPass(skiPassID))",
+        + "PRIMARY KEY (rentalID))",
         // Equipment: EquipmentID, type, size, status
         "CREATE TABLE Equipment ("
-        + "equipmentID INTEGER PRIMARY KEY, "
-        + "type VARCHAR2(20) NOT NULL, "
-        + "size VARCHAR2(10), "
-        + "status VARCHAR2(10))"
-        + "FOREIGN KEY (rentalID) REFERENCES gearRental(rentalID)",
+        + "equipmentID INTEGER, "
+        + "type VARCHAR(20), "
+        + "eSize VARCHAR(10), "
+        + "status VARCHAR(10),"
+        + "PRIMARY KEY (equipmentID))",
         // Equipment Update: equipmentUpdateID, equipmentID, type, notes
         "CREATE TABLE EquipmentUpdate ("
         + "equipmentUpdateID INTEGER, "
         + "equipmentID INTEGER, "
         + "type VARCHAR(20), "
         + "notes VARCHAR(50), "
-        + "PRIMARY KEY (equipmentUpdateID), "
-        + "FOREIGN KEY (equipmentID) REFERENCES Equipment(equipmentID))",
+        + "PRIMARY KEY (equipmentUpdateID))",
         // Gear Rental Update: rentalUpdateID, rentalID, type, notes
         "CREATE TABLE GearRentalUpdate ("
         + "rentalUpdateID INTEGER, "
         + "rentalID INTEGER, "
         + "type VARCHAR(20), "
         + "notes VARCHAR(200), "
-        + "PRIMARY KEY (rentalUpdateID), "
-        + "FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID))",
+        + "PRIMARY KEY (rentalUpdateID))",
         // Trail: trailName, location, difficulty, category, status
         "CREATE TABLE Trail ("
         + "trailName VARCHAR(50), "
@@ -178,8 +214,8 @@ public class DBMSSetup {
         "CREATE TABLE Lift ("
         + "liftName VARCHAR2(25) PRIMARY KEY, "
         + "abilityLevel VARCHAR2(15), "
-        + "openTime TIME, "
-        + "closeTime TIME, "
+        + "openTime DATE, " // * time doesn't exist so we use date's time component. ignore other components
+        + "closeTime DATE, " // * time doesn't exist so we use date's time component. ignore other components
         + "status VARCHAR2(10))",
         // LessonOrder: lessonOrderID, memberID, lessonsPurchased, remainingSessions
         "CREATE TABLE LessonOrder ("
@@ -187,28 +223,23 @@ public class DBMSSetup {
         + "memberID INTEGER, "
         + "lessonsPurchased INTEGER, "
         + "remainingSessions INTEGER, "
-        + "PRIMARY KEY (lessonOrderID), "
-        + "FOREIGN KEY (memberID) REFERENCES Member(memberID))",
+        + "PRIMARY KEY (lessonOrderID))",
         // Lesson: LessonID, lessonName, EmployeeID
         "CREATE TABLE Lesson ("
         + "lessonID INTEGER PRIMARY KEY, "
         + "lessonName VARCHAR2(25) NOT NULL, "
-        + "employeeID INTEGER)"
-        + "FOREIGN KEY (employeeID) REFERENCES Instructor(employeeID))",
+        + "employeeID INTEGER)",
         // LessonSession: sessionID, date, startTime, endTime, lessonID
         "CREATE TABLE LessonSession ("
-        + "sessionID INTEGER, "
-        + "date DATE, "
-        + "startTime TIME, "
-        + "endTime TIME, "
+        + "sessionID INTEGER, " // ! removed Date
+        + "startTime DATE, " // * time doesn't exist so we use date's time component. ignore other components
+        + "endTime DATE, " // * time doesn't exist so we use date's time component. ignore other components
         + "lessonID INTEGER, "
-        + "PRIMARY KEY (sessionID), "
-        + "FOREIGN KEY (lessonID) REFERENCES Lesson(lessonID))",
+        + "PRIMARY KEY (sessionID))",
         // Instructor: EmployeeID, Certification level
         "CREATE TABLE Instructor ("
         + "employeeID INTEGER PRIMARY KEY, "
-        + "certificationLevel VARCHAR2(10))"
-        + "FOREIGN KEY (employeeID) REFERENCES Employee(employeeID))",
+        + "certificationLevel VARCHAR2(10))",
         // Employee: employeeID, name, age, sex, race, monthly salary, job title
         "CREATE TABLE Employee ("
         + "employeeID INTEGER, "
@@ -222,8 +253,7 @@ public class DBMSSetup {
         // Lodge: lodgeID, location
         "CREATE TABLE Lodge ("
         + "lodgeID INTEGER PRIMARY KEY, "
-        + "location VARCHAR2(30))"
-        + "FOREIGN KEY (lodgeID) REFERENCES IncomeSource(lodgeID))",
+        + "location VARCHAR2(30))",
         // IncomeSource: sourceID, day, lodgeID, sourceName, dailyIncome
         "CREATE TABLE IncomeSource ("
         + "sourceID INTEGER, "
@@ -231,8 +261,7 @@ public class DBMSSetup {
         + "lodgeID INTEGER, "
         + "sourceName VARCHAR(50), "
         + "dailyIncome INTEGER, "
-        + "PRIMARY KEY (sourceID), "
-        + "FOREIGN KEY (lodgeID) REFERENCES Lodge(lodgeID))",
+        + "PRIMARY KEY (sourceID))",
         // Shuttle: shuttleID, location, capacity, status
         "CREATE TABLE Shuttle ("
         + "shuttleID INTEGER PRIMARY KEY, "
@@ -242,49 +271,78 @@ public class DBMSSetup {
         "CREATE TABLE LessonToOrder ("
         + "lessonID INTEGER, "
         + "lessonOrderID INTEGER, "
-        + "PRIMARY KEY (lessonID, lessonOrderID), "
-        + "FOREIGN KEY (lessonID) REFERENCES Lesson(lessonID), "
-        + "FOREIGN KEY (lessonOrderID) REFERENCES LessonOrder(lessonOrderID))",
+        + "PRIMARY KEY (lessonID, lessonOrderID))",
         // TrailLift: trailName, liftName
         "CREATE TABLE TrailLift ("
         + "trailName VARCHAR(25), "
         + "liftName VARCHAR(25), "
-        + "PRIMARY KEY (trailName, liftName), "
-        + "FOREIGN KEY (trailName) REFERENCES Trail(trailName), "
-        + "FOREIGN KEY (liftName) REFERENCES Lift(liftName))",
+        + "PRIMARY KEY (trailName, liftName))",
         // LiftPassUsage: skiPassID, liftName, dateUsed, timeUsed
         "CREATE TABLE LiftPassUsage ("
         + "skiPassID INTEGER, "
         + "liftName VARCHAR(25), "
-        + "dateUsed DATE, "
-        + "timeUsed TIME, "
-        + "PRIMARY KEY (skiPassID, liftName, dateUsed), "
-        + "FOREIGN KEY (skiPassID) REFERENCES SkiPass(skiPassID), "
-        + "FOREIGN KEY (liftName) REFERENCES Lift(liftName))",
+        + "dateUsed DATE, " // * date includes time
+        + "PRIMARY KEY (skiPassID, liftName, dateUsed))",
         // ShuttleLodge: shuttleID, lodgeID
         "CREATE TABLE ShuttleLodge ("
         + "shuttleID INTEGER, "
         + "lodgeID INTEGER, "
-        + "PRIMARY KEY (shuttleID, lodgeID), "
-        + "FOREIGN KEY (shuttleID) REFERENCES Shuttle(shuttleID), "
-        + "FOREIGN KEY (lodgeID) REFERENCES Lodge(lodgeID))",
+        + "PRIMARY KEY (shuttleID, lodgeID))",
         // RentalEquipment: rentalID, equipmentID
         "CREATE TABLE RentalEquipment ("
         + "rentalID INTEGER, "
         + "equipmentID INTEGER, "
-        + "PRIMARY KEY (rentalID, equipmentID), "
-        + "FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID), "
-        + "FOREIGN KEY (equipmentID) REFERENCES Equipment(equipmentID))",
+        + "PRIMARY KEY (rentalID, equipmentID))",
         // EmployeeIncomeSource: employeeID, sourceID, day
         "CREATE TABLE EmployeeIncomeSource ("
         + "employeeID INTEGER, "
         + "sourceID INTEGER, "
         + "day DATE, "
-        + "PRIMARY KEY (employeeID, sourceID, day), "
-        + "FOREIGN KEY (employeeID) REFERENCES Employee(employeeID), "
-        + "FOREIGN KEY (sourceID) REFERENCES IncomeSource(sourceID))"
+        + "PRIMARY KEY (employeeID, sourceID, day))"
     };
-    // #endregion Tables creation consts
+
+    private static void addForeignKeys(Connection dbconn) {
+        try (Statement stmt = dbconn.createStatement()) {
+            // Ski pass references Member and GearRental
+            stmt.executeUpdate("ALTER TABLE SkiPass ADD CONSTRAINT fk_member FOREIGN KEY (memberID) REFERENCES Member(memberID)");
+            stmt.executeUpdate("ALTER TABLE SkiPass ADD CONSTRAINT fk_rental FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID)");
+            // GearRental references SkiPass
+            stmt.executeUpdate("ALTER TABLE GearRental ADD CONSTRAINT fk_skiPass FOREIGN KEY (skiPassID) REFERENCES SkiPass(skiPassID)");
+            // EquipmentUpdate references Equipment
+            stmt.executeUpdate("ALTER TABLE EquipmentUpdate ADD CONSTRAINT fk_equipment FOREIGN KEY (equipmentID) REFERENCES Equipment(equipmentID)");
+            // GearRentalUpdate references GearRental
+            stmt.executeUpdate("ALTER TABLE GearRentalUpdate ADD CONSTRAINT fk_rentalUpdate FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID)");
+            // LessonOrder references Member
+            stmt.executeUpdate("ALTER TABLE LessonOrder ADD CONSTRAINT fk_lessonOrder_member FOREIGN KEY (memberID) REFERENCES Member(memberID)");
+            // LessonSession references Lesson
+            stmt.executeUpdate("ALTER TABLE LessonSession ADD CONSTRAINT fk_lessonSession FOREIGN KEY (lessonID) REFERENCES Lesson(lessonID)");
+            // Instructor references Employee
+            stmt.executeUpdate("ALTER TABLE Lesson ADD CONSTRAINT fk_lesson_employee FOREIGN KEY (employeeID) REFERENCES Instructor(employeeID)");
+            // Employee references EmployeeIncomeSource
+            stmt.executeUpdate("ALTER TABLE IncomeSource ADD CONSTRAINT fk_incomeSource FOREIGN KEY (lodgeID) REFERENCES Lodge(lodgeID)");
+            // Shuttle references ShuttleLodge
+            stmt.executeUpdate("ALTER TABLE LessonToOrder ADD CONSTRAINT fk_lessonToOrder_lesson FOREIGN KEY (lessonID) REFERENCES Lesson(lessonID)");
+            // ShuttleLodge references Shuttle and Lodge
+            stmt.executeUpdate("ALTER TABLE LessonToOrder ADD CONSTRAINT fk_lessonToOrder_order FOREIGN KEY (lessonOrderID) REFERENCES LessonOrder(lessonOrderID)");
+            // TrailLift references Trail and Lift
+            stmt.executeUpdate("ALTER TABLE TrailLift ADD CONSTRAINT fk_trailLift_trail FOREIGN KEY (trailName) REFERENCES Trail(trailName)");
+            stmt.executeUpdate("ALTER TABLE TrailLift ADD CONSTRAINT fk_trailLift_lift FOREIGN KEY (liftName) REFERENCES Lift(liftName)");
+            // LiftPassUsage references SkiPass and Lift            
+            stmt.executeUpdate("ALTER TABLE LiftPassUsage ADD CONSTRAINT fk_liftPassUsage_skiPass FOREIGN KEY (skiPassID) REFERENCES SkiPass(skiPassID)");
+            stmt.executeUpdate("ALTER TABLE LiftPassUsage ADD CONSTRAINT fk_liftPassUsage_lift FOREIGN KEY (liftName) REFERENCES Lift(liftName)");
+            // ShuttleLodge references Shuttle and Lodge            
+            stmt.executeUpdate("ALTER TABLE ShuttleLodge ADD CONSTRAINT fk_shuttleLodge_shuttle FOREIGN KEY (shuttleID) REFERENCES Shuttle(shuttleID)");
+            stmt.executeUpdate("ALTER TABLE ShuttleLodge ADD CONSTRAINT fk_shuttleLodge_lodge FOREIGN KEY (lodgeID) REFERENCES Lodge(lodgeID)");
+            // RentalEquipment references GearRental and Equipment
+            stmt.executeUpdate("ALTER TABLE RentalEquipment ADD CONSTRAINT fk_rentalEquipment_rental FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID)");
+            stmt.executeUpdate("ALTER TABLE RentalEquipment ADD CONSTRAINT fk_rentalEquipment_equipment FOREIGN KEY (equipmentID) REFERENCES Equipment(equipmentID)");
+            // EmployeeIncomeSource references Employee and IncomeSource
+            stmt.executeUpdate("ALTER TABLE EmployeeIncomeSource ADD CONSTRAINT fk_EISource_employee FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)");
+            stmt.executeUpdate("ALTER TABLE EmployeeIncomeSource ADD CONSTRAINT fk_EISource_source FOREIGN KEY (sourceID) REFERENCES IncomeSource(sourceID)");
+        } catch (SQLException e) {
+            System.err.println("Error adding foreign keys: " + e.getMessage());
+        }
+    }
 
     private static void makeTables(Connection dbconn) {
         for (int i = 0; i < tableNames.length; i++) {
@@ -294,6 +352,11 @@ public class DBMSSetup {
             // makes the current table
             try {
                 Statement stmt = dbconn.createStatement();
+                if (printDebug) {
+                    System.out.println("Creating table: " + tableName);
+                    System.out.println("SQL Statement: " + createTableSQL);
+                }
+
                 stmt.executeUpdate(createTableSQL);
             } catch (SQLException e) {
                 System.err.println("Error: couldn't INIT table " + tableName + ": " + e.getMessage());
@@ -308,6 +371,23 @@ public class DBMSSetup {
                 // System.out.println("Granted SELECT on table: " + tableName);
             } catch (SQLException e) {
                 System.err.println("Error granting SELECT on table " + tableName + ": " + e.getMessage());
+            }
+        }
+        System.out.println("made tables!");
+
+    }
+
+    private static void forceDropTables(Connection dbconn) {
+        for (int i = 0; i < tableNames.length; i++) {
+            String tableName = tableNames[i];
+
+            // drops the current table
+            try {
+                Statement stmt = dbconn.createStatement();
+                stmt.executeUpdate("DROP TABLE " + tableName + " CASCADE CONSTRAINTS");
+                System.out.println("Dropped table: " + tableName);
+            } catch (SQLException e) {
+                System.err.println("Error: couldn't DROP table " + tableName + ": " + e.getMessage());
             }
         }
     }
@@ -360,7 +440,13 @@ public class DBMSSetup {
             pstmt.setString(7, passType);
             pstmt.setString(8, status);
             pstmt.setInt(9, memberID);
-            pstmt.setInt(10, rentalID);
+
+
+            if (rentalID == -1) {
+                pstmt.setNull(10, Types.INTEGER); // Set rentalID to NULL if not provided
+            } else {
+                pstmt.setInt(10, rentalID);
+            }
 
             pstmt.executeUpdate();
 
@@ -459,10 +545,8 @@ public class DBMSSetup {
 
             // counts how many already have that ID
             // count everything from tableName where columnName = randomID
-            try (PreparedStatement checkStmt = dbconn.prepareStatement("SELECT COUNT(*) FROM ? WHERE ? = ?")) {
-                checkStmt.setString(1, tableName);
-                checkStmt.setString(2, columnName);
-                checkStmt.setInt(3, randomID);
+            try (PreparedStatement checkStmt = dbconn.prepareStatement("SELECT COUNT(*) FROM " + tableName + " WHERE " + columnName + " = ? ")) {
+                checkStmt.setInt(1, randomID);
 
                 // execute and get result
                 ResultSet rs = checkStmt.executeQuery();
@@ -548,6 +632,7 @@ public class DBMSSetup {
         }
     }
 
+    /*
     public static void addMyEntities(Connection dbconn) {
         // * John doe
         int mID1 = addMember(dbconn, "John Doe", "2344234234", "johnDoe@gmail.com", java.sql.Date.valueOf("1990-05-15"),
@@ -578,9 +663,8 @@ public class DBMSSetup {
 
         // *
     }
-
+     */
     // * random entity generator ------------------------------------------------------------------------------
-    
     // rand param for seeding
     // * add random member to the database
     // * returns the memberID of the new member
@@ -594,7 +678,7 @@ public class DBMSSetup {
 
         String phone = String.format("%03d-%03d-%04d", rand.nextInt(1000), rand.nextInt(1000), rand.nextInt(10000));
         String email = randStr(rand, -1) + "@gmail.com";
-        java.sql.Date dob = new java.sql.Date(System.currentTimeMillis() - rand.nextLong(100 * 365L * 24 * 60 * 60 * 1000)); // random date of birth 100 years ago
+        java.sql.Date dob = new java.sql.Date(System.currentTimeMillis() - randLong(rand, 0, 100 * 365L * 24 * 60 * 60 * 1000)); // random date of birth 100 years ago
         String emergencyContact = String.format("%03d-%03d-%04d", rand.nextInt(1000), rand.nextInt(1000), rand.nextInt(10000));
 
         int memberID = addMember(dbconn, name, phone, email, dob, emergencyContact);
@@ -609,7 +693,7 @@ public class DBMSSetup {
     // ! isn't really a way to get the gear rentalID from the ski passID
     private static int addRandomSkiPass(Connection dbconn, Random rand, int memberID) {
         // ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses,
-            // remainingUses, passType, status, memberID, rentalID
+        // remainingUses, passType, status, memberID, rentalID
 
         // * pass types
         // * in this system, punch cards don't expire and time limits can be used unlimited times. 
@@ -664,28 +748,41 @@ public class DBMSSetup {
             }
 
             if (status.equals("Active")) {
-                timeOfPurchase = new java.sql.Date(System.currentTimeMillis() - rand.nextLong(offset)); // random date up to offset ago
+                timeOfPurchase = new java.sql.Date(System.currentTimeMillis() - randLong(rand, 0, offset)); // random date up to offset ago
             } else {
                 // ! this can create rare cases in which a member holds multiple ski passes at the same time some time in the past when inactive is called multiple times
-                timeOfPurchase = new java.sql.Date(System.currentTimeMillis() - offset - rand.nextLong(3L * 365 * 24 * 60 * 60 * 1000)); // random inactive date up to 3 years (+ offset) ago
+                timeOfPurchase = new java.sql.Date(System.currentTimeMillis() - offset - randLong(rand, 0, 3L * 365 * 24 * 60 * 60 * 1000)); // random inactive date up to 3 years (+ offset) ago
             }
             expDate = new java.sql.Date(timeOfPurchase.getTime() + offset); // expiration date is offset from current time
         }
 
         int skiPassID = generateRandomID(dbconn, "SkiPass", "skiPassID"); // generate random ski pass ID
         int rentalID = -1; // rental ID is -1 by default
-        if (rand.nextBoolean()) {
-            rentalID = generateRandomID(dbconn, "GearRental", "rentalID"); // generate random rental ID
-    
-            int result = addRandomGearRental(dbconn, rentalID, rand, skiPassID, expDate, expDate);
-            if (result == -1) {
-                System.err.println("Error adding gear rental: " + rentalID + ", " + skiPassID);
-                return -1;
-            }
-        }
 
         int result = addSkiPass(dbconn, skiPassID, price, timeOfPurchase, expDate, totalUses, remainingUses, passType, status,
                 memberID, rentalID);
+
+        // if (rand.nextBoolean()) {
+        //     rentalID = generateRandomID(dbconn, "GearRental", "rentalID"); // generate random rental ID
+
+        //     result = addRandomGearRental(dbconn, rentalID, rand, skiPassID, expDate, expDate);
+        //     if (result == -1) {
+        //         System.err.println("Error adding gear rental: " + rentalID + ", " + skiPassID);
+        //         return -1;
+        //     }
+
+        //     // update the ski pass with the rental ID
+        //     try (PreparedStatement pstmt = dbconn.prepareStatement(
+        //         "UPDATE SkiPass SET rentalID = ? WHERE skiPassID = ?")) {
+        //         pstmt.setInt(1, rentalID);
+        //         pstmt.setInt(2, skiPassID);
+        //         pstmt.executeUpdate();
+        //     } catch (SQLException e) {
+        //         System.err.println("Error updating SkiPass with rentalID: " + e.getMessage());
+        //         return -1;
+        //     }
+        // }
+
 
         if (result == -1) {
             System.err.println("Error adding ski pass: " + skiPassID + ", " + price + ", " + timeOfPurchase + ", " + expDate + ", " + totalUses + ", " + remainingUses + ", " + passType + ", " + status);
@@ -699,10 +796,9 @@ public class DBMSSetup {
     private static int addRandomGearRental(Connection dbconn, int rentalID, Random rand, int skiPassID, java.sql.Date skiStartDate, java.sql.Date skiExpDate) {
         // gear rental: rentalID, startDate, expDate, return status, status, skiPassID
 
-        java.sql.Date startDate = new java.sql.Date(rand.nextLong(skiStartDate.getTime(),
+        java.sql.Date startDate = new java.sql.Date(randLong(rand, skiStartDate.getTime(),
                 Math.min(System.currentTimeMillis(), skiExpDate.getTime()))); // random date between start date, and min(now or skiExpDate)
         String returnStatus = rand.nextBoolean() ? "Returned" : "Not Returned"; // 50% chance of being returned
-
 
         String status = rand.nextInt(100) >= 5 ? "Active" : "Inactive"; // 5% chance of being inactive
 
@@ -714,9 +810,13 @@ public class DBMSSetup {
         return 0;
     }
 
+    // * generic helper
+    // * generates a random string of lowercase letters of the given length
+    // * if length is -1, generates a random length between 4 and 10
+    // * the first letter is capitalized
     private static String randStr(Random rand, int length) {
         if (length == -1) {
-            length = rand.nextInt(10) + 1; // generate random length between 4 and 10
+            length = rand.nextInt(7) + 4; // generate random length between 4 and 10
         }
 
         char[] randomChars = new char[length];
@@ -725,6 +825,10 @@ public class DBMSSetup {
         }
         randomChars[0] = Character.toUpperCase(randomChars[0]); // capitalize the first letter
         return new String(randomChars);
+    }
+
+    private static long randLong(Random rand, long min, long max) {
+        return min + (long) (rand.nextDouble() * (max - min)); // generate random long between min and max
     }
     // * random entity generator ------------------------------------------------------------------------------
 
