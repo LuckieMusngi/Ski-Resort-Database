@@ -15,8 +15,6 @@
 //  *   Finally, run the program:
 //  *
 //  *         java JDBC <oracle username> <oracle password>
-
-
 import java.io.IOException;
 import java.sql.*;
 
@@ -104,7 +102,7 @@ public class DBMSSetup {
         "EmployeeIncomeSource"
     };
 
-    // * #region Table Creation Statements
+    // Table Creation Statements
     static final String[] tableCreateStatements = new String[]{
         // Member: memberID, name, phone#, email, dob, emergency contact
         "CREATE TABLE Member ("
@@ -114,7 +112,8 @@ public class DBMSSetup {
         + "dob DATE, "
         + "emergencyContact VARCHAR(50), "
         + "PRIMARY KEY (memberID))",
-        // Ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses, remainingUses. passType, status, memberID, rentalID
+        // Ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses,
+        // remainingUses. passType, status, memberID, rentalID
         "CREATE TABLE SkiPass ("
         + "skiPassID INTEGER PRIMARY KEY, "
         + "price INTEGER NOT NULL, "
@@ -125,7 +124,9 @@ public class DBMSSetup {
         + "passType VARCHAR2(20), "
         + "status VARCHAR2(10), "
         + "memberID INTEGER, "
-        + "rentalID INTEGER)",
+        + "rentalID INTEGER)"
+        + "FOREIGN KEY (memberID) REFERENCES Member(memberID), "
+        + "FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID))",
         // Gear Rental: rentalID, startDate, expDate, return status, status, skiPassID
         "CREATE TABLE GearRental ("
         + "rentalID INTEGER, "
@@ -141,7 +142,8 @@ public class DBMSSetup {
         + "equipmentID INTEGER PRIMARY KEY, "
         + "type VARCHAR2(20) NOT NULL, "
         + "size VARCHAR2(10), "
-        + "status VARCHAR2(10))",
+        + "status VARCHAR2(10))"
+        + "FOREIGN KEY (rentalID) REFERENCES gearRental(rentalID)",
         // Equipment Update: equipmentUpdateID, equipmentID, type, notes
         "CREATE TABLE EquipmentUpdate ("
         + "equipmentUpdateID INTEGER, "
@@ -185,7 +187,8 @@ public class DBMSSetup {
         "CREATE TABLE Lesson ("
         + "lessonID INTEGER PRIMARY KEY, "
         + "lessonName VARCHAR2(25) NOT NULL, "
-        + "employeeID INTEGER)",
+        + "employeeID INTEGER)"
+        + "FOREIGN KEY (employeeID) REFERENCES Instructor(employeeID))",
         // LessonSession: sessionID, date, startTime, endTime, lessonID
         "CREATE TABLE LessonSession ("
         + "sessionID INTEGER, "
@@ -198,7 +201,8 @@ public class DBMSSetup {
         // Instructor: EmployeeID, Certification level
         "CREATE TABLE Instructor ("
         + "employeeID INTEGER PRIMARY KEY, "
-        + "certificationLevel VARCHAR2(10))",
+        + "certificationLevel VARCHAR2(10))"
+        + "FOREIGN KEY (employeeID) REFERENCES Employee(employeeID))",
         // Employee: employeeID, name, age, sex, race, monthly salary, job title
         "CREATE TABLE Employee ("
         + "employeeID INTEGER, "
@@ -212,7 +216,8 @@ public class DBMSSetup {
         // Lodge: lodgeID, location
         "CREATE TABLE Lodge ("
         + "lodgeID INTEGER PRIMARY KEY, "
-        + "location VARCHAR2(30))",
+        + "location VARCHAR2(30))"
+        + "FOREIGN KEY (lodgeID) REFERENCES IncomeSource(lodgeID))",
         // IncomeSource: sourceID, day, lodgeID, sourceName, dailyIncome
         "CREATE TABLE IncomeSource ("
         + "sourceID INTEGER, "
@@ -236,7 +241,7 @@ public class DBMSSetup {
         + "FOREIGN KEY (lessonOrderID) REFERENCES LessonOrder(lessonOrderID))",
         // TrailLift: trailName, liftName
         "CREATE TABLE TrailLift ("
-        + "trailName VARCHAR(50), "
+        + "trailName VARCHAR(25), "
         + "liftName VARCHAR(25), "
         + "PRIMARY KEY (trailName, liftName), "
         + "FOREIGN KEY (trailName) REFERENCES Trail(trailName), "
@@ -302,5 +307,6 @@ public class DBMSSetup {
         }
     }
 
-    // * Table Creation (End) ---------------------------------------------------------------------
+    // * Table Creation (End)
+    // ---------------------------------------------------------------------
 }
