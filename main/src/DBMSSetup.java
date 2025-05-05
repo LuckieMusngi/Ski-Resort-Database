@@ -1,5 +1,22 @@
 // Authors: Luckie Musngi and Aj Becerra
 
+// * To compile and execute this program on lectura:
+//  *
+//  *   Add the Oracle JDBC driver to your CLASSPATH environment variable:
+//  *
+//  *         export CLASSPATH=/usr/lib/oracle/19.8/client64/lib/ojdbc8.jar:${CLASSPATH}
+//  *     (or whatever shell variable set-up you need to perform to add the
+//  *     JAR file to your Java CLASSPATH)
+//  *
+//  *   Compile this file:
+//  *
+//  *         javac JDBC.java
+//  *
+//  *   Finally, run the program:
+//  *
+//  *         java JDBC <oracle username> <oracle password>
+
+
 import java.io.IOException;
 import java.sql.*;
 
@@ -87,7 +104,7 @@ public class DBMSSetup {
         "EmployeeIncomeSource"
     };
 
-    // Table Creation Statements
+    // * #region Table Creation Statements
     static final String[] tableCreateStatements = new String[]{
         // Member: memberID, name, phone#, email, dob, emergency contact
         "CREATE TABLE Member ("
@@ -256,6 +273,7 @@ public class DBMSSetup {
         + "FOREIGN KEY (employeeID) REFERENCES Employee(employeeID), "
         + "FOREIGN KEY (sourceID) REFERENCES IncomeSource(sourceID))"
     };
+    // #endregion Table Creation Statements
 
     private static void makeTables(Connection dbconn) {
         for (int i = 0; i < tableNames.length; i++) {
