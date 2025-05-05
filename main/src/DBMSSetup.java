@@ -19,7 +19,7 @@ public class DBMSSetup {
                 "jdbc:oracle:thin:@aloe.cs.arizona.edu:1521:oracle";
 
         String username = null, // Oracle DBMS username
-                password = null;    // Oracle DBMS password
+                password = null; // Oracle DBMS password
 
         try (java.util.Scanner scanner = new java.util.Scanner(System.in)) {
             System.out.print("Enter your Oracle DBMS username: ");
@@ -60,7 +60,8 @@ public class DBMSSetup {
         return dbconn;
     }
 
-    // * Table Creation ---------------------------------------------------------------------------
+    // * Table Creation
+    // ---------------------------------------------------------------------------
     // Tables to be Made:
     static final String[] tableNames = new String[]{
         // main entities
@@ -100,7 +101,18 @@ public class DBMSSetup {
         + "emergencyContact varchar(50), "
         + "primary key (memberID))",
         // Ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses, remainingUses. passType, status, memberID, rentalID
-        "",
+        "CREATE TABLE SkiPass ("
+        + "  skiPassID INTEGER PRIMARY KEY,"
+        + "  price INTEGER NOT NULL,"
+        + "  timeOfPurchase TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
+        + "  expDate DATE NOT NULL,"
+        + "  totalUses INTEGER,"
+        + "  remainingUses INTEGER,"
+        + "  passType VARCHAR2(20),"
+        + "  status VARCHAR2(10),"
+        + "  memberID INTEGER,"
+        + "  rentalID INTEGER,"
+        + ")",
         // Gear Rental: rentalID,  startDate, expDate, return status, status, skiPassID
         "create table GearRental ("
         + "rentalID integer, "
@@ -112,7 +124,12 @@ public class DBMSSetup {
         + "primary key (rentalID),"
         + "foreign key (skiPassID) references SkiPass(skiPassID))",
         // Equipment: EquipmentID, type, size, status
-
+        "CREATE TABLE Equipment ("
+        + "  equipmentID INTEGER PRIMARY KEY,"
+        + "  type VARCHAR2(20) NOT NULL,"
+        + "  size VARCHAR2(10),"
+        + "  status VARCHAR2(10)"
+        + ")",
         // Equipment Update: equipmentUpdateID, equipmentID, type, notes
         "create table EquipmentUpdate ("
         + "equipmentUpdateID integer, "
@@ -138,7 +155,13 @@ public class DBMSSetup {
         + "status varchar(10))"
         + "primary key (trailName)",
         // Lift: liftName, ability level, openTime, closeTime, status
-
+        "CREATE TABLE Lift ("
+        + "  liftName VARCHAR2(25) PRIMARY KEY,"
+        + "  abilityLevel VARCHAR2(15),"
+        + "  openTime VARCHAR2(5),"
+        + "  closeTime VARCHAR2(5),"
+        + "  status VARCHAR2(10)"
+        + ")",
         // LessonOrder: lessonOrderID, memberID, lessonsPurchased, remainingSessions
         "create table LessonOrder ("
         + "lessonOrderID integer, "
@@ -148,7 +171,11 @@ public class DBMSSetup {
         + "primary key (lessonOrderID),"
         + "foreign key (memberID) references Member(memberID))",
         // Lesson: LessonID, lessonName, EmployeeID
-
+        "CREATE TABLE Lesson ("
+        + "  LessonID INTEGER PRIMARY KEY,"
+        + "  lessonName VARCHAR2(25) NOT NULL,"
+        + "  employeeID INTEGER,"
+        + ")",
         // LessonSession: SessionID, Date, startTime, endTime, lessonID
         "create table LessonSession ("
         + "sessionID integer, "
@@ -158,7 +185,12 @@ public class DBMSSetup {
         + "lessonID integer, "
         + "primary key (sessionID),"
         + "foreign key (lessonID) references Lesson(lessonID))",
+
         // Instructor: EmployeeID, Certification level
+        "CREATE TABLE Instructor ("
+        + "  EmployeeID INTEGER PRIMARY KEY,"
+        + "  certificationLevel VARCHAR2(10),"
+        + ")",
 
         // Employee: EmployeeID, Name, age, sex, race, monthly salary, job title
         "create table Employee ("
@@ -170,7 +202,12 @@ public class DBMSSetup {
         + "monthlySalary integer, "
         + "jobTitle varchar(50), "
         + "primary key (employeeID))",
+
         // Lodge: lodgeID, Location
+        "CREATE TABLE Lodge ("
+        + "  lodgeID INTEGER PRIMARY KEY,"
+        + "  location VARCHAR2(30),"
+        + ")",
 
         // IncomeSource: sourceID, day, lodgeID, sourceName, dailyIncome
         "create table IncomeSource ("
@@ -180,8 +217,16 @@ public class DBMSSetup {
         + "sourceName varchar(50), "
         + "dailyIncome integer, "
         + "primary key (sourceID),"
-        + "foreign key (lodgeID) references Lodge(lodgeID))"
+        + "foreign key (lodgeID) references Lodge(lodgeID))",
+
         // Shuttle: shuttleID, location, capacity, status
+        "CREATE TABLE shuttle ("
+        + "  ShuttleID INTEGER PRIMARY KEY,"
+        + "  shuttleName VARCHAR2(20),"
+        + "  status VARCHAR2(10)"
+        + ")"
+
+        
     };
 
     private static void makeTables(Connection dbconn) {
