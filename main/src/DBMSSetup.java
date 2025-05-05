@@ -44,6 +44,7 @@ public class DBMSSetup {
 
         printTableContents(dbconn, "Member"); // print the contents of the Member table
         printTableContents(dbconn, "SkiPass"); // print the contents of the SkiPass table
+        printTableContents(dbconn, "GearRental"); // print the contents of the GearRental table
     }
 
     // * gets and returns a connection to the database
@@ -762,26 +763,26 @@ public class DBMSSetup {
         int result = addSkiPass(dbconn, skiPassID, price, timeOfPurchase, expDate, totalUses, remainingUses, passType, status,
                 memberID, rentalID);
 
-        // if (rand.nextBoolean()) {
-        //     rentalID = generateRandomID(dbconn, "GearRental", "rentalID"); // generate random rental ID
+        if (rand.nextBoolean()) {
+            rentalID = generateRandomID(dbconn, "GearRental", "rentalID"); // generate random rental ID
 
-        //     result = addRandomGearRental(dbconn, rentalID, rand, skiPassID, expDate, expDate);
-        //     if (result == -1) {
-        //         System.err.println("Error adding gear rental: " + rentalID + ", " + skiPassID);
-        //         return -1;
-        //     }
+            result = addRandomGearRental(dbconn, rentalID, rand, skiPassID, expDate, expDate);
+            if (result == -1) {
+                System.err.println("Error adding gear rental: " + rentalID + ", " + skiPassID);
+                return -1;
+            }
 
-        //     // update the ski pass with the rental ID
-        //     try (PreparedStatement pstmt = dbconn.prepareStatement(
-        //         "UPDATE SkiPass SET rentalID = ? WHERE skiPassID = ?")) {
-        //         pstmt.setInt(1, rentalID);
-        //         pstmt.setInt(2, skiPassID);
-        //         pstmt.executeUpdate();
-        //     } catch (SQLException e) {
-        //         System.err.println("Error updating SkiPass with rentalID: " + e.getMessage());
-        //         return -1;
-        //     }
-        // }
+            // update the ski pass with the rental ID
+            try (PreparedStatement pstmt = dbconn.prepareStatement(
+                "UPDATE SkiPass SET rentalID = ? WHERE skiPassID = ?")) {
+                pstmt.setInt(1, rentalID);
+                pstmt.setInt(2, skiPassID);
+                pstmt.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println("Error updating SkiPass with rentalID: " + e.getMessage());
+                return -1;
+            }
+        }
 
 
         if (result == -1) {
