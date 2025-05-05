@@ -109,12 +109,13 @@ public class DBMSSetup {
             "CREATE TABLE Member ("
                     + "memberID INTEGER, "
                     + "name VARCHAR(50), "
+                    + "phone VARCHAR(20), " // 20 bc of international numbers
                     + "email VARCHAR(50), "
                     + "dob DATE, "
                     + "emergencyContact VARCHAR(50), "
                     + "PRIMARY KEY (memberID))",
             // Ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses,
-            // remainingUses. passType, status, memberID, rentalID
+            // remainingUses, passType, status, memberID, rentalID
             "CREATE TABLE SkiPass ("
                     + "skiPassID INTEGER PRIMARY KEY, "
                     + "price INTEGER NOT NULL, "
@@ -311,7 +312,7 @@ public class DBMSSetup {
     // #region // * Add/Update/Delete
     // * Member: memberID, name, phone#, email, dob, emergency contact
     // adds a member to the database
-    private static void addMember(Connection dbconn, String name, int phone, String email, java.sql.Date dob,
+    private static void addMember(Connection dbconn, String name, String phone, String email, java.sql.Date dob,
             String emergencyContact) {
         int memberID = generateRandomID(dbconn, "Member", "memberID");
 
@@ -319,7 +320,7 @@ public class DBMSSetup {
                 "INSERT INTO Member VALUES (?, ?, ?, ?, ?, ?)")) {
             pstmt.setInt(1, memberID);
             pstmt.setString(2, name);
-            pstmt.setInt(3, phone);
+            pstmt.setString(3, phone);
             pstmt.setString(4, email);
             pstmt.setDate(5, dob);
             pstmt.setString(6, emergencyContact);
@@ -538,5 +539,15 @@ public class DBMSSetup {
         }
     }
 
+    public static void addMyEntities(Connection dbconn) {
+        // * Member inserts: name, phone#, email, dob, emergency contact
+        addMember(dbconn, "John Doe", "2344234234", "johnDoe@gmail.com", java.sql.Date.valueOf("1990-05-15"), "1234567890");
+        addMember(dbconn, "Gavin Borquez", "5202629618", "gavin.borquez@gmail.com", java.sql.Date.valueOf("2006-10-17"), "borquezgabriel@gmail.com");
+        addMember(dbconn, "Ahen Dridman", "5120000100", "we.will.lose.wahwahwah@gmail.com", java.sql.Date.valueOf("2000-01-01"), "1234567890");
+        addMember(dbconn, "Thegor Rilla", "5329999999", "a.whole.gorilla@gmail.com", java.sql.Date.valueOf("2000-01-01"), "1234567890");
+        addMember(dbconn, "Andrew Johnson", "5206683030", "ajbecerra@arizona.edu", java.sql.Date.valueOf("2000-01-01"), "lmusngi@arizona.edu");
+        
+        // * 
+    }
     // #endregion Populate tables
 }
