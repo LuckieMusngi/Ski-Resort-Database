@@ -29,8 +29,7 @@ public class DBMSSetup {
 
     // * gets and returns a connection to the database
     private static Connection getDbconn() {
-        final String oracleURL
-                = // Magic lectura -> aloe access spell
+        final String oracleURL = // Magic lectura -> aloe access spell
                 "jdbc:oracle:thin:@aloe.cs.arizona.edu:1521:oracle";
 
         String username = null, // Oracle DBMS username
@@ -78,207 +77,207 @@ public class DBMSSetup {
     // #endregion Main methods
     // #region // * Table Creation
     // #region Tables creation consts
-    static final String[] tableNames = new String[]{
-        // main entities
-        "Member",
-        "SkiPass",
-        "GearRental",
-        "Equipment",
-        "EquipmentUpdate",
-        "GearRentalUpdate",
-        "Trail",
-        "Lift",
-        "LessonOrder",
-        "Lesson",
-        "LessonSession",
-        "Instructor",
-        "Employee",
-        "Lodge",
-        "IncomeSource",
-        "Shuttle",
-        // relation entities
-        "LessonToOrder",
-        "TrailLift",
-        "LiftPassUsage",
-        "ShuttleLodge",
-        "RentalEquipment",
-        "EmployeeIncomeSource"
+    static final String[] tableNames = new String[] {
+            // main entities
+            "Member",
+            "SkiPass",
+            "GearRental",
+            "Equipment",
+            "EquipmentUpdate",
+            "GearRentalUpdate",
+            "Trail",
+            "Lift",
+            "LessonOrder",
+            "Lesson",
+            "LessonSession",
+            "Instructor",
+            "Employee",
+            "Lodge",
+            "IncomeSource",
+            "Shuttle",
+            // relation entities
+            "LessonToOrder",
+            "TrailLift",
+            "LiftPassUsage",
+            "ShuttleLodge",
+            "RentalEquipment",
+            "EmployeeIncomeSource"
     };
 
-    static final String[] tableCreateStatements = new String[]{
-        // Member: memberID, name, phone#, email, dob, emergency contact
-        "CREATE TABLE Member ("
-        + "memberID INTEGER, "
-        + "name VARCHAR(50), "
-        + "email VARCHAR(50), "
-        + "dob DATE, "
-        + "emergencyContact VARCHAR(50), "
-        + "PRIMARY KEY (memberID))",
-        // Ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses,
-        // remainingUses. passType, status, memberID, rentalID
-        "CREATE TABLE SkiPass ("
-        + "skiPassID INTEGER PRIMARY KEY, "
-        + "price INTEGER NOT NULL, "
-        + "timeOfPurchase TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
-        + "expDate DATE NOT NULL, "
-        + "totalUses INTEGER, "
-        + "remainingUses INTEGER, "
-        + "passType VARCHAR2(20), "
-        + "status VARCHAR2(10), "
-        + "memberID INTEGER, "
-        + "rentalID INTEGER)"
-        + "FOREIGN KEY (memberID) REFERENCES Member(memberID), "
-        + "FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID))",
-        // Gear Rental: rentalID, startDate, expDate, return status, status, skiPassID
-        "CREATE TABLE GearRental ("
-        + "rentalID INTEGER, "
-        + "startDate DATE, "
-        + "expDate DATE, "
-        + "returnStatus VARCHAR(50), "
-        + "status VARCHAR(50), "
-        + "skiPassID INTEGER, "
-        + "PRIMARY KEY (rentalID), "
-        + "FOREIGN KEY (skiPassID) REFERENCES SkiPass(skiPassID))",
-        // Equipment: EquipmentID, type, size, status
-        "CREATE TABLE Equipment ("
-        + "equipmentID INTEGER PRIMARY KEY, "
-        + "type VARCHAR2(20) NOT NULL, "
-        + "size VARCHAR2(10), "
-        + "status VARCHAR2(10))"
-        + "FOREIGN KEY (rentalID) REFERENCES gearRental(rentalID)",
-        // Equipment Update: equipmentUpdateID, equipmentID, type, notes
-        "CREATE TABLE EquipmentUpdate ("
-        + "equipmentUpdateID INTEGER, "
-        + "equipmentID INTEGER, "
-        + "type VARCHAR(20), "
-        + "notes VARCHAR(50), "
-        + "PRIMARY KEY (equipmentUpdateID), "
-        + "FOREIGN KEY (equipmentID) REFERENCES Equipment(equipmentID))",
-        // Gear Rental Update: rentalUpdateID, rentalID, type, notes
-        "CREATE TABLE GearRentalUpdate ("
-        + "rentalUpdateID INTEGER, "
-        + "rentalID INTEGER, "
-        + "type VARCHAR(20), "
-        + "notes VARCHAR(200), "
-        + "PRIMARY KEY (rentalUpdateID), "
-        + "FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID))",
-        // Trail: trailName, location, difficulty, category, status
-        "CREATE TABLE Trail ("
-        + "trailName VARCHAR(50), "
-        + "location VARCHAR(50), "
-        + "difficulty VARCHAR(20), "
-        + "category VARCHAR(20), "
-        + "status VARCHAR(10), "
-        + "PRIMARY KEY (trailName))",
-        // Lift: liftName, ability level, openTime, closeTime, status
-        "CREATE TABLE Lift ("
-        + "liftName VARCHAR2(25) PRIMARY KEY, "
-        + "abilityLevel VARCHAR2(15), "
-        + "openTime TIME, "
-        + "closeTime TIME, "
-        + "status VARCHAR2(10))",
-        // LessonOrder: lessonOrderID, memberID, lessonsPurchased, remainingSessions
-        "CREATE TABLE LessonOrder ("
-        + "lessonOrderID INTEGER, "
-        + "memberID INTEGER, "
-        + "lessonsPurchased INTEGER, "
-        + "remainingSessions INTEGER, "
-        + "PRIMARY KEY (lessonOrderID), "
-        + "FOREIGN KEY (memberID) REFERENCES Member(memberID))",
-        // Lesson: LessonID, lessonName, EmployeeID
-        "CREATE TABLE Lesson ("
-        + "lessonID INTEGER PRIMARY KEY, "
-        + "lessonName VARCHAR2(25) NOT NULL, "
-        + "employeeID INTEGER)"
-        + "FOREIGN KEY (employeeID) REFERENCES Instructor(employeeID))",
-        // LessonSession: sessionID, date, startTime, endTime, lessonID
-        "CREATE TABLE LessonSession ("
-        + "sessionID INTEGER, "
-        + "date DATE, "
-        + "startTime TIME, "
-        + "endTime TIME, "
-        + "lessonID INTEGER, "
-        + "PRIMARY KEY (sessionID), "
-        + "FOREIGN KEY (lessonID) REFERENCES Lesson(lessonID))",
-        // Instructor: EmployeeID, Certification level
-        "CREATE TABLE Instructor ("
-        + "employeeID INTEGER PRIMARY KEY, "
-        + "certificationLevel VARCHAR2(10))"
-        + "FOREIGN KEY (employeeID) REFERENCES Employee(employeeID))",
-        // Employee: employeeID, name, age, sex, race, monthly salary, job title
-        "CREATE TABLE Employee ("
-        + "employeeID INTEGER, "
-        + "name VARCHAR(50), "
-        + "age INTEGER, "
-        + "sex VARCHAR(20), "
-        + "race VARCHAR(20), "
-        + "monthlySalary INTEGER, "
-        + "jobTitle VARCHAR(50), "
-        + "PRIMARY KEY (employeeID))",
-        // Lodge: lodgeID, location
-        "CREATE TABLE Lodge ("
-        + "lodgeID INTEGER PRIMARY KEY, "
-        + "location VARCHAR2(30))"
-        + "FOREIGN KEY (lodgeID) REFERENCES IncomeSource(lodgeID))",
-        // IncomeSource: sourceID, day, lodgeID, sourceName, dailyIncome
-        "CREATE TABLE IncomeSource ("
-        + "sourceID INTEGER, "
-        + "day DATE, "
-        + "lodgeID INTEGER, "
-        + "sourceName VARCHAR(50), "
-        + "dailyIncome INTEGER, "
-        + "PRIMARY KEY (sourceID), "
-        + "FOREIGN KEY (lodgeID) REFERENCES Lodge(lodgeID))",
-        // Shuttle: shuttleID, location, capacity, status
-        "CREATE TABLE Shuttle ("
-        + "shuttleID INTEGER PRIMARY KEY, "
-        + "shuttleName VARCHAR2(20), "
-        + "status VARCHAR2(10))",
-        // LessonToOrder: lessonID, lessonOrderID
-        "CREATE TABLE LessonToOrder ("
-        + "lessonID INTEGER, "
-        + "lessonOrderID INTEGER, "
-        + "PRIMARY KEY (lessonID, lessonOrderID), "
-        + "FOREIGN KEY (lessonID) REFERENCES Lesson(lessonID), "
-        + "FOREIGN KEY (lessonOrderID) REFERENCES LessonOrder(lessonOrderID))",
-        // TrailLift: trailName, liftName
-        "CREATE TABLE TrailLift ("
-        + "trailName VARCHAR(25), "
-        + "liftName VARCHAR(25), "
-        + "PRIMARY KEY (trailName, liftName), "
-        + "FOREIGN KEY (trailName) REFERENCES Trail(trailName), "
-        + "FOREIGN KEY (liftName) REFERENCES Lift(liftName))",
-        // LiftPassUsage: skiPassID, liftName, dateUsed, timeUsed
-        "CREATE TABLE LiftPassUsage ("
-        + "skiPassID INTEGER, "
-        + "liftName VARCHAR(25), "
-        + "dateUsed DATE, "
-        + "timeUsed TIME, "
-        + "PRIMARY KEY (skiPassID, liftName, dateUsed), "
-        + "FOREIGN KEY (skiPassID) REFERENCES SkiPass(skiPassID), "
-        + "FOREIGN KEY (liftName) REFERENCES Lift(liftName))",
-        // ShuttleLodge: shuttleID, lodgeID
-        "CREATE TABLE ShuttleLodge ("
-        + "shuttleID INTEGER, "
-        + "lodgeID INTEGER, "
-        + "PRIMARY KEY (shuttleID, lodgeID), "
-        + "FOREIGN KEY (shuttleID) REFERENCES Shuttle(shuttleID), "
-        + "FOREIGN KEY (lodgeID) REFERENCES Lodge(lodgeID))",
-        // RentalEquipment: rentalID, equipmentID
-        "CREATE TABLE RentalEquipment ("
-        + "rentalID INTEGER, "
-        + "equipmentID INTEGER, "
-        + "PRIMARY KEY (rentalID, equipmentID), "
-        + "FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID), "
-        + "FOREIGN KEY (equipmentID) REFERENCES Equipment(equipmentID))",
-        // EmployeeIncomeSource: employeeID, sourceID, day
-        "CREATE TABLE EmployeeIncomeSource ("
-        + "employeeID INTEGER, "
-        + "sourceID INTEGER, "
-        + "day DATE, "
-        + "PRIMARY KEY (employeeID, sourceID, day), "
-        + "FOREIGN KEY (employeeID) REFERENCES Employee(employeeID), "
-        + "FOREIGN KEY (sourceID) REFERENCES IncomeSource(sourceID))"
+    static final String[] tableCreateStatements = new String[] {
+            // Member: memberID, name, phone#, email, dob, emergency contact
+            "CREATE TABLE Member ("
+                    + "memberID INTEGER, "
+                    + "name VARCHAR(50), "
+                    + "email VARCHAR(50), "
+                    + "dob DATE, "
+                    + "emergencyContact VARCHAR(50), "
+                    + "PRIMARY KEY (memberID))",
+            // Ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses,
+            // remainingUses. passType, status, memberID, rentalID
+            "CREATE TABLE SkiPass ("
+                    + "skiPassID INTEGER PRIMARY KEY, "
+                    + "price INTEGER NOT NULL, "
+                    + "timeOfPurchase TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
+                    + "expDate DATE NOT NULL, "
+                    + "totalUses INTEGER, "
+                    + "remainingUses INTEGER, "
+                    + "passType VARCHAR2(20), "
+                    + "status VARCHAR2(10), "
+                    + "memberID INTEGER, "
+                    + "rentalID INTEGER)"
+                    + "FOREIGN KEY (memberID) REFERENCES Member(memberID), "
+                    + "FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID))",
+            // Gear Rental: rentalID, startDate, expDate, return status, status, skiPassID
+            "CREATE TABLE GearRental ("
+                    + "rentalID INTEGER, "
+                    + "startDate DATE, "
+                    + "expDate DATE, "
+                    + "returnStatus VARCHAR(50), "
+                    + "status VARCHAR(50), "
+                    + "skiPassID INTEGER, "
+                    + "PRIMARY KEY (rentalID), "
+                    + "FOREIGN KEY (skiPassID) REFERENCES SkiPass(skiPassID))",
+            // Equipment: EquipmentID, type, size, status
+            "CREATE TABLE Equipment ("
+                    + "equipmentID INTEGER PRIMARY KEY, "
+                    + "type VARCHAR2(20) NOT NULL, "
+                    + "size VARCHAR2(10), "
+                    + "status VARCHAR2(10))"
+                    + "FOREIGN KEY (rentalID) REFERENCES gearRental(rentalID)",
+            // Equipment Update: equipmentUpdateID, equipmentID, type, notes
+            "CREATE TABLE EquipmentUpdate ("
+                    + "equipmentUpdateID INTEGER, "
+                    + "equipmentID INTEGER, "
+                    + "type VARCHAR(20), "
+                    + "notes VARCHAR(50), "
+                    + "PRIMARY KEY (equipmentUpdateID), "
+                    + "FOREIGN KEY (equipmentID) REFERENCES Equipment(equipmentID))",
+            // Gear Rental Update: rentalUpdateID, rentalID, type, notes
+            "CREATE TABLE GearRentalUpdate ("
+                    + "rentalUpdateID INTEGER, "
+                    + "rentalID INTEGER, "
+                    + "type VARCHAR(20), "
+                    + "notes VARCHAR(200), "
+                    + "PRIMARY KEY (rentalUpdateID), "
+                    + "FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID))",
+            // Trail: trailName, location, difficulty, category, status
+            "CREATE TABLE Trail ("
+                    + "trailName VARCHAR(50), "
+                    + "location VARCHAR(50), "
+                    + "difficulty VARCHAR(20), "
+                    + "category VARCHAR(20), "
+                    + "status VARCHAR(10), "
+                    + "PRIMARY KEY (trailName))",
+            // Lift: liftName, ability level, openTime, closeTime, status
+            "CREATE TABLE Lift ("
+                    + "liftName VARCHAR2(25) PRIMARY KEY, "
+                    + "abilityLevel VARCHAR2(15), "
+                    + "openTime TIME, "
+                    + "closeTime TIME, "
+                    + "status VARCHAR2(10))",
+            // LessonOrder: lessonOrderID, memberID, lessonsPurchased, remainingSessions
+            "CREATE TABLE LessonOrder ("
+                    + "lessonOrderID INTEGER, "
+                    + "memberID INTEGER, "
+                    + "lessonsPurchased INTEGER, "
+                    + "remainingSessions INTEGER, "
+                    + "PRIMARY KEY (lessonOrderID), "
+                    + "FOREIGN KEY (memberID) REFERENCES Member(memberID))",
+            // Lesson: LessonID, lessonName, EmployeeID
+            "CREATE TABLE Lesson ("
+                    + "lessonID INTEGER PRIMARY KEY, "
+                    + "lessonName VARCHAR2(25) NOT NULL, "
+                    + "employeeID INTEGER)"
+                    + "FOREIGN KEY (employeeID) REFERENCES Instructor(employeeID))",
+            // LessonSession: sessionID, date, startTime, endTime, lessonID
+            "CREATE TABLE LessonSession ("
+                    + "sessionID INTEGER, "
+                    + "date DATE, "
+                    + "startTime TIME, "
+                    + "endTime TIME, "
+                    + "lessonID INTEGER, "
+                    + "PRIMARY KEY (sessionID), "
+                    + "FOREIGN KEY (lessonID) REFERENCES Lesson(lessonID))",
+            // Instructor: EmployeeID, Certification level
+            "CREATE TABLE Instructor ("
+                    + "employeeID INTEGER PRIMARY KEY, "
+                    + "certificationLevel VARCHAR2(10))"
+                    + "FOREIGN KEY (employeeID) REFERENCES Employee(employeeID))",
+            // Employee: employeeID, name, age, sex, race, monthly salary, job title
+            "CREATE TABLE Employee ("
+                    + "employeeID INTEGER, "
+                    + "name VARCHAR(50), "
+                    + "age INTEGER, "
+                    + "sex VARCHAR(20), "
+                    + "race VARCHAR(20), "
+                    + "monthlySalary INTEGER, "
+                    + "jobTitle VARCHAR(50), "
+                    + "PRIMARY KEY (employeeID))",
+            // Lodge: lodgeID, location
+            "CREATE TABLE Lodge ("
+                    + "lodgeID INTEGER PRIMARY KEY, "
+                    + "location VARCHAR2(30))"
+                    + "FOREIGN KEY (lodgeID) REFERENCES IncomeSource(lodgeID))",
+            // IncomeSource: sourceID, day, lodgeID, sourceName, dailyIncome
+            "CREATE TABLE IncomeSource ("
+                    + "sourceID INTEGER, "
+                    + "day DATE, "
+                    + "lodgeID INTEGER, "
+                    + "sourceName VARCHAR(50), "
+                    + "dailyIncome INTEGER, "
+                    + "PRIMARY KEY (sourceID), "
+                    + "FOREIGN KEY (lodgeID) REFERENCES Lodge(lodgeID))",
+            // Shuttle: shuttleID, location, capacity, status
+            "CREATE TABLE Shuttle ("
+                    + "shuttleID INTEGER PRIMARY KEY, "
+                    + "shuttleName VARCHAR2(20), "
+                    + "status VARCHAR2(10))",
+            // LessonToOrder: lessonID, lessonOrderID
+            "CREATE TABLE LessonToOrder ("
+                    + "lessonID INTEGER, "
+                    + "lessonOrderID INTEGER, "
+                    + "PRIMARY KEY (lessonID, lessonOrderID), "
+                    + "FOREIGN KEY (lessonID) REFERENCES Lesson(lessonID), "
+                    + "FOREIGN KEY (lessonOrderID) REFERENCES LessonOrder(lessonOrderID))",
+            // TrailLift: trailName, liftName
+            "CREATE TABLE TrailLift ("
+                    + "trailName VARCHAR(25), "
+                    + "liftName VARCHAR(25), "
+                    + "PRIMARY KEY (trailName, liftName), "
+                    + "FOREIGN KEY (trailName) REFERENCES Trail(trailName), "
+                    + "FOREIGN KEY (liftName) REFERENCES Lift(liftName))",
+            // LiftPassUsage: skiPassID, liftName, dateUsed, timeUsed
+            "CREATE TABLE LiftPassUsage ("
+                    + "skiPassID INTEGER, "
+                    + "liftName VARCHAR(25), "
+                    + "dateUsed DATE, "
+                    + "timeUsed TIME, "
+                    + "PRIMARY KEY (skiPassID, liftName, dateUsed), "
+                    + "FOREIGN KEY (skiPassID) REFERENCES SkiPass(skiPassID), "
+                    + "FOREIGN KEY (liftName) REFERENCES Lift(liftName))",
+            // ShuttleLodge: shuttleID, lodgeID
+            "CREATE TABLE ShuttleLodge ("
+                    + "shuttleID INTEGER, "
+                    + "lodgeID INTEGER, "
+                    + "PRIMARY KEY (shuttleID, lodgeID), "
+                    + "FOREIGN KEY (shuttleID) REFERENCES Shuttle(shuttleID), "
+                    + "FOREIGN KEY (lodgeID) REFERENCES Lodge(lodgeID))",
+            // RentalEquipment: rentalID, equipmentID
+            "CREATE TABLE RentalEquipment ("
+                    + "rentalID INTEGER, "
+                    + "equipmentID INTEGER, "
+                    + "PRIMARY KEY (rentalID, equipmentID), "
+                    + "FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID), "
+                    + "FOREIGN KEY (equipmentID) REFERENCES Equipment(equipmentID))",
+            // EmployeeIncomeSource: employeeID, sourceID, day
+            "CREATE TABLE EmployeeIncomeSource ("
+                    + "employeeID INTEGER, "
+                    + "sourceID INTEGER, "
+                    + "day DATE, "
+                    + "PRIMARY KEY (employeeID, sourceID, day), "
+                    + "FOREIGN KEY (employeeID) REFERENCES Employee(employeeID), "
+                    + "FOREIGN KEY (sourceID) REFERENCES IncomeSource(sourceID))"
     };
     // #endregion Tables creation consts
 
@@ -312,7 +311,8 @@ public class DBMSSetup {
     // #region // * Add/Update/Delete
     // * Member: memberID, name, phone#, email, dob, emergency contact
     // adds a member to the database
-    private static void addMember(Connection dbconn, String name, int phone, String email, java.sql.Date dob, String emergencyContact) {
+    private static void addMember(Connection dbconn, String name, int phone, String email, java.sql.Date dob,
+            String emergencyContact) {
         int memberID = generateRandomID(dbconn, "Member", "memberID");
 
         try (PreparedStatement pstmt = dbconn.prepareStatement(
@@ -327,16 +327,19 @@ public class DBMSSetup {
             pstmt.executeUpdate();
 
             if (printDebug) {
-                System.out.println("Member added: " + memberID + ", " + name + ", " + email + ", " + dob + ", " + emergencyContact);
+                System.out.println("Member added: " + memberID + ", " + name + ", " + email + ", " + dob + ", "
+                        + emergencyContact);
             }
         } catch (SQLException e) {
             System.err.println("Error adding member: " + e.getMessage());
         }
     }
 
-    // * Ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses, remainingUses, passType, status, memberID, rentalID
+    // * Ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses,
+    // remainingUses, passType, status, memberID, rentalID
     // adds a ski pass to the database
-    private static void addSkiPass(Connection dbconn, int price, java.sql.Date timeOfPurchase, java.sql.Date expDate, int totalUses, int remainingUses, String passType, String status, int memberID, int rentalID) {
+    private static void addSkiPass(Connection dbconn, int price, java.sql.Date timeOfPurchase, java.sql.Date expDate,
+            int totalUses, int remainingUses, String passType, String status, int memberID, int rentalID) {
         int skiPassID = generateRandomID(dbconn, "SkiPass", "skiPassID");
 
         try (PreparedStatement pstmt = dbconn.prepareStatement(
@@ -355,7 +358,8 @@ public class DBMSSetup {
             pstmt.executeUpdate();
 
             if (printDebug) {
-                System.out.println("SkiPass added: " + skiPassID + ", " + price + ", " + expDate + ", " + totalUses + ", " + remainingUses + ", " + passType + ", " + status + ", " + memberID + ", " + rentalID);
+                System.out.println("SkiPass added: " + skiPassID + ", " + price + ", " + expDate + ", " + totalUses
+                        + ", " + remainingUses + ", " + passType + ", " + status + ", " + memberID + ", " + rentalID);
             }
         } catch (SQLException e) {
             System.err.println("Error adding SkiPass: " + e.getMessage());
@@ -377,10 +381,61 @@ public class DBMSSetup {
             pstmt.executeUpdate();
 
             if (printDebug) {
-                System.out.println("LessonOrder added: " + lessonOrderID + ", " + memberID + ", " + lessonsPurchased + ", " + remainingSessions);
+                System.out.println("LessonOrder added: " + lessonOrderID + ", " + memberID + ", " + lessonsPurchased
+                        + ", " + remainingSessions);
             }
         } catch (SQLException e) {
             System.err.println("Error adding LessonOrder: " + e.getMessage());
+        }
+    }
+
+    // * Add equipment to the database
+    // * Equipment: equipmentID, type, size, status
+    public static void addEquipment(Connection conn, String type, String size, String status) {
+        try {
+            int equipmentID = generateRandomID(conn, "Equipment", "equipmentID"); // generate ID for the new equipment
+
+            String sql = "INSERT INTO Equipment (equipmentID, type, size, status) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setInt(1, equipmentID);
+                pstmt.setString(2, type);
+                pstmt.setString(3, size);
+                pstmt.setString(4, status);
+
+                int rowsInserted = pstmt.executeUpdate();
+                if (rowsInserted > 0) {
+                    System.out.println("Successfully added equipment with ID " + equipmentID);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error adding equipment: " + e.getMessage());
+        }
+    }
+
+    // * Add gearRental to the database
+    // * GearRental: rentalID, startDate, expDate, return status, status, skiPassID
+    public static void addGearRental(Connection conn, int rentalID, java.sql.Date startDate, java.sql.Date expDate,
+            String returnStatus, String status, int skiPassID) {
+        try {
+
+            rentalID = generateRandomID(conn, "GearRental", "rentalID"); // generate ID for the new gear rental
+
+            String sql = "INSERT INTO GearRental (rentalID, startDate, expDate, returnStatus, status, skiPassID) VALUES (?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setInt(1, rentalID);
+                pstmt.setDate(2, startDate);
+                pstmt.setDate(3, expDate);
+                pstmt.setString(4, returnStatus);
+                pstmt.setString(5, status);
+                pstmt.setInt(6, skiPassID);
+
+                int rowsInserted = pstmt.executeUpdate();
+                if (rowsInserted > 0) {
+                    System.out.println("Successfully added gear rental with ID " + rentalID);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error adding gear rental: " + e.getMessage());
         }
     }
 
