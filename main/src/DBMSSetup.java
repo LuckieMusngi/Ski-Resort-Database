@@ -310,17 +310,19 @@ public class DBMSSetup {
 
     // #endregion Table Creation
     // #region // * Add/Update/Delete
-    // * Member
+    // * Member: memberID, name, phone#, email, dob, emergency contact
     // adds a member to the database
-    private static void addMember(Connection dbconn, String name, String email, java.sql.Date dob, String emergencyContact) {
+    private static void addMember(Connection dbconn, String name, int phone, String email, java.sql.Date dob, String emergencyContact) {
         int memberID = generateRandomID(dbconn, "Member", "memberID");
 
-        try (PreparedStatement pstmt = dbconn.prepareStatement("INSERT INTO Member (memberID, name, email, dob, emergencyContact) VALUES (?, ?, ?, ?, ?)")) {
+        try (PreparedStatement pstmt = dbconn.prepareStatement(
+                "INSERT INTO Member VALUES (?, ?, ?, ?, ?, ?)")) {
             pstmt.setInt(1, memberID);
             pstmt.setString(2, name);
-            pstmt.setString(3, email);
-            pstmt.setDate(4, dob);
-            pstmt.setString(5, emergencyContact);
+            pstmt.setInt(3, phone);
+            pstmt.setString(4, email);
+            pstmt.setDate(5, dob);
+            pstmt.setString(6, emergencyContact);
 
             pstmt.executeUpdate();
 
@@ -332,24 +334,83 @@ public class DBMSSetup {
         }
     }
 
+    // * Ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses, remainingUses, passType, status, memberID, rentalID
+    // adds a ski pass to the database
+    private static void addSkiPass(Connection dbconn, int price, java.sql.Date timeOfPurchase, java.sql.Date expDate, int totalUses, int remainingUses, String passType, String status, int memberID, int rentalID) {
+        int skiPassID = generateRandomID(dbconn, "SkiPass", "skiPassID");
+
+        try (PreparedStatement pstmt = dbconn.prepareStatement(
+                "INSERT INTO SkiPass VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+            pstmt.setInt(1, skiPassID);
+            pstmt.setInt(2, price);
+            pstmt.setDate(3, timeOfPurchase);
+            pstmt.setDate(4, expDate);
+            pstmt.setInt(5, totalUses);
+            pstmt.setInt(6, remainingUses);
+            pstmt.setString(7, passType);
+            pstmt.setString(8, status);
+            pstmt.setInt(9, memberID);
+            pstmt.setInt(10, rentalID);
+
+            pstmt.executeUpdate();
+
+            if (printDebug) {
+                System.out.println("SkiPass added: " + skiPassID + ", " + price + ", " + expDate + ", " + totalUses + ", " + remainingUses + ", " + passType + ", " + status + ", " + memberID + ", " + rentalID);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error adding SkiPass: " + e.getMessage());
+        }
+    }
+
+    // * Lesson Order: lessonOrderID, memberID, lessonsPurchased, remainingSessions
+    // adds a lesson order to the database
+    private static void addLessonOrder(Connection dbconn, int memberID, int lessonsPurchased, int remainingSessions) {
+        int lessonOrderID = generateRandomID(dbconn, "LessonOrder", "lessonOrderID");
+
+        try (PreparedStatement pstmt = dbconn.prepareStatement(
+                "INSERT INTO LessonOrder VALUES (?, ?, ?, ?)")) {
+            pstmt.setInt(1, lessonOrderID);
+            pstmt.setInt(2, memberID);
+            pstmt.setInt(3, lessonsPurchased);
+            pstmt.setInt(4, remainingSessions);
+
+            pstmt.executeUpdate();
+
+            if (printDebug) {
+                System.out.println("LessonOrder added: " + lessonOrderID + ", " + memberID + ", " + lessonsPurchased + ", " + remainingSessions);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error adding LessonOrder: " + e.getMessage());
+        }
+    }
+
+    // * generate a random ID for a table (columnName should be the ID column)
+    // this is a helper for the add methods
     private static int generateRandomID(Connection dbconn, String tableName, String columnName) {
         int i = 0;
         while (true) {
             int randomID = new java.util.Random().nextInt(100000); // Generate random ID
+
+            // counts how many already have that ID
+            // count everything from tableName where columnName = randomID
             try (PreparedStatement checkStmt = dbconn.prepareStatement("SELECT COUNT(*) FROM ? WHERE ? = ?")) {
                 checkStmt.setString(1, tableName);
                 checkStmt.setString(2, columnName);
                 checkStmt.setInt(3, randomID);
 
-                try (ResultSet rs = checkStmt.executeQuery()) {
-                    if (rs.next() && rs.getInt(1) == 0) {
-                        return randomID; // ID is unique, return it
-                    }
-                    i++;
-                    if (i > 100) {
-                        System.err.println("Error: Unable to generate a unique ID for table (100 tries in)" + tableName);
-                        return -1; // Return -1 if unable to generate a unique ID after 100 attempts
-                    }
+                // execute and get result
+                ResultSet rs = checkStmt.executeQuery();
+
+                // if unique, return it
+                if (rs.next() && rs.getInt(1) == 0) {
+                    return randomID; // ID is unique, return it
+                }
+
+                // after 1000 tries, return -1
+                i++;
+                if (i > 1000) {
+                    System.err.println("Error: Unable to generate a unique ID for table (1000 tries in)" + tableName);
+                    return -1; // Return -1 if unable to generate a unique ID after 1000 attempts
                 }
             } catch (SQLException e) {
                 System.err.println("Error checking ID uniqueness for table " + tableName + ": " + e.getMessage());
@@ -358,5 +419,5 @@ public class DBMSSetup {
         }
     }
 
-// #endregion Add/Update/Delete
+    // #endregion Add/Update/Delete
 }
