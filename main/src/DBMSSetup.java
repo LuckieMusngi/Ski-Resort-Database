@@ -17,6 +17,7 @@
 //  *         java JDBC <oracle username> <oracle password>
 import java.io.IOException;
 import java.sql.*;
+import java.util.Random;
 
 // TODO: add constraints to tables
 // TODO: add modify w/ constaints to tables
@@ -560,15 +561,35 @@ public class DBMSSetup {
         
         // ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses,
         // remainingUses, passType, status, memberID, rentalID
-        int skiPass1 = addSkiPass(dbconn, 300, java.sql.Date.valueOf("2023-10-01"), java.sql.Date.valueOf("2024-10-01"), 10, 10, 
+        int skiPass1 = addSkiPass(dbconn, 300, java.sql.Date.valueOf("2025-3-01"), java.sql.Date.valueOf("2026-3-01"), 10, 2, 
         "Season", "Active", mID1, -1);
         
+
+
         addMember(dbconn, "Gavin Borquez", "5202629618", "gavin.borquez@gmail.com", java.sql.Date.valueOf("2006-10-17"), "borquezgabriel@gmail.com");
+        
+
+        
         addMember(dbconn, "Ahen Dridman", "5120000100", "we.will.lose.wahwahwah@gmail.com", java.sql.Date.valueOf("2000-01-01"), "1234567890");
         addMember(dbconn, "Thegor Rilla", "5329999999", "a.whole.gorilla@gmail.com", java.sql.Date.valueOf("2000-01-01"), "1234567890");
         addMember(dbconn, "Andrew Johnson", "5206683030", "ajbecerra@arizona.edu", java.sql.Date.valueOf("2000-05-14"), "lmusngi@arizona.edu");
         
         // * 
     }
+
+    public static void addRandomEntity(Connection dbconn, Random rand) {
+        String name = generateRandomString(rand, 5);
+        System.out.println("Generated random name: " + name);
+    }
+
+    private static String generateRandomString(Random rand, int length) {
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            char randomChar = (char) ('A' + rand.nextInt(26)); // Generate random uppercase letter
+            sb.append(randomChar);
+        }
+        return sb.toString();
+    }
+
     // #endregion Populate tables
 }
