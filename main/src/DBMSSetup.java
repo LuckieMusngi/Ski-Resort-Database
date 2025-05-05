@@ -12,12 +12,11 @@ public class DBMSSetup {
 
     // * gets and returns a connection to the database
     private static Connection getDbconn() {
-        final String oracleURL
-                = // Magic lectura -> aloe access spell
+        final String oracleURL = // Magic lectura -> aloe access spell
                 "jdbc:oracle:thin:@aloe.cs.arizona.edu:1521:oracle";
 
         String username = null, // Oracle DBMS username
-                password = null;    // Oracle DBMS password
+                password = null; // Oracle DBMS password
 
         try (java.util.Scanner scanner = new java.util.Scanner(System.in)) {
             System.out.print("Enter your Oracle DBMS username: ");
@@ -58,14 +57,90 @@ public class DBMSSetup {
         return dbconn;
     }
 
-    // * Table Creation ---------------------------------------------------------------------------
+    // * Table Creation
+    // ---------------------------------------------------------------------------
+
     // Tables to be Made:
-    // member, ski pass, gear rental, equipment, equipment update       
+    String[] tableNames = new String[] {
+            "skiPass",
+            "equipment",
+            "gearRentalUpdate",
+            "lift",
+            "lesson",
+            "instructor",
+            "lodge",
+            "shuttle"
+    };
+
+    String[] tableCreationStatements = new String[] {
+            // Ski Pass:
+            "CREATE TABLE skiPass (" +
+                    "  skiPassID INTEGER PRIMARY KEY," +
+                    "  price INTEGER NOT NULL," +
+                    "  timeOfPurchase TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                    "  expDate DATE NOT NULL," +
+                    "  totalUses INTEGER," +
+                    "  remainingUses INTEGER," +
+                    "  passType VARCHAR2(20)," +
+                    "  status VARCHAR2(10)," +
+                    "  memberID INTEGER," +
+                    "  rentalID INTEGER," +
+
+                    ")",
+            // equipment:
+            "CREATE TABLE equipment (" +
+                    "  equipmentID INTEGER PRIMARY KEY," +
+                    "  type VARCHAR2(20) NOT NULL," +
+                    "  size VARCHAR2(10)," +
+                    "  status VARCHAR2(10)" +
+                    ")",
+            // gearRentalUpdate:
+            "CREATE TABLE gearRentalUpdate (" +
+                    "  rentalUpdateID INTEGER PRIMARY KEY," +
+                    "  rentalID INTEGER NOT NULL," +
+                    "  type VARCHAR2(20)," +
+                    "  notes VARCHAR2(200)," +
+
+                    ")",
+            // lift
+            "CREATE TABLE lift (" +
+                    "  liftName VARCHAR2(25) PRIMARY KEY," +
+                    "  abilityLevel VARCHAR2(15)," +
+                    "  openTime VARCHAR2(5)," +
+                    "  closeTime VARCHAR2(5)," +
+                    "  status VARCHAR2(10)" +
+                    ")",
+            // lesson
+            "CREATE TABLE lesson (" +
+                    "  LessonID INTEGER PRIMARY KEY," +
+                    "  lessonName VARCHAR2(25) NOT NULL," +
+                    "  employeeID INTEGER," +
+
+                    ")",
+            // instructor
+            "CREATE TABLE instructor (" +
+                    "  EmployeeID INTEGER PRIMARY KEY," +
+                    "  certificationLevel VARCHAR2(10)," +
+
+                    ")",
+            // lodge
+            "CREATE TABLE lodge (" +
+                    "  lodgeID INTEGER PRIMARY KEY," +
+                    "  location VARCHAR2(30)," +
+                    "  incomeSourceID INTEGER," +
+
+                    ")",
+            // Shuttle
+            "CREATE TABLE shuttle (" +
+                    "  ShuttleID INTEGER PRIMARY KEY," +
+                    "  shuttleName VARCHAR2(20)," +
+                    "  status VARCHAR2(10)" +
+                    ")"
+    };
+
     private static void makeTables(Connection dconn) {
-        
     }
 
-
-
-    // * Table Creation (End) ---------------------------------------------------------------------
+    // * Table Creation (End)
+    // ---------------------------------------------------------------------
 }
