@@ -49,7 +49,8 @@ public class DBMSSetup {
 
     // * gets and returns a connection to the database
     private static Connection getDbconn() {
-        final String oracleURL = // Magic lectura -> aloe access spell
+        final String oracleURL
+                = // Magic lectura -> aloe access spell
                 "jdbc:oracle:thin:@aloe.cs.arizona.edu:1521:oracle";
 
         String username = null, // Oracle DBMS username
@@ -123,34 +124,33 @@ public class DBMSSetup {
     // #endregion Main methods
     // #region // * Table Creation
     // #region Tables creation consts
-    static final String[] tableNames = new String[] {
-            // main entities
-            "Member",
-            "SkiPass",
-            "GearRental",
-            "Equipment",
-            "EquipmentUpdate",
-            "GearRentalUpdate",
-            "Trail",
-            "Lift",
-            "LessonOrder",
-            "Lesson",
-            "LessonSession",
-            "Instructor",
-            "Employee",
-            "Lodge",
-            "IncomeSource",
-            "Shuttle",
-            // relation entities
-            "LessonToOrder",
-            "TrailLift",
-            "LiftPassUsage",
-            "ShuttleLodge",
-            "RentalEquipment",
-            "EmployeeIncomeSource"
+    static final String[] tableNames = new String[]{
+        // main entities
+        "Member",
+        "SkiPass",
+        "GearRental",
+        "Equipment",
+        "EquipmentUpdate",
+        "GearRentalUpdate",
+        "Trail",
+        "Lift",
+        "LessonOrder",
+        "Lesson",
+        "LessonSession",
+        "Instructor",
+        "Employee",
+        "Lodge",
+        "IncomeSource",
+        "Shuttle",
+        // relation entities
+        "LessonToOrder",
+        "TrailLift",
+        "LiftPassUsage",
+        "ShuttleLodge",
+        "RentalEquipment",
+        "EmployeeIncomeSource"
     };
 
-<<<<<<< HEAD
     static final String[] tableCreateStatements = new String[]{
         // Member: memberID, name, phone#, email, dob, emergency contact
         "CREATE TABLE Member ("
@@ -300,182 +300,6 @@ public class DBMSSetup {
         + "sourceID INTEGER, "
         + "day DATE, "
         + "PRIMARY KEY (employeeID, sourceID, day))"
-=======
-    static final String[] tableCreateStatements = new String[] {
-            // Member: memberID, name, phone#, email, dob, emergency contact
-            "CREATE TABLE Member ("
-                    + "memberID INTEGER, "
-                    + "name VARCHAR(50), "
-                    + "phone VARCHAR(20), " // 20 bc of international numbers
-                    + "email VARCHAR(50), "
-                    + "dob DATE, "
-                    + "emergencyContact VARCHAR(50), "
-                    + "PRIMARY KEY (memberID))",
-            // Ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses,
-            // remainingUses, passType, status, memberID, rentalID
-            "CREATE TABLE SkiPass ("
-                    + "skiPassID INTEGER PRIMARY KEY, "
-                    + "price INTEGER NOT NULL, "
-                    + "timeOfPurchase TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
-                    + "expDate DATE NOT NULL, "
-                    + "totalUses INTEGER, "
-                    + "remainingUses INTEGER, "
-                    + "passType VARCHAR2(20), "
-                    + "status VARCHAR2(10), "
-                    + "memberID INTEGER, "
-                    + "rentalID INTEGER)"
-                    + "FOREIGN KEY (memberID) REFERENCES Member(memberID), "
-                    + "FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID))",
-            // Gear Rental: rentalID, startDate, expDate, return status, status, skiPassID
-            "CREATE TABLE GearRental ("
-                    + "rentalID INTEGER, "
-                    + "startDate DATE, "
-                    + "returnStatus VARCHAR(50), "
-                    + "status VARCHAR(50), "
-                    + "skiPassID INTEGER, "
-                    + "PRIMARY KEY (rentalID), "
-                    + "FOREIGN KEY (skiPassID) REFERENCES SkiPass(skiPassID))",
-            // Equipment: EquipmentID, type, size, status
-            "CREATE TABLE Equipment ("
-                    + "equipmentID INTEGER PRIMARY KEY, "
-                    + "type VARCHAR2(20) NOT NULL, "
-                    + "size VARCHAR2(10), "
-                    + "status VARCHAR2(10))"
-                    + "FOREIGN KEY (rentalID) REFERENCES gearRental(rentalID)",
-            // Equipment Update: equipmentUpdateID, equipmentID, type, notes
-            "CREATE TABLE EquipmentUpdate ("
-                    + "equipmentUpdateID INTEGER, "
-                    + "equipmentID INTEGER, "
-                    + "type VARCHAR(20), "
-                    + "notes VARCHAR(50), "
-                    + "PRIMARY KEY (equipmentUpdateID), "
-                    + "FOREIGN KEY (equipmentID) REFERENCES Equipment(equipmentID))",
-            // Gear Rental Update: rentalUpdateID, rentalID, type, notes
-            "CREATE TABLE GearRentalUpdate ("
-                    + "rentalUpdateID INTEGER, "
-                    + "rentalID INTEGER, "
-                    + "type VARCHAR(20), "
-                    + "notes VARCHAR(200), "
-                    + "PRIMARY KEY (rentalUpdateID), "
-                    + "FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID))",
-            // Trail: trailName, location, difficulty, category, status
-            "CREATE TABLE Trail ("
-                    + "trailName VARCHAR(50), "
-                    + "location VARCHAR(50), "
-                    + "difficulty VARCHAR(20), "
-                    + "category VARCHAR(20), "
-                    + "status VARCHAR(10), "
-                    + "PRIMARY KEY (trailName))",
-            // Lift: liftName, ability level, openTime, closeTime, status
-            "CREATE TABLE Lift ("
-                    + "liftName VARCHAR2(25) PRIMARY KEY, "
-                    + "abilityLevel VARCHAR2(15), "
-                    + "openTime TIME, "
-                    + "closeTime TIME, "
-                    + "status VARCHAR2(10))",
-            // LessonOrder: lessonOrderID, memberID, lessonsPurchased, remainingSessions
-            "CREATE TABLE LessonOrder ("
-                    + "lessonOrderID INTEGER, "
-                    + "memberID INTEGER, "
-                    + "lessonsPurchased INTEGER, "
-                    + "remainingSessions INTEGER, "
-                    + "PRIMARY KEY (lessonOrderID), "
-                    + "FOREIGN KEY (memberID) REFERENCES Member(memberID))",
-            // Lesson: LessonID, lessonName, EmployeeID
-            "CREATE TABLE Lesson ("
-                    + "lessonID INTEGER PRIMARY KEY, "
-                    + "lessonName VARCHAR2(25) NOT NULL, "
-                    + "employeeID INTEGER)"
-                    + "FOREIGN KEY (employeeID) REFERENCES Instructor(employeeID))",
-            // LessonSession: sessionID, date, startTime, endTime, lessonID
-            "CREATE TABLE LessonSession ("
-                    + "sessionID INTEGER, "
-                    + "date DATE, "
-                    + "startTime TIME, "
-                    + "endTime TIME, "
-                    + "lessonID INTEGER, "
-                    + "PRIMARY KEY (sessionID), "
-                    + "FOREIGN KEY (lessonID) REFERENCES Lesson(lessonID))",
-            // Instructor: EmployeeID, Certification level
-            "CREATE TABLE Instructor ("
-                    + "employeeID INTEGER PRIMARY KEY, "
-                    + "certificationLevel VARCHAR2(10))"
-                    + "FOREIGN KEY (employeeID) REFERENCES Employee(employeeID))",
-            // Employee: employeeID, name, age, sex, race, monthly salary, job title
-            "CREATE TABLE Employee ("
-                    + "employeeID INTEGER, "
-                    + "name VARCHAR(50), "
-                    + "age INTEGER, "
-                    + "sex VARCHAR(20), "
-                    + "race VARCHAR(20), "
-                    + "monthlySalary INTEGER, "
-                    + "jobTitle VARCHAR(50), "
-                    + "PRIMARY KEY (employeeID))",
-            // Lodge: lodgeID, location
-            "CREATE TABLE Lodge ("
-                    + "lodgeID INTEGER PRIMARY KEY, "
-                    + "location VARCHAR2(30))"
-                    + "FOREIGN KEY (lodgeID) REFERENCES IncomeSource(lodgeID))",
-            // IncomeSource: sourceID, day, lodgeID, sourceName, dailyIncome
-            "CREATE TABLE IncomeSource ("
-                    + "sourceID INTEGER, "
-                    + "day DATE, "
-                    + "lodgeID INTEGER, "
-                    + "sourceName VARCHAR(50), "
-                    + "dailyIncome INTEGER, "
-                    + "PRIMARY KEY (sourceID), "
-                    + "FOREIGN KEY (lodgeID) REFERENCES Lodge(lodgeID))",
-            // Shuttle: shuttleID, location, capacity, status
-            "CREATE TABLE Shuttle ("
-                    + "shuttleID INTEGER PRIMARY KEY, "
-                    + "shuttleName VARCHAR2(20), "
-                    + "status VARCHAR2(10))",
-            // LessonToOrder: lessonID, lessonOrderID
-            "CREATE TABLE LessonToOrder ("
-                    + "lessonID INTEGER, "
-                    + "lessonOrderID INTEGER, "
-                    + "PRIMARY KEY (lessonID, lessonOrderID), "
-                    + "FOREIGN KEY (lessonID) REFERENCES Lesson(lessonID), "
-                    + "FOREIGN KEY (lessonOrderID) REFERENCES LessonOrder(lessonOrderID))",
-            // TrailLift: trailName, liftName
-            "CREATE TABLE TrailLift ("
-                    + "trailName VARCHAR(25), "
-                    + "liftName VARCHAR(25), "
-                    + "PRIMARY KEY (trailName, liftName), "
-                    + "FOREIGN KEY (trailName) REFERENCES Trail(trailName), "
-                    + "FOREIGN KEY (liftName) REFERENCES Lift(liftName))",
-            // LiftPassUsage: skiPassID, liftName, dateUsed, timeUsed
-            "CREATE TABLE LiftPassUsage ("
-                    + "skiPassID INTEGER, "
-                    + "liftName VARCHAR(25), "
-                    + "dateUsed DATE, "
-                    + "timeUsed TIME, "
-                    + "PRIMARY KEY (skiPassID, liftName, dateUsed), "
-                    + "FOREIGN KEY (skiPassID) REFERENCES SkiPass(skiPassID), "
-                    + "FOREIGN KEY (liftName) REFERENCES Lift(liftName))",
-            // ShuttleLodge: shuttleID, lodgeID
-            "CREATE TABLE ShuttleLodge ("
-                    + "shuttleID INTEGER, "
-                    + "lodgeID INTEGER, "
-                    + "PRIMARY KEY (shuttleID, lodgeID), "
-                    + "FOREIGN KEY (shuttleID) REFERENCES Shuttle(shuttleID), "
-                    + "FOREIGN KEY (lodgeID) REFERENCES Lodge(lodgeID))",
-            // RentalEquipment: rentalID, equipmentID
-            "CREATE TABLE RentalEquipment ("
-                    + "rentalID INTEGER, "
-                    + "equipmentID INTEGER, "
-                    + "PRIMARY KEY (rentalID, equipmentID), "
-                    + "FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID), "
-                    + "FOREIGN KEY (equipmentID) REFERENCES Equipment(equipmentID))",
-            // EmployeeIncomeSource: employeeID, sourceID, day
-            "CREATE TABLE EmployeeIncomeSource ("
-                    + "employeeID INTEGER, "
-                    + "sourceID INTEGER, "
-                    + "day DATE, "
-                    + "PRIMARY KEY (employeeID, sourceID, day), "
-                    + "FOREIGN KEY (employeeID) REFERENCES Employee(employeeID), "
-                    + "FOREIGN KEY (sourceID) REFERENCES IncomeSource(sourceID))"
->>>>>>> b545ccdb278eb38d0cdfde71b13d5398428cfa9a
     };
 
     private static void addForeignKeys(Connection dbconn) {
@@ -618,7 +442,6 @@ public class DBMSSetup {
             pstmt.setString(7, passType);
             pstmt.setString(8, status);
             pstmt.setInt(9, memberID);
-
 
             if (rentalID == -1) {
                 pstmt.setNull(10, Types.INTEGER); // Set rentalID to NULL if not provided
@@ -845,15 +668,8 @@ public class DBMSSetup {
 
         // *
     }
-<<<<<<< HEAD
      */
     // * random entity generator ------------------------------------------------------------------------------
-=======
-
-    // * random entity generator
-    // ------------------------------------------------------------------------------
-
->>>>>>> b545ccdb278eb38d0cdfde71b13d5398428cfa9a
     // rand param for seeding
     // * add random member to the database
     // * returns the memberID of the new member
@@ -867,16 +683,8 @@ public class DBMSSetup {
 
         String phone = String.format("%03d-%03d-%04d", rand.nextInt(1000), rand.nextInt(1000), rand.nextInt(10000));
         String email = randStr(rand, -1) + "@gmail.com";
-<<<<<<< HEAD
         java.sql.Date dob = new java.sql.Date(System.currentTimeMillis() - randLong(rand, 0, 100 * 365L * 24 * 60 * 60 * 1000)); // random date of birth 100 years ago
         String emergencyContact = String.format("%03d-%03d-%04d", rand.nextInt(1000), rand.nextInt(1000), rand.nextInt(10000));
-=======
-        java.sql.Date dob = new java.sql.Date(
-                System.currentTimeMillis() - rand.nextLong(100 * 365L * 24 * 60 * 60 * 1000)); // random date of birth
-                                                                                               // 100 years ago
-        String emergencyContact = String.format("%03d-%03d-%04d", rand.nextInt(1000), rand.nextInt(1000),
-                rand.nextInt(10000));
->>>>>>> b545ccdb278eb38d0cdfde71b13d5398428cfa9a
 
         int memberID = addMember(dbconn, name, phone, email, dob, emergencyContact);
         if (memberID == -1) {
@@ -948,31 +756,13 @@ public class DBMSSetup {
             }
 
             if (status.equals("Active")) {
-<<<<<<< HEAD
                 timeOfPurchase = new java.sql.Date(System.currentTimeMillis() - randLong(rand, 0, offset)); // random date up to offset ago
             } else {
                 // ! this can create rare cases in which a member holds multiple ski passes at the same time some time in the past when inactive is called multiple times
                 timeOfPurchase = new java.sql.Date(System.currentTimeMillis() - offset - randLong(rand, 0, 3L * 365 * 24 * 60 * 60 * 1000)); // random inactive date up to 3 years (+ offset) ago
-=======
-                timeOfPurchase = new java.sql.Date(System.currentTimeMillis() - rand.nextLong(offset)); // random date
-                                                                                                        // up to offset
-                                                                                                        // ago
-            } else {
-                // ! this can create rare cases in which a member holds multiple ski passes at
-                // the same time some time in the past when inactive is called multiple times
-                timeOfPurchase = new java.sql.Date(
-                        System.currentTimeMillis() - offset - rand.nextLong(3L * 365 * 24 * 60 * 60 * 1000)); // random
-                                                                                                              // inactive
-                                                                                                              // date up
-                                                                                                              // to 3
-                                                                                                              // years
-                                                                                                              // (+
-                                                                                                              // offset)
-                                                                                                              // ago
->>>>>>> b545ccdb278eb38d0cdfde71b13d5398428cfa9a
             }
             expDate = new java.sql.Date(timeOfPurchase.getTime() + offset); // expiration date is offset from current
-                                                                            // time
+            // time
         }
 
         int skiPassID = generateRandomID(dbconn, "SkiPass", "skiPassID"); // generate random ski pass ID
@@ -984,11 +774,7 @@ public class DBMSSetup {
         if (rand.nextBoolean()) {
             rentalID = generateRandomID(dbconn, "GearRental", "rentalID"); // generate random rental ID
 
-<<<<<<< HEAD
             result = addRandomGearRental(dbconn, rentalID, rand, skiPassID, expDate, expDate);
-=======
-            int result = addRandomGearRental(dbconn, rentalID, rand, skiPassID, expDate, expDate);
->>>>>>> b545ccdb278eb38d0cdfde71b13d5398428cfa9a
             if (result == -1) {
                 System.err.println("Error adding gear rental: " + rentalID + ", " + skiPassID);
                 return -1;
@@ -996,7 +782,7 @@ public class DBMSSetup {
 
             // update the ski pass with the rental ID
             try (PreparedStatement pstmt = dbconn.prepareStatement(
-                "UPDATE SkiPass SET rentalID = ? WHERE skiPassID = ?")) {
+                    "UPDATE SkiPass SET rentalID = ? WHERE skiPassID = ?")) {
                 pstmt.setInt(1, rentalID);
                 pstmt.setInt(2, skiPassID);
                 pstmt.executeUpdate();
@@ -1005,13 +791,6 @@ public class DBMSSetup {
                 return -1;
             }
         }
-
-<<<<<<< HEAD
-=======
-        int result = addSkiPass(dbconn, skiPassID, price, timeOfPurchase, expDate, totalUses, remainingUses, passType,
-                status,
-                memberID, rentalID);
->>>>>>> b545ccdb278eb38d0cdfde71b13d5398428cfa9a
 
         if (result == -1) {
             System.err.println("Error adding ski pass: " + skiPassID + ", " + price + ", " + timeOfPurchase + ", "
@@ -1027,14 +806,8 @@ public class DBMSSetup {
             java.sql.Date skiStartDate, java.sql.Date skiExpDate) {
         // gear rental: rentalID, startDate, expDate, return status, status, skiPassID
 
-<<<<<<< HEAD
         java.sql.Date startDate = new java.sql.Date(randLong(rand, skiStartDate.getTime(),
                 Math.min(System.currentTimeMillis(), skiExpDate.getTime()))); // random date between start date, and min(now or skiExpDate)
-=======
-        java.sql.Date startDate = new java.sql.Date(rand.nextLong(skiStartDate.getTime(),
-                Math.min(System.currentTimeMillis(), skiExpDate.getTime()))); // random date between start date, and
-                                                                              // min(now or skiExpDate)
->>>>>>> b545ccdb278eb38d0cdfde71b13d5398428cfa9a
         String returnStatus = rand.nextBoolean() ? "Returned" : "Not Returned"; // 50% chance of being returned
 
         String status = rand.nextInt(100) >= 5 ? "Active" : "Inactive"; // 5% chance of being inactive
@@ -1064,19 +837,13 @@ public class DBMSSetup {
         randomChars[0] = Character.toUpperCase(randomChars[0]); // capitalize the first letter
         return new String(randomChars);
     }
-<<<<<<< HEAD
 
     private static long randLong(Random rand, long min, long max) {
         return min + (long) (rand.nextDouble() * (max - min)); // generate random long between min and max
     }
     // * random entity generator ------------------------------------------------------------------------------
-=======
-    // * random entity generator
-    // ------------------------------------------------------------------------------
->>>>>>> b545ccdb278eb38d0cdfde71b13d5398428cfa9a
 
     // #endregion Populate tables
-
     // update region
     // * update member in the database
     public static boolean updateMember(Connection conn, int memberId, String newPhone, String newEmail,
@@ -1191,7 +958,6 @@ public class DBMSSetup {
     }
 
     // end region
-
     // delete region
     // * delete member in the database
     public static boolean deleteMember(Connection conn, int memberId) {
@@ -1386,9 +1152,7 @@ public class DBMSSetup {
     }
 
     // end region
-
     // * update/delete helpers
-
     // checks if the member has open records in the database
     // returns true if there are open records, false otherwise
     private static boolean hasOpenRecords(Connection conn, String sql, int memberId) throws SQLException {
