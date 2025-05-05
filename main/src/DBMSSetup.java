@@ -20,6 +20,9 @@ import java.sql.*;
 
 public class DBMSSetup {
 
+    static final boolean printDebug = false; // set to true to print debug messages
+
+    // #region // * Main methods
     public static void main(String[] args) throws Exception {
         Connection dbconn = getDbconn(); // connect to the database
     }
@@ -72,9 +75,9 @@ public class DBMSSetup {
         return dbconn;
     }
 
-    // * Table Creation
-    // ---------------------------------------------------------------------------
-    // Tables to be Made:
+    // #endregion Main methods
+    // #region // * Table Creation
+    // #region Tables creation consts
     static final String[] tableNames = new String[]{
         // main entities
         "Member",
@@ -102,7 +105,6 @@ public class DBMSSetup {
         "EmployeeIncomeSource"
     };
 
-    // Table Creation Statements
     static final String[] tableCreateStatements = new String[]{
         // Member: memberID, name, phone#, email, dob, emergency contact
         "CREATE TABLE Member ("
@@ -278,7 +280,7 @@ public class DBMSSetup {
         + "FOREIGN KEY (employeeID) REFERENCES Employee(employeeID), "
         + "FOREIGN KEY (sourceID) REFERENCES IncomeSource(sourceID))"
     };
-    // #endregion Table Creation Statements
+    // #endregion Tables creation consts
 
     private static void makeTables(Connection dbconn) {
         for (int i = 0; i < tableNames.length; i++) {
@@ -288,7 +290,6 @@ public class DBMSSetup {
             // makes the current table
             try {
                 Statement stmt = dbconn.createStatement();
-                // System.out.println("Table made " + tableName + "");
                 stmt.executeUpdate(createTableSQL);
             } catch (SQLException e) {
                 System.err.println("Error: couldn't INIT table " + tableName + ": " + e.getMessage());
@@ -307,6 +308,55 @@ public class DBMSSetup {
         }
     }
 
-    // * Table Creation (End)
-    // ---------------------------------------------------------------------
+    // #endregion Table Creation
+    // #region // * Add/Update/Delete
+    // * Member
+    // adds a member to the database
+    private static void addMember(Connection dbconn, String name, String email, java.sql.Date dob, String emergencyContact) {
+        int memberID = generateRandomID(dbconn, "Member", "memberID");
+
+        try (PreparedStatement pstmt = dbconn.prepareStatement("INSERT INTO Member (memberID, name, email, dob, emergencyContact) VALUES (?, ?, ?, ?, ?)")) {
+            pstmt.setInt(1, memberID);
+            pstmt.setString(2, name);
+            pstmt.setString(3, email);
+            pstmt.setDate(4, dob);
+            pstmt.setString(5, emergencyContact);
+
+            pstmt.executeUpdate();
+
+            if (printDebug) {
+                System.out.println("Member added: " + memberID + ", " + name + ", " + email + ", " + dob + ", " + emergencyContact);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error adding member: " + e.getMessage());
+        }
+    }
+
+    private static int generateRandomID(Connection dbconn, String tableName, String columnName) {
+        int i = 0;
+        while (true) {
+            int randomID = new java.util.Random().nextInt(100000); // Generate random ID
+            try (PreparedStatement checkStmt = dbconn.prepareStatement("SELECT COUNT(*) FROM ? WHERE ? = ?")) {
+                checkStmt.setString(1, tableName);
+                checkStmt.setString(2, columnName);
+                checkStmt.setInt(3, randomID);
+
+                try (ResultSet rs = checkStmt.executeQuery()) {
+                    if (rs.next() && rs.getInt(1) == 0) {
+                        return randomID; // ID is unique, return it
+                    }
+                    i++;
+                    if (i > 100) {
+                        System.err.println("Error: Unable to generate a unique ID for table (100 tries in)" + tableName);
+                        return -1; // Return -1 if unable to generate a unique ID after 100 attempts
+                    }
+                }
+            } catch (SQLException e) {
+                System.err.println("Error checking ID uniqueness for table " + tableName + ": " + e.getMessage());
+                return -1; // Return -1 in case of an error
+            }
+        }
+    }
+
+// #endregion Add/Update/Delete
 }
