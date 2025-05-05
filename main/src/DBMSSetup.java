@@ -3,6 +3,8 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.io.IOException;
+import java.sql.*;
 
 public class DBMSSetup {
 
@@ -60,14 +62,16 @@ public class DBMSSetup {
 
     // * Table Creation ---------------------------------------------------------------------------
     // Tables to be Made:
-    String[] tableNames = new String[]{
+    static final String[] tableNames = new String[]{
         // main entities
         "Member",
         "SkiPass",
         "GearRental",
+
         "Equipment",
         "EquipmentUpdate",
         "GearRentalUpdate",
+        
         "Trail",
         "Lift",
         "LessonOrder",
@@ -78,6 +82,7 @@ public class DBMSSetup {
         "Lodge",
         "IncomeSource",
         "Shuttle",
+
         // relation entities
         "LessonToOrder",
         "TrailLift",
@@ -87,7 +92,8 @@ public class DBMSSetup {
         "EmployeeIncomeSource"
     };
 
-    String[] tableCreateStatements = new String[]{
+    // Table Creation Statements
+    static final String[] tableCreateStatements = new String[]{
         // Member: memberID, name, phone#, email, dob, emergency contact
         "create table Member ("
         + "memberID integer, "
@@ -106,33 +112,30 @@ public class DBMSSetup {
         + "returnStatus varchar(50), "
         + "status varchar(50), "
         + "skiPassID integer, "
-        + "primary key (rentalID), ",
+        + "primary key (rentalID))",
         // Equipment: EquipmentID, type, size, status
 
         // Equipment Update: equipmentUpdateID, equipmentID, type, notes
         "create table EquipmentUpdate ("
         + "equipmentUpdateID integer, "
         + "equipmentID integer, "
-        + "type varchar(50), "
+        + "type varchar(20), "
         + "notes varchar(50), "
-        + "primary key (equipmentUpdateID), ",
-
+        + "primary key (equipmentUpdateID))",
         // Gear Rental Update: rentalUpdateID, rentalID, type, notes
         "create table GearRentalUpdate ("
         + "rentalUpdateID integer, "
         + "rentalID integer, "
-        + "type varchar(50), "
-        + "notes varchar(50), "
-        + "primary key (rentalUpdateID), ",
-
+        + "type varchar(20), "
+        + "notes varchar(200), "
+        + "primary key (rentalUpdateID))",
         // Trail: trailName, location, difficulty, category, status
         "create table Trail ("
         + "trailName varchar(50), "
         + "location varchar(50), "
-        + "difficulty varchar(50), "
-        + "category varchar(50), "
-        + "status varchar(50), ",
-
+        + "difficulty varchar(20), "
+        + "category varchar(20), "
+        + "status varchar(10))",
         // Lift: liftName, ability level, openTime, closeTime, status
 
         // LessonOrder: lessonOrderID, memberID, lessonsPurchased, remainingSessions
@@ -141,8 +144,7 @@ public class DBMSSetup {
         + "memberID integer, "
         + "lessonsPurchased integer, "
         + "remainingSessions integer, "
-        + "primary key (lessonOrderID), ",
-
+        + "primary key (lessonOrderID))",
         // Lesson: LessonID, lessonName, EmployeeID
 
         // LessonSession: SessionID, Date, startTime, endTime, lessonID
@@ -152,8 +154,7 @@ public class DBMSSetup {
         + "startTime time, "
         + "endTime time, "
         + "lessonID integer, "
-        + "primary key (sessionID), ",
-
+        + "primary key (sessionID))",
         // Instructor: EmployeeID, Certification level
 
         // Employee: EmployeeID, Name, age, sex, race, monthly salary, job title
@@ -161,12 +162,11 @@ public class DBMSSetup {
         + "employeeID integer, "
         + "name varchar(50), "
         + "age integer"
-        + "sex varchar(10), "
-        + "race varchar(10), "
+        + "sex varchar(20), "
+        + "race varchar(20), "
         + "monthlySalary integer, "
         + "jobTitle varchar(50), "
-        + "primary key (employeeID), ",
-
+        + "primary key (employeeID))",
         // Lodge: lodgeID, Location
 
         // IncomeSource: sourceID, day, lodgeID, sourceName, dailyIncome
@@ -176,14 +176,34 @@ public class DBMSSetup {
         + "lodgeID integer, "
         + "sourceName varchar(50), "
         + "dailyIncome integer, "
-        + "primary key (sourceID), ",
-
-        // Shuttle: shuttleID, location, capacity, status
-
+        + "primary key (sourceID))" // Shuttle: shuttleID, location, capacity, status
     };
 
-    private static void makeTables(Connection dconn) {
+    private static void makeTables(Connection dbconn) {
+        for (int i = 0; i < tableNames.length; i++) {
+            String tableName = tableNames[i];
+            String createTableSQL = tableCreateStatements[i];
 
+            // makes the current table
+            try {
+                Statement stmt = dbconn.createStatement();
+                // System.out.println("Table made " + tableName + "");
+                stmt.executeUpdate(createTableSQL);
+            } catch (SQLException e) {
+                System.err.println("Error: couldn't INIT table " + tableName + ": " + e.getMessage());
+                System.exit(-1);
+            }
+
+            // Grant SELECT permission on the table to PUBLIC
+            String grantSelectSQL = String.format("GRANT SELECT ON %s TO PUBLIC", tableName);
+            try {
+                Statement stmt = dbconn.createStatement();
+                stmt.executeUpdate(grantSelectSQL);
+                // System.out.println("Granted SELECT on table: " + tableName);
+            } catch (SQLException e) {
+                System.err.println("Error granting SELECT on table " + tableName + ": " + e.getMessage());
+            }
+        }
     }
 
     // * Table Creation (End) ---------------------------------------------------------------------
