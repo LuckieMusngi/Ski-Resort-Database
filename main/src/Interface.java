@@ -817,12 +817,41 @@ public class Interface {
     // #endregion update
     // #region // * delete
     // * delete member in the database
+    // * delete member in the database
     public static boolean deleteMember(Connection conn, int memberId) {
         try {
             // Check active ski passes, rentals, lessons
-            String activeSkiPass = "SELECT COUNT(*) FROM SkiPass WHERE memberID = ? AND expirationDate >= CURRENT_DATE";
-            String activeRental = "SELECT COUNT(*) FROM GearRental WHERE memberID = ? AND returnStatus = 'not returned'";
-            String activeLesson = "SELECT COUNT(*) FROM LessonOrder WHERE memberID = ? AND usedStatus = 'unused'";
+            String activeSkiPass = """
+                    SELECT
+                        COUNT(*)
+                    FROM
+                        SkiPass
+                    WHERE
+                        SkiPass.memberID = ?
+                        AND SkiPass.expDate >= CURRENT_DATE
+                    """;
+
+            String activeRental = """
+                    SELECT
+                        COUNT(*)
+                    FROM
+                        GearRental
+                    JOIN
+                        SkiPass ON GearRental.skiPassID = SkiPass.skiPassID
+                    WHERE
+                        SkiPass.memberID = ?
+                        AND GearRental.returnStatus = 'not returned'
+                    """;
+
+            String activeLesson = """
+                    SELECT
+                        COUNT(*)
+                    FROM
+                        LessonOrder
+                    WHERE
+                        LessonOrder.memberID = ?
+                        AND LessonOrder.remainingSessions < LessonOrder.lessonsPurchased
+                    """;
 
             if (hasOpenRecords(conn, activeSkiPass, memberId)
                     || hasOpenRecords(conn, activeRental, memberId)
@@ -833,26 +862,32 @@ public class Interface {
 
             conn.setAutoCommit(false);
             try {
-                // Delete lessons
-                try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM LessonOrder WHERE memberID = ?")) {
+                // Delete lesson orders
+                try (PreparedStatement stmt = conn.prepareStatement(
+                        "DELETE FROM LessonOrder WHERE memberID = ?")) {
                     stmt.setInt(1, memberId);
                     stmt.executeUpdate();
                 }
 
-                // Delete rentals
-                try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM GearRental WHERE memberID = ?")) {
+                // Delete gear rentals via skiPass lookup
+                try (PreparedStatement stmt = conn.prepareStatement(
+                        "DELETE FROM GearRental WHERE skiPassID IN (\n" +
+                                "    SELECT skiPassID FROM SkiPass WHERE memberID = ?\n" +
+                                ")")) {
                     stmt.setInt(1, memberId);
                     stmt.executeUpdate();
                 }
 
                 // Delete ski passes
-                try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM SkiPass WHERE memberID = ?")) {
+                try (PreparedStatement stmt = conn.prepareStatement(
+                        "DELETE FROM SkiPass WHERE memberID = ?")) {
                     stmt.setInt(1, memberId);
                     stmt.executeUpdate();
                 }
 
-                // Delete member
-                try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM Member WHERE memberID = ?")) {
+                // Finally delete the member
+                try (PreparedStatement stmt = conn.prepareStatement(
+                        "DELETE FROM Member WHERE memberID = ?")) {
                     stmt.setInt(1, memberId);
                     stmt.executeUpdate();
                 }
