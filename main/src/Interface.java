@@ -296,7 +296,7 @@ public class Interface {
                         System.out.println("Updating a gear rental...");
                         System.out.println("This needs the following parameters: rentalID, return status (true/false)");
                         int rentalID = (int) getArgument(scanner, "rental ID", 0);
-                        boolean isReturned = (boolean) getArgument(scanner, "return status (true/false)", 0);
+                        boolean isReturned = (boolean) getArgument(scanner, "return status (true/false)", 4);
                         boolean result = updateEquipmentRental(dbconn, rentalID, isReturned);
                         if (result) {
                             System.out.println("Gear rental updated successfully.");
@@ -397,7 +397,7 @@ public class Interface {
     }
 
     // * getArgument: get an argument from the user
-    static final String[] typeStr = {"int", "String", "Date", "equipment array (comma separated)"}; // types of
+    static final String[] typeStr = {"int", "String", "Date", "equipment array (comma separated)", "boolean (true/false)"}; // types of
     // arguments
 
     private static Object getArgument(Scanner scanner, String argName, int type) {
@@ -437,6 +437,16 @@ public class Interface {
                         }
                         return equipments;
                     }
+                    case 4 -> {
+                        if (input.toLowerCase().startsWith("t")) {
+                            return true;
+                        } else if (input.toLowerCase().startsWith("f")) {
+                            return false;
+                        } else {
+                            throw new IllegalArgumentException("Invalid boolean value: " + input);
+                        }
+                    }
+
                     default ->
                         throw new IllegalArgumentException("Invalid type: " + type);
                 }
@@ -445,6 +455,7 @@ public class Interface {
                 if (type == 2) {
                     System.out.println("Dates are in YYYY-MM-DD.");
                 }
+                
                 // it goes again
             }
         }
@@ -1119,7 +1130,7 @@ public class Interface {
                     String status = res.getString("status"); // Get the current status
 
                     // Check if the pass is already archived
-                    if ("archived".equals(status)) {
+                    if ("Archived".equals(status)) {
                         System.out.println("Ski pass is already archived.");
                         return true; // No further action needed
                     }
@@ -1132,7 +1143,7 @@ public class Interface {
                     }
 
                     // Archive the ski pass by updating the status to 'archived'
-                    String archiveSql = "UPDATE SkiPass SET status = 'archived' WHERE skiPassID = ?";
+                    String archiveSql = "UPDATE SkiPass SET status = 'Archived' WHERE skiPassID = ?";
                     try (PreparedStatement archiveStmt = conn.prepareStatement(archiveSql)) {
                         archiveStmt.setInt(1, skiPassId);
                         int rowsUpdated = archiveStmt.executeUpdate();
@@ -1162,7 +1173,7 @@ public class Interface {
                     }
 
                     // Archive equipment
-                    String archiveSql = "UPDATE Equipment SET status = 'archived' WHERE equipmentID = ?";
+                    String archiveSql = "UPDATE Equipment SET status = 'Archived' WHERE equipmentID = ?";
                     try (PreparedStatement archiveStmt = conn.prepareStatement(archiveSql)) {
                         archiveStmt.setInt(1, equipmentId);
                         int updated = archiveStmt.executeUpdate();
