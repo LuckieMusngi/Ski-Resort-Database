@@ -28,3 +28,14 @@ To run in lectura:
 
 
     For both of these, you will need to sign in with your oracle username and password
+
+Workload Distribution:
+    Luckie Musngi:
+        Worked on creating tables, writing add, constraint checking, populating tables, writing queries, creating schema
+        General debugging
+
+
+    AJ Becerra:
+        Worked on creating tables, writing update/delete, constaint checking, writing queries creating schema
+        General debugging
+        Creation of E-R Diagram and analysis
