@@ -909,7 +909,7 @@ public class Interface {
 
     public static boolean updateSkiPassUsage(Connection conn, int skiPassId, int newRemainingUses) {
         // Check if pass is valid
-        String sqlCheck = "SELECT expirationDate, remainingUses FROM SkiPass WHERE skiPassID = ? AND expirationDate >= CURRENT_DATE";
+        String sqlCheck = "SELECT expDate, remainingUses FROM SkiPass WHERE skiPassID = ? AND expDate >= CURRENT_DATE";
 
         if (newRemainingUses < 0) {
             System.err.println("New remaining uses cannot be negative.");
@@ -925,7 +925,7 @@ public class Interface {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    Date expirationDate = rs.getDate("expirationDate");
+                    Date expirationDate = rs.getDate("expDate");
                     int remainingUses = rs.getInt("remainingUses");
 
                     // Check if the pass is valid

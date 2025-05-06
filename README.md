@@ -29,6 +29,8 @@ To run in lectura (start lectura first):
 
     For both of these, you will need to sign in with your oracle username and password
 
+    I highly recommend u take advantage of print tables!
+
 Workload Distribution:
     
     Luckie Musngi:
