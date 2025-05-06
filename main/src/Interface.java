@@ -28,8 +28,22 @@ public class Interface {
                 }
 
                 case 'p' -> {
-                    String tableName = (String) getArgument(scanner, "table name", 1);
-                    printTable(dbconn, tableName);
+                    String tableName = (String) getArgument(scanner, "table name (or 'help')", 1);
+                    if (tableName.equalsIgnoreCase(("help"))) {
+                        System.out.println("""
+                        Available tables:
+                            Member, SkiPass, GearRental
+                            Equipment, EquipmentUpdate, GearRentalUpdate
+                            Trail, Lift, LessonOrder
+                            Lesson, LessonSession, Instructor
+                            Employee, Lodge, IncomeSource
+                            Shuttle, LessonToOrder, TrailLift
+                            LiftPassUsage, ShuttleLodge, RentalEquipment
+                            EmployeeIncomeSource
+                        """);
+                    } else {
+                        printTable(dbconn, tableName);
+                    }
                 }
 
                 case 'e' -> {
@@ -70,7 +84,7 @@ public class Interface {
             }
         } catch (SQLException e) {
             if (e.getMessage().startsWith("ORA-00942")) {
-                System.err.println("Table name doesn't exist");
+                System.err.println("Table name doesn't exist (use 'help' for names)");
             } else {
                 System.err.println("SQL Error: " + e.getMessage());
             }
@@ -134,7 +148,6 @@ public class Interface {
                         if (memberID != -1) {
                             System.out.println("Member added with ID: " + memberID);
                         } else {
-                            System.out.println("Error adding member.");
                             return -1;
                         }
                     }
@@ -159,7 +172,6 @@ public class Interface {
                         if (result != -1) {
                             System.out.println("Ski pass added with ID: " + skiPassID);
                         } else {
-                            System.out.println("Error adding ski pass.");
                             return -1;
                         }
                     }
@@ -176,7 +188,6 @@ public class Interface {
                         if (result != -1) {
                             System.out.println("Lesson order added with ID: " + lessonOrderID);
                         } else {
-                            System.out.println("Error adding lesson order.");
                             return -1;
                         }
                     }
@@ -220,7 +231,6 @@ public class Interface {
                         if (result != -1) {
                             System.out.println("Gear rental added with ID: " + rentalID);
                         } else {
-                            System.out.println("Error adding gear rental.");
                             return -1;
                         }
                     }
@@ -235,7 +245,6 @@ public class Interface {
                         if (result != -1) {
                             System.out.println("Equipment added with ID: " + equipmentID);
                         } else {
-                            System.out.println("Error adding equipment.");
                             return -1;
                         }
                     }
@@ -244,7 +253,6 @@ public class Interface {
             case 'u' -> {
                 switch (entity) {
                     case 'm' -> {
-                        // ! rather faulty one might say TODO
                         System.out.println("Updating a member...");
                         System.out.println(
                                 "This needs the following parameters: memberID, new phone#, new email, new emergency contact");
@@ -256,7 +264,6 @@ public class Interface {
                         if (result) {
                             System.out.println("Member updated successfully.");
                         } else {
-                            System.out.println("Error updating member.");
                             return -1;
                         }
                     }
@@ -269,7 +276,6 @@ public class Interface {
                         if (result) {
                             System.out.println("Ski pass updated successfully.");
                         } else {
-                            System.out.println("Error updating ski pass.");
                             return -1;
                         }
                     }
@@ -283,7 +289,6 @@ public class Interface {
                         if (result) {
                             System.out.println("Lesson order updated successfully.");
                         } else {
-                            System.out.println("Error updating lesson order.");
                             return -1;
                         }
                     }
@@ -296,7 +301,6 @@ public class Interface {
                         if (result) {
                             System.out.println("Gear rental updated successfully.");
                         } else {
-                            System.out.println("Error updating gear rental.");
                             return -1;
                         }
                     }
@@ -305,12 +309,12 @@ public class Interface {
                         System.out.println("This needs the following parameters: equipmentID, new type, new size");
                         int equipmentID = (int) getArgument(scanner, "equipment ID", 0);
                         String newType = (String) getArgument(scanner, "new type", 1);
-                        String newSize = (String) getArgument(scanner, "new size", 1);
+                        int newSizeInt = (int) getArgument(scanner, "new size", 0); // force int
+                        String newSize = String.valueOf(newSizeInt); // convert back int to String
                         boolean result = updateEquipment(dbconn, equipmentID, newType, newSize);
                         if (result) {
                             System.out.println("Equipment updated successfully.");
                         } else {
-                            System.out.println("Error updating equipment.");
                             return -1;
                         }
                     }
@@ -326,7 +330,6 @@ public class Interface {
                         if (result) {
                             System.out.println("Member deleted successfully.");
                         } else {
-                            System.out.println("Error deleting member.");
                             return -1;
                         }
                     }
@@ -338,7 +341,6 @@ public class Interface {
                         if (result) {
                             System.out.println("Ski pass deleted successfully.");
                         } else {
-                            System.out.println("Error deleting ski pass.");
                             return -1;
                         }
                     }
@@ -350,7 +352,6 @@ public class Interface {
                         if (result) {
                             System.out.println("Lesson order deleted successfully.");
                         } else {
-                            System.out.println("Error deleting lesson order.");
                             return -1;
                         }
                     }
@@ -362,7 +363,6 @@ public class Interface {
                         if (result) {
                             System.out.println("Gear rental deleted successfully.");
                         } else {
-                            System.out.println("Error deleting gear rental.");
                             return -1;
                         }
                     }
@@ -374,7 +374,6 @@ public class Interface {
                         if (result) {
                             System.out.println("Equipment deleted successfully.");
                         } else {
-                            System.out.println("Error deleting equipment.");
                             return -1;
                         }
                     }
@@ -562,6 +561,26 @@ public class Interface {
             String emergencyContact) {
         int memberID = generateRandomID(dbconn, "Member", "memberID");
 
+        if (!email.contains("@")) {
+            System.err.println("Email must contain '@'.");
+            return -1; // error
+        }
+
+        if (!phone.matches("\\d{10}")) {
+            System.err.println("Phone number must be 10 digits (do not put spaces or dashes).");
+            return -1; // error
+        }
+
+        if (dob == null) {
+            System.err.println("Date of birth cannot be null.");
+            return -1; // error
+        }
+
+        if (emergencyContact == null || emergencyContact.isEmpty()) {
+            System.err.println("Emergency contact cannot be null or empty.");
+            return -1; // error
+        }
+
         try (PreparedStatement pstmt = dbconn.prepareStatement(
                 "INSERT INTO Member VALUES (?, ?, ?, ?, ?, ?)")) {
             pstmt.setInt(1, memberID);
@@ -592,6 +611,39 @@ public class Interface {
             int totalUses, int remainingUses, String passType, String status, int memberID, int rentalID) {
         // int skiPassID = generateRandomID(dbconn, "SkiPass", "skiPassID");
 
+        if (price < 0) {
+            System.err.println("Price cannot be negative.");
+            return -1; // error
+        }
+        if (totalUses < 0) {
+            System.err.println("Total uses cannot be negative.");
+            return -1; // error
+        }
+        if (remainingUses < 0) {
+            System.err.println("Remaining uses cannot be negative.");
+            return -1; // error
+        }
+        if (remainingUses > totalUses) {
+            System.err.println("Remaining uses cannot be greater than total uses.");
+            return -1; // error
+        }
+        if (passType == null || passType.isEmpty()) {
+            System.err.println("Pass type cannot be null or empty.");
+            return -1; // error
+        }
+        if (status == null || status.isEmpty()) {
+            System.err.println("Status cannot be null or empty.");
+            return -1; // error
+        }
+        if (memberID < 0) {
+            System.err.println("Member ID cannot be negative.");
+            return -1; // error
+        }
+        if (rentalID < -1) {
+            System.err.println("Rental ID cannot be negative.");
+            return -1; // error
+        }
+
         try (PreparedStatement pstmt = dbconn.prepareStatement(
                 "INSERT INTO SkiPass VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
             pstmt.setInt(1, skiPassID);
@@ -617,7 +669,7 @@ public class Interface {
                         + ", " + remainingUses + ", " + passType + ", " + status + ", " + memberID + ", " + rentalID);
             }
         } catch (SQLException e) {
-            System.err.println("Error adding SkiPass: " + e.getMessage());
+            System.err.println("Error adding SkiPass (check arguments): " + e.getMessage());
             return -1;
         }
         return 0;
@@ -627,6 +679,28 @@ public class Interface {
     // adds a lesson order to the database
     private static int addLessonOrder(Connection dbconn, int lessonOrderID, int memberID, int lessonsPurchased,
             int remainingSessions) {
+
+        if (lessonsPurchased < 0) {
+            System.err.println("Lessons purchased cannot be negative.");
+            return -1;
+        }
+        if (remainingSessions < 0) {
+            System.err.println("Remaining sessions cannot be negative.");
+            return -1;
+        }
+        if (remainingSessions > lessonsPurchased) {
+            System.err.println("Remaining sessions cannot be greater than lessons purchased.");
+            return -1;
+        }
+        if (memberID < 0) {
+            System.err.println("Member ID cannot be negative.");
+            return -1;
+        }
+        if (lessonOrderID < 0) {
+            System.err.println("Lesson order ID cannot be negative.");
+            return -1;
+        }
+
         try (PreparedStatement pstmt = dbconn.prepareStatement(
                 "INSERT INTO LessonOrder VALUES (?, ?, ?, ?)")) {
             pstmt.setInt(1, lessonOrderID);
@@ -642,7 +716,7 @@ public class Interface {
             }
         } catch (SQLException e) {
             System.err.println("Error adding LessonOrder: " + e.getMessage());
-            return -1; // error
+            return -1;
         }
         return 0;
     }
@@ -653,6 +727,19 @@ public class Interface {
         try {
             // int equipmentID = generateRandomID(conn, "Equipment", "equipmentID"); //
             // generate ID for the new equipment
+
+            if (equipmentID < 0) {
+                System.err.println("Equipment ID cannot be negative.");
+                return -1;
+            }
+            if (type == null || type.isEmpty()) {
+                System.err.println("Type cannot be null or empty.");
+                return -1;
+            }
+            if (size == null || size.isEmpty()) {
+                System.err.println("Size cannot be null or empty.");
+                return -1;
+            }
 
             String sql = "INSERT INTO Equipment (equipmentID, type, eSize, status) VALUES (?, ?, ?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -670,7 +757,7 @@ public class Interface {
             }
         } catch (SQLException e) {
             System.err.println("Error adding equipment: " + e.getMessage());
-            return -1; // error
+            return -1;
         }
         return 0;
     }
@@ -679,8 +766,42 @@ public class Interface {
     // * GearRental: rentalID, startDate, expDate, return status, status, skiPassID
     private static int addGearRental(Connection conn, int rentalID, java.sql.Date startDate,
             String returnStatus, String status, int skiPassID, int[] rentedEquipmentTypes) {
-        // int rentalID = generateRandomID(conn, "GearRental", "rentalID"); // generate
-        // ID for the new gear rental
+
+        if (rentalID < 0) {
+            System.err.println("Rental ID cannot be negative.");
+            return -1;
+        }
+        if (startDate == null) {
+            System.err.println("Start date cannot be null.");
+            return -1;
+        }
+        if (returnStatus == null || returnStatus.isEmpty()) {
+            System.err.println("Return status cannot be null or empty.");
+            return -1;
+        }
+        if (status == null || status.isEmpty()) {
+            System.err.println("Status cannot be null or empty.");
+            return -1;
+        }
+        if (skiPassID < 0) {
+            System.err.println("Ski pass ID cannot be negative.");
+            return -1;
+        }
+        if (rentedEquipmentTypes == null || rentedEquipmentTypes.length == 0) {
+            System.err.println("Rented equipment types cannot be null or empty.");
+            return -1;
+        }
+        if (rentedEquipmentTypes.length > 5) {
+            System.err.println("Rented equipment types cannot be more than 5.");
+            return -1;
+        }
+        for (int equipmentType : rentedEquipmentTypes) {
+            if (equipmentType < 0 || equipmentType > 4) {
+                System.err.println("Invalid equipment type: " + equipmentType);
+                return -1;
+            }
+        }
+        
         String sql = "INSERT INTO GearRental (rentalID, startDate, returnStatus, status, skiPassID) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, rentalID);
@@ -743,6 +864,22 @@ public class Interface {
     // * update member in the database
     public static boolean updateMember(Connection conn, int memberId, String newPhone, String newEmail,
             String newEmergencyContact) {
+        if (!newEmail.contains("@")) {
+            System.err.println("Email must contain '@'.");
+            return false;
+        }
+
+        if (!newPhone.matches("\\d{10}")) {
+            System.err.println("Phone number must be 10 digits (do not put spaces or dashes).");
+            return false;
+        }
+
+        if (newEmergencyContact == null || newEmergencyContact.isEmpty()) {
+            System.err.println("Emergency contact cannot be null or empty.");
+            return false;
+        }
+
+        // update all of member (except memberID and name)
         String sql = "UPDATE Member SET phone = ?, email = ?, emergencyContact = ? WHERE memberID = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, newPhone);
@@ -759,6 +896,16 @@ public class Interface {
     public static boolean updateSkiPassUsage(Connection conn, int skiPassId, int newRemainingUses) {
         // Check if pass is valid
         String sqlCheck = "SELECT expirationDate, remainingUses FROM SkiPass WHERE skiPassID = ? AND expirationDate >= CURRENT_DATE";
+
+        if (newRemainingUses < 0) {
+            System.err.println("New remaining uses cannot be negative.");
+            return false; // error
+        }
+        if (skiPassId < 0) {
+            System.err.println("Ski pass ID cannot be negative.");
+            return false; // error
+        }
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheck)) {
             pstmt.setInt(1, skiPassId); // get ski pass ID to update
 
@@ -794,6 +941,21 @@ public class Interface {
     // Updates equipment type and size, and logs the change
     public static boolean updateEquipment(Connection conn, int equipmentId, String newType, String newSize) {
         String sql = "UPDATE Equipment SET type = ?, eSize = ? WHERE equipmentID = ?";
+
+        if (equipmentId < 0) {
+            System.err.println("Equipment ID cannot be negative.");
+            return false; // error
+        }
+        if (newType == null || newType.isEmpty()) {
+            System.err.println("Type cannot be null or empty.");
+            return false; // error
+        }
+        if (newSize == null || newSize.isEmpty()) {
+            System.err.println("Size cannot be null or empty.");
+            return false; // error
+        }
+
+
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, newType);
             pstmt.setString(2, newSize);
@@ -1200,45 +1362,57 @@ public class Interface {
         // get
         String sql = """
                     SELECT
-                        LiftPassUsage.liftName,
-                        LiftPassUsage.timeUsed
+                        liftName,
+                        dateUsed
                     FROM
                         LiftPassUsage
                     WHERE
-                        LiftPassUsage.skiPassID = ?
-                """;
-        String sql2 = """
-                    SELECT
-                        GearRental.startDate,
-                        GearRental.returnStatus
-                    FROM
-                        GearRental
-                    WHERE
-                        GearRental.skiPassID = ?
+                        skiPassID = ?
                 """;
 
-        try (
-                PreparedStatement pstmt = conn.prepareStatement(sql); PreparedStatement pstmt2 = conn.prepareStatement(sql2);) {
+        String sql2 = "SELECT Equipment.type, Equipment.eSize, GearRental.returnStatus, GearRental.startDate, GearRental.rentalID "
+                + "FROM Equipment "
+                + "JOIN RentalEquipment ON Equipment.equipmentID = RentalEquipment.equipmentID "
+                + "JOIN GearRental ON RentalEquipment.rentalID = GearRental.rentalID "
+                + "JOIN SkiPass ON GearRental.skiPassID = SkiPass.skiPassID "
+                + "WHERE SkiPass.skiPassID = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql); PreparedStatement pstmt2 = conn.prepareStatement(sql2);) {
             pstmt.setInt(1, skiPassID);
             pstmt2.setInt(1, skiPassID);
 
             try (ResultSet res = pstmt.executeQuery()) {
                 System.out.println("Lift usage for ski pass ID " + skiPassID + ":");
+                boolean hasLiftUsage = false;
                 while (res.next()) {
+                    hasLiftUsage = true;
                     String liftName = res.getString("liftName");
-                    Timestamp timeUsed = res.getTimestamp("timeUsed");
+                    Timestamp timeUsed = res.getTimestamp("dateUsed");
 
                     System.out.println("Lift: " + liftName + ", Time used: " + timeUsed);
+                }
+                if (!hasLiftUsage) {
+                    System.out.println("No lift usage found for ski pass ID " + skiPassID);
                 }
             }
 
             try (ResultSet res2 = pstmt2.executeQuery()) {
                 System.out.println("Gear rentals for ski pass ID " + skiPassID + ":");
+
+                boolean hasRentals = false;
                 while (res2.next()) {
+                    hasRentals = true;
                     Date startDate = res2.getDate("startDate");
                     String returnStatus = res2.getString("returnStatus");
+                    String type = res2.getString("type");
+                    String size = res2.getString("eSize");
+                    int rentalID = res2.getInt("rentalID");
+                    System.out.println("Rental ID: " + rentalID + ", Equipment: " + type + " (" + size + "), Start date: " + startDate
+                            + ", " + returnStatus);
 
-                    System.out.println("Start date: " + startDate + ", Return status: " + returnStatus);
+                }
+                if (!hasRentals) {
+                    System.out.println("No gear rentals found for ski pass ID " + skiPassID);
                 }
             }
 
@@ -1281,9 +1455,18 @@ public class Interface {
     // given a memberID, do they have a ski pass?, do they have a rental?
     // along with the information on all the equipment they have rented
     public static void getMemberInfo(Connection conn, int memberID) {
-        String sql = """
+        String sq = """
                     SELECT
-                        skiPassID
+                        name, phone, email, dob, emergencyContact
+                    FROM
+                        Member
+                    WHERE
+                        memberID = ?
+                """;
+
+        String sql1 = """
+                    SELECT
+                        skiPassID, timeOfPurchase
                     FROM
                         SkiPass
                     WHERE
@@ -1301,21 +1484,38 @@ public class Interface {
                 """;
 
         String sql3 = "SELECT Equipment.type, Equipment.eSize, GearRental.returnStatus "
-                        + "FROM Equipment "
-                        + "JOIN RentalEquipment ON Equipment.equipmentID = RentalEquipment.equipmentID "
-                        + "JOIN GearRental ON RentalEquipment.rentalID = GearRental.rentalID "
-                        + "JOIN SkiPass ON GearRental.skiPassID = SkiPass.skiPassID "
-                        + "WHERE SkiPass.memberID = ?";
+                + "FROM Equipment "
+                + "JOIN RentalEquipment ON Equipment.equipmentID = RentalEquipment.equipmentID "
+                + "JOIN GearRental ON RentalEquipment.rentalID = GearRental.rentalID "
+                + "JOIN SkiPass ON GearRental.skiPassID = SkiPass.skiPassID "
+                + "WHERE SkiPass.memberID = ?";
 
         boolean hasSkiPass = false;
         boolean hasRental = false;
 
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(sq)) {
             pstmt.setInt(1, memberID);
             ResultSet res = pstmt.executeQuery();
             if (res.next()) {
+                System.out.println("Name: " + res.getString("name"));
+                System.out.println("Phone: " + res.getString("phone"));
+                System.out.println("Email: " + res.getString("email"));
+                System.out.println("DOB: " + res.getDate("dob"));
+                System.out.println("Emergency Contact: " + res.getString("emergencyContact"));
+            } else {
+                System.out.println("No member found with ID: " + memberID);
+                return;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching member info: " + e.getMessage());
+        }
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql1)) {
+            pstmt.setInt(1, memberID);
+            ResultSet res = pstmt.executeQuery();
+            while (res.next()) {
                 hasSkiPass = true;
-                System.out.println("Ski pass ID: " + res.getInt("skiPassID"));
+                System.out.println("Ski pass ID: " + res.getInt("skiPassID") + ", Purchased: " + res.getTimestamp("timeOfPurchase"));
             }
         } catch (SQLException e) {
             System.err.println("Error fetching ski pass: " + e.getMessage());
@@ -1325,7 +1525,7 @@ public class Interface {
             try (PreparedStatement pstmt2 = conn.prepareStatement(sql2)) {
                 pstmt2.setInt(1, memberID);
                 ResultSet res2 = pstmt2.executeQuery();
-                if (res2.next()) {
+                while (res2.next()) {
                     hasRental = true;
                     System.out.println("Rental ID: " + res2.getInt("rentalID"));
                 }
