@@ -19,12 +19,12 @@ To run in lectura:
     Run DBMSSetup.java
         java DBMSSetup
 
-    This will both create the tables and populate them with values that make sense
+    This will both create the tables and populate them with values
 
     Run Interface.java
         java Interface
 
-    Follow the instructions of this interface to do modify and query the database
+    Follow the instructions of this interface to modify and query the database
 
 
-    For both of these files, you will need to sign in with your oracle username and password
+    For both of these, you will need to sign in with your oracle username and password
