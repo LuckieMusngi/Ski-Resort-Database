@@ -13,7 +13,7 @@ public class Interface {
         System.out.println("Here, you may add/update/delete records or query records.");
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("Would you like to modify records (m), query records (q),  or exit (e):");
+            System.out.println("Would you like to modify records (m), query records (q), print table (p)  or exit (e):");
             String input = scanner.nextLine();
 
             switch (input.toLowerCase().charAt(0)) {
@@ -47,31 +47,35 @@ public class Interface {
         }
     }
 
-        // * Prints table tuples
-        private static void printTable(Connection dbconn, String tableName) {
-            String query = "SELECT * FROM " + tableName;
-            try (Statement stmt = dbconn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
-    
-                ResultSetMetaData metaData = rs.getMetaData();
-                int columnCount = metaData.getColumnCount();
-    
-                // Print column headers
+    // * Prints table tuples
+    private static void printTable(Connection dbconn, String tableName) {
+        String query = "SELECT * FROM " + tableName;
+        try (Statement stmt = dbconn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnCount = metaData.getColumnCount();
+
+            // Print column headers
+            for (int i = 1; i <= columnCount; i++) {
+                System.out.print(metaData.getColumnName(i) + "\t");
+            }
+            System.out.println();
+
+            // Print rows
+            while (rs.next()) {
                 for (int i = 1; i <= columnCount; i++) {
-                    System.out.print(metaData.getColumnName(i) + "\t");
+                    System.out.print(rs.getString(i) + "\t");
                 }
                 System.out.println();
-    
-                // Print rows
-                while (rs.next()) {
-                    for (int i = 1; i <= columnCount; i++) {
-                        System.out.print(rs.getString(i) + "\t");
-                    }
-                    System.out.println();
-                }
-            } catch (SQLException e) {
-                System.err.println("Error printing table contents for " + tableName + ": " + e.getMessage());
+            }
+        } catch (SQLException e) {
+            if (e.getMessage().startsWith("ORA-00942")) {
+                System.err.println("Table name doesn't exist");
+            } else {
+                System.err.println("SQL Error: " + e.getMessage());
             }
         }
+    }
 
     private static int prepareModifyRecords(Connection dbconn, Scanner scanner) {
         System.out.println("Which record would you like to add/update/delete?");
@@ -468,6 +472,7 @@ public class Interface {
                     System.out.println("Querying member lessons: ");
                     int memberID = (int) getArgument(scanner, "member ID", 0);
                     getMemberLessons(dbconn, memberID);
+                    return 0;
                 }
 
                 case '2' -> {
@@ -475,12 +480,14 @@ public class Interface {
                     System.out.println("Querying ski pass info: ");
                     int skiPassID = (int) getArgument(scanner, "ski pass ID", 0);
                     getSkiPassInfo(dbconn, skiPassID);
+                    return 0;
                 }
 
                 case '3' -> {
                     // query3: getTrailInfo
                     System.out.println("Querying open intermediate trails: ");
                     getTrailInfo(dbconn);
+                    return 0;
                 }
 
                 case '4' -> {
@@ -488,6 +495,7 @@ public class Interface {
                     System.out.println("Querying member info: ");
                     int memberID = (int) getArgument(scanner, "member ID", 0);
                     getMemberInfo(dbconn, memberID);
+                    return 0;
                 }
 
                 case 'e' -> {
@@ -901,9 +909,9 @@ public class Interface {
 
                 // Delete gear rentals via skiPass lookup
                 try (PreparedStatement stmt = conn.prepareStatement(
-                        "DELETE FROM GearRental WHERE skiPassID IN (\n" +
-                                "    SELECT skiPassID FROM SkiPass WHERE memberID = ?\n" +
-                                ")")) {
+                        "DELETE FROM GearRental WHERE skiPassID IN (\n"
+                        + "    SELECT skiPassID FROM SkiPass WHERE memberID = ?\n"
+                        + ")")) {
                     stmt.setInt(1, memberId);
                     stmt.executeUpdate();
                 }
@@ -1284,26 +1292,20 @@ public class Interface {
 
         String sql2 = """
                     SELECT
-                        rentalID
+                        SkiPass.rentalID
                     FROM
-                        GearRental
-                    WHERE
-                        memberID = ?
-                """;
-
-        String sql3 = """
-                    SELECT
-                        Equipment.type,
-                        Equipment.size
-                    FROM
-                        Equipment
-                    JOIN RentalEquipment ON Equipment.equipmentID = RentalEquipment.equipmentID
-                    JOIN GearRental ON RentalEquipment.rentalID = GearRental.rentalID
-                    JOIN SkiPass ON GearRental.skiPassID = SkiPass.skiPassID
+                        SkiPass
+                    JOIN GearRental ON SkiPass.skiPassID = GearRental.skiPassID
                     WHERE
                         SkiPass.memberID = ?
-                        AND GearRental.returnStatus = 'not returned'
                 """;
+
+        String sql3 = "SELECT Equipment.type, Equipment.eSize, GearRental.returnStatus "
+                        + "FROM Equipment "
+                        + "JOIN RentalEquipment ON Equipment.equipmentID = RentalEquipment.equipmentID "
+                        + "JOIN GearRental ON RentalEquipment.rentalID = GearRental.rentalID "
+                        + "JOIN SkiPass ON GearRental.skiPassID = SkiPass.skiPassID "
+                        + "WHERE SkiPass.memberID = ?";
 
         boolean hasSkiPass = false;
         boolean hasRental = false;
@@ -1341,8 +1343,9 @@ public class Interface {
                 System.out.println("Equipment owned:");
                 while (res3.next()) {
                     String type = res3.getString("type");
-                    String size = res3.getString("size");
-                    System.out.println("- " + type + " (" + size + ")");
+                    String size = res3.getString("eSize");
+                    String returnStatus = res3.getString("returnStatus");
+                    System.out.println("- " + type + " (" + size + "), ReturnStatus: " + returnStatus);
                 }
             } catch (SQLException e) {
                 System.err.println("Error fetching equipment: " + e.getMessage());
