@@ -110,8 +110,8 @@ public class DBMSSetup {
         }
     }
 
-    // * Prints the contents of a table
-    private static void printTableContents(Connection dbconn, String tableName) {
+    // * Prints table tuples
+    private static void printTable(Connection dbconn, String tableName) {
         String query = "SELECT * FROM " + tableName;
         try (Statement stmt = dbconn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
 
@@ -292,9 +292,9 @@ public class DBMSSetup {
                     + "status VARCHAR2(10))",
             // LessonToOrder: lessonID, lessonOrderID
             "CREATE TABLE LessonToOrder ("
-                    + "lessonID INTEGER, "
+                    + "sessionID INTEGER, "
                     + "lessonOrderID INTEGER, "
-                    + "PRIMARY KEY (lessonID, lessonOrderID))",
+                    + "PRIMARY KEY (sessionID, lessonOrderID))", // ! changed to sessionID
             // TrailLift: trailName, liftName
             "CREATE TABLE TrailLift ("
                     + "trailName VARCHAR(25), "
@@ -355,7 +355,7 @@ public class DBMSSetup {
                     "ALTER TABLE IncomeSource ADD CONSTRAINT fk_incomeSource FOREIGN KEY (lodgeID) REFERENCES Lodge(lodgeID)");
             // Shuttle references ShuttleLodge
             stmt.executeUpdate(
-                    "ALTER TABLE LessonToOrder ADD CONSTRAINT fk_lessonToOrder_lesson FOREIGN KEY (lessonID) REFERENCES Lesson(lessonID)");
+                    "ALTER TABLE LessonToOrder ADD CONSTRAINT fk_lessonToOrder_session FOREIGN KEY (sessionID) REFERENCES LessonSession(sessionID)");
             // ShuttleLodge references Shuttle and Lodge
             stmt.executeUpdate(
                     "ALTER TABLE LessonToOrder ADD CONSTRAINT fk_lessonToOrder_order FOREIGN KEY (lessonOrderID) REFERENCES LessonOrder(lessonOrderID)");
@@ -744,19 +744,19 @@ public class DBMSSetup {
         makeIncomeSourceRecords(dbconn, rand, new int[]{employee4, employee5}, schoolID, "'Gift shop'");
 
         // * Add snowboard lessons (beginner, intermediate, advanced)
-        int boardBeginnerID = makeRandomLesson(dbconn, rand, "Snowboard Beginner", "PSIA-AASI I");
-        int boardIntermediateID = makeRandomLesson(dbconn, rand, "Snowboard Intermediate", "PSIA-AASI II");
-        int boardAdvancedID = makeRandomLesson(dbconn, rand, "Snowboard Advanced", "PSIA-AASI III");
+        int[] boardBeginnerIDs = makeRandomLesson(dbconn, rand, "Snowboard Beginner", "PSIA-AASI I");
+        int[] boardIntermediateIDs = makeRandomLesson(dbconn, rand, "Snowboard Intermediate", "PSIA-AASI II");
+        int[] boardAdvancedIDs = makeRandomLesson(dbconn, rand, "Snowboard Advanced", "PSIA-AASI III");
 
         // * add ski lessons (beginner, intermediate, advanced)
-        int skiBeginnerID = makeRandomLesson(dbconn, rand, "Ski Beginner", "PSIA-AASI I");
-        int skiIntermediateID = makeRandomLesson(dbconn, rand, "Ski Intermediate", "PSIA-AASI II");
-        int skiAdvancedID = makeRandomLesson(dbconn, rand, "Ski Advanced", "PSIA-AASI III");
+        int[] skiBeginnerIDs = makeRandomLesson(dbconn, rand, "Ski Beginner", "PSIA-AASI I");
+        int[] skiIntermediateIDs = makeRandomLesson(dbconn, rand, "Ski Intermediate", "PSIA-AASI II");
+        int[] skiAdvancedIDs = makeRandomLesson(dbconn, rand, "Ski Advanced", "PSIA-AASI III");
 
         // * add shuttles
-        int shuttle1 = addToTable(dbconn, "Shuttle", "shuttleID", new String[]{"'Shuttle 1'", "'active'"});
-        int shuttle2 = addToTable(dbconn, "Shuttle", "shuttleID", new String[]{"'Shuttle 2'", "'active'"});
-        int shuttle3 = addToTable(dbconn, "Shuttle", "shuttleID", new String[]{"'Shuttle 2'", "'inactive'"});
+        int shuttle1 = addToTable(dbconn, "Shuttle", "shuttleID", new String[]{"'Shuttle 1'", "'Active'"});
+        int shuttle2 = addToTable(dbconn, "Shuttle", "shuttleID", new String[]{"'Shuttle 2'", "'Active'"});
+        int shuttle3 = addToTable(dbconn, "Shuttle", "shuttleID", new String[]{"'Shuttle 2'", "'Inactive'"});
 
         // Shuttle 1 goes to lodge 1 and lodge 2
         rawAddToTable(dbconn, "ShuttleLodge", new String[]{String.valueOf(shuttle1), String.valueOf(visitorCenterID)});
@@ -783,10 +783,10 @@ public class DBMSSetup {
         }
 
         // * add lifts
-        addLift(dbconn, "Lift A", "Beginner-Intermediate", Time.valueOf("09:00:00"), Time.valueOf("16:00:00"), "Open");
-        addLift(dbconn, "Lift B", "Beginner-Intermediate", Time.valueOf("08:30:00"), Time.valueOf("16:30:00"), "Open");
-        addLift(dbconn, "Lift C", "Intermediate-Expert", Time.valueOf("10:00:00"), Time.valueOf("15:00:00"), "Closed");
-        addLift(dbconn, "Lift D", "Intermediate-Expert", Time.valueOf("09:00:00"), Time.valueOf("17:00:00"), "Open");
+        addLift(dbconn, "Lift A", "Beginner-Intermediate", Time.valueOf("09:00:00"), Time.valueOf("16:00:00"), "Active");
+        addLift(dbconn, "Lift B", "Beginner-Intermediate", Time.valueOf("08:30:00"), Time.valueOf("16:30:00"), "Active");
+        addLift(dbconn, "Lift C", "Intermediate-Expert", Time.valueOf("10:00:00"), Time.valueOf("15:00:00"), "Inactive");
+        addLift(dbconn, "Lift D", "Intermediate-Expert", Time.valueOf("09:00:00"), Time.valueOf("17:00:00"), "Active");
         String[] liftNames = new String[]{"Lift A", "Lift B", "Lift C", "Lift D"};
         
         // * add trails
@@ -822,9 +822,36 @@ public class DBMSSetup {
                 }
             }
 
+            int allLessonSessionLength = boardBeginnerIDs.length + boardIntermediateIDs.length + boardAdvancedIDs.length + skiBeginnerIDs.length + skiIntermediateIDs.length + skiAdvancedIDs.length;
+
+
+            // if i % 10 == 0 or 1, add it to unfinished lessons; otherwise, add it to finished lessons
+            int[] finishedSessions = new int[allLessonSessionLength * 2 / 5];
+            int[] unfinishedSessions = new int[allLessonSessionLength * 3 / 5];
+            int finishedCount = 0, unfinishedCount = 0;
+
+            // f, f, f, f, u, u, u, u, u, u
+            for (int[] lessonIDs : new int[][]{boardBeginnerIDs, boardIntermediateIDs, boardAdvancedIDs, skiBeginnerIDs, skiIntermediateIDs, skiAdvancedIDs}) {
+                for (int j = 0; j < lessonIDs.length; j++) {
+                    if (j % 10 < 4) {
+                        finishedSessions[unfinishedCount++] = lessonIDs[j];
+                    } else {
+                        unfinishedSessions[finishedCount++] = lessonIDs[j];
+                    }
+                }
+            }
+
+            // // Trim the arrays to their actual sizes
+            // finishedSessions = java.util.Arrays.copyOf(finishedSessions, finishedCount);
+            // unfinishedSessions = java.util.Arrays.copyOf(unfinishedSessions, unfinishedCount);
+
             int lessonOrderID = 0;
             if (rand.nextInt(100) < 40) { // 40% chance to make an order
-                lessonOrderID = makeRandomLessonOrder(dbconn, rand, memberID, new int[]{boardBeginnerID, boardIntermediateID, boardAdvancedID, skiBeginnerID, skiIntermediateID, skiAdvancedID});
+                lessonOrderID = makeRandomLessonOrder(dbconn, rand, memberID, finishedSessions, unfinishedSessions);
+                if (lessonOrderID == -1) {
+                    System.err.println("Error adding lesson order for member " + memberID);
+                    status = -1; // error
+                }
             }
 
             if (status == -1 || lessonOrderID == -1 || memberID == -1) {
@@ -886,15 +913,17 @@ public class DBMSSetup {
     }
 
     // * adds weekly sessions with random days and times (but same days/times per week); makes 5 weeks of sessions (2 back, current, and 2 forward)
-    private static int addRandomSessions(Connection dbconn, Random rand, int lessonID) {
+    private static int[] addRandomSessions(Connection dbconn, Random rand, int lessonID) {
         // LessonSession: sessionID, startTime, endTime, lessonID
 
         // Generate two random days of the week
-        int day1 = rand.nextInt(7) - 3; // Random day between -3 and 3 (3 days forward)
-        int day2 = rand.nextInt(7) - 3; // Random day between -3 and 3 (3 days forward)
+        int day1 = rand.nextInt(7) + 1; // Random day between 1 and 8
+        int day2 = rand.nextInt(7) + 1; // Random day between 1 and 8
         while (day1 == day2) {
-            day2 = rand.nextInt(7) - 3; // Ensure the two days are different
+            day2 = rand.nextInt(7); // Ensure the two days are different
         }
+
+        int[] sessionIDs = new int[10]; // Array to store session IDs for 5 weeks (2 sessions per week)
 
         int startHour = 10 + rand.nextInt(5); // Random hour between 10 and 14 (2 PM)
         String startTime = String.format("%02d:00:00", startHour);
@@ -904,82 +933,107 @@ public class DBMSSetup {
             System.out.println("Session Details: Day1: " + day1 + ", Day2: " + day2 + ", StartTime: " + startTime + ", EndTime: " + endTime);
         }
 
-        int sessionID = -1;
+        int sessions = 0;
         // * add lesson sessions to the database for the past 2 weeks to 2 weeks forward
         // * returns the number of sessions added
-        for (int i = -2; i <= 3; i++) { // Loop from 2 weeks ago (-14) to 2 weeks forward (+14)
+        
+        for (int i = -2; i < 3; i++) { // Loop from 2 weeks ago (-14) to 2 weeks forward (+14)
             // current day + i weeks + day days
             java.sql.Date sessionDate1 = new java.sql.Date(System.currentTimeMillis() + i * 24L * 60 * 60 * 1000 * 7 + day1 * 24L * 60 * 60 * 1000); // Calculate the session date
             java.sql.Date sessionDate2 = new java.sql.Date(System.currentTimeMillis() + i * 24L * 60 * 60 * 1000 * 7 + day2 * 24L * 60 * 60 * 1000); // Calculate the session date
 
             // Add session for day 1
-            sessionID = addToTable(dbconn, "LessonSession", "sessionID", new String[]{
+            sessionIDs[sessions] = addToTable(dbconn, "LessonSession", "sessionID", new String[]{
                 "TO_DATE('" + sessionDate1 + " " + startTime + "', 'YYYY-MM-DD HH24:MI:SS')",
                 "TO_DATE('" + sessionDate1 + " " + endTime + "', 'YYYY-MM-DD HH24:MI:SS')",
                 String.valueOf(lessonID)
             });
-
-            if (sessionID == -1) {
+            
+            if (sessionIDs[sessions] == -1) {
                 System.err.println("Error adding session for lesson " + lessonID + " on date " + sessionDate1 + " or " + sessionDate2);
-                return -1; // error
+                return new int[] {-1}; // error
             }
-
+            sessions++;
+            
             // Add session for day 2
-            sessionID = addToTable(dbconn, "LessonSession", "sessionID", new String[]{
+            sessionIDs[sessions] = addToTable(dbconn, "LessonSession", "sessionID", new String[]{
                 "TO_DATE('" + sessionDate2 + " " + startTime + "', 'YYYY-MM-DD HH24:MI:SS')",
                 "TO_DATE('" + sessionDate2 + " " + endTime + "', 'YYYY-MM-DD HH24:MI:SS')",
                 String.valueOf(lessonID)
             });
 
-            if (sessionID == -1) {
+            if (sessionIDs[sessions] == -1) {
                 System.err.println("Error adding session for lesson " + lessonID + " on date " + sessionDate1 + " or " + sessionDate2);
-                return -1; // error
+                return new int[] {-1}; // error
             }
+            sessions++;
         }
 
-        return sessionID;
+        return sessionIDs; // returns 10: [f, f, f, f, u, u, u, u, u, u]
     }
 
     // * makes lesson orders for a member (and their lessonToOrders)
-    private static int makeRandomLessonOrder(Connection dbconn, Random rand, int memberID, int[] lessons) {
+    private static int makeRandomLessonOrder(Connection dbconn, Random rand, int memberID, int[] finishedSessions, int[] unfinishedSessions) {
         // LessonOrder: lessonOrderID, memberID, lessonsPurchased, remainingSessions
         int lessonOrderID = -1;
         int lessonAmount = rand.nextInt(10) + 1; // Random number of lessons between 1 and 10
 
         int lessonsPurchased = lessonAmount; // Lessons purchased start as the total lessons purchased
-        int remainingSessions = rand.nextInt(lessonAmount); // Random number of remaining sessions
+        int remainingSessions = rand.nextInt(lessonAmount); // random amount remain
 
         lessonOrderID = addToTable(dbconn, "LessonOrder", "lessonOrderID",
                 new String[]{
                     String.valueOf(memberID),
                     String.valueOf(lessonsPurchased),
                     String.valueOf(remainingSessions)});
-        int i = 0;
-        boolean[] pickedLessons = new boolean[lessons.length]; // Track picked lessons
-        while (i < lessonAmount) {
-            int lessonIndex = rand.nextInt(lessons.length); // Pick a random lesson index
 
-            if (!pickedLessons[lessonIndex]) { // Check if the lesson has already been picked
-                pickedLessons[lessonIndex] = true; // Mark the lesson as picked
+
+        int i = 0;
+        boolean[] pickedSessions = new boolean[unfinishedSessions.length]; // Track picked lessons
+        while (i < remainingSessions) {
+            int lessonIndex = rand.nextInt(pickedSessions.length); // Pick a random lesson index
+
+            if (!pickedSessions[lessonIndex]) { // Check if the lesson has already been picked
+                pickedSessions[lessonIndex] = true; // Mark the lesson as picked
 
                 // add lesson to the order
-                int lessonID = lessons[lessonIndex];
-                int lessonToOrderID = rawAddToTable(dbconn, "LessonToOrder", new String[]{String.valueOf(lessonID), String.valueOf(lessonOrderID)});
+                int sessionID = unfinishedSessions[lessonIndex];
+                int lessonToOrderID = rawAddToTable(dbconn, "LessonToOrder", new String[]{String.valueOf(sessionID), String.valueOf(lessonOrderID)});
 
                 if (lessonToOrderID == -1) {
                     System.err.println("Error adding lesson to order for member " + memberID);
                     return -1; // error
                 }
+                i++; // increment when one is picked (to ensure lessonAmount picked)
             }
-
-            i++; // increment whether or not we end up adding a lesson to the order (for variety)
         }
+
+        pickedSessions = new boolean[finishedSessions.length]; // Track picked lessons
+        // add the remaining sessions to the order
+        while (i < lessonsPurchased) {
+            int lessonIndex = rand.nextInt(finishedSessions.length); // Pick a random lesson index
+
+            if (!pickedSessions[lessonIndex]) { // Check if the lesson has already been picked
+                pickedSessions[lessonIndex] = true; // Mark the lesson as picked
+
+                // add lesson to the order
+                int sessionID = finishedSessions[lessonIndex];
+                int lessonToOrderID = rawAddToTable(dbconn, "LessonToOrder", new String[]{String.valueOf(sessionID), String.valueOf(lessonOrderID)});
+
+                if (lessonToOrderID == -1) {
+                    System.err.println("Error adding lesson to order for member " + memberID);
+                    return -1; // error
+                }
+                i++; // increment when one is picked (to ensure lessonAmount picked)
+            }
+        }
+
 
         return lessonOrderID;
     }
 
     // * makes a lesson with a new random instructor, and returns the lessonID
-    private static int makeRandomLesson(Connection dbconn, Random rand, String lessonName, String certification) {
+    private static int[] makeRandomLesson(Connection dbconn, Random rand, String lessonName, String certification) {
         int instructorID = addRandomEmployee(dbconn, rand, "Instructor");
         rawAddToTable(dbconn, "Instructor", new String[]{String.valueOf(instructorID), "'" + certification + "'"});
         
@@ -987,16 +1041,16 @@ public class DBMSSetup {
 
         if (lessonID == -1) {
             System.err.println("Error adding lesson: " + lessonName);
-            return -1;
+            return new int[] {-1}; // error
         }
 
-        int sessionID = addRandomSessions(dbconn, rand, lessonID);
-        if (sessionID == -1) {
+        int[] sessionIDs = addRandomSessions(dbconn, rand, lessonID);
+        if (sessionIDs[0] == -1) {
             System.err.println("Error adding sessions for lesson: " + lessonName);
-            return -1;
+            return new int[] {-1}; // error
         }
 
-        return lessonID;
+        return sessionIDs; // used in lessonOrder creation
     }
 
     // * add lift to the database

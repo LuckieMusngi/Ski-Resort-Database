@@ -27,6 +27,11 @@ public class Interface {
                     queryRecords(dbconn, scanner);
                 }
 
+                case 'p' -> {
+                    String tableName = (String) getArgument(scanner, "table name", 1);
+                    printTable(dbconn, tableName);
+                }
+
                 case 'e' -> {
                     // Exit
                     System.out.println("Exiting.");
@@ -42,12 +47,38 @@ public class Interface {
         }
     }
 
+        // * Prints table tuples
+        private static void printTable(Connection dbconn, String tableName) {
+            String query = "SELECT * FROM " + tableName;
+            try (Statement stmt = dbconn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+    
+                ResultSetMetaData metaData = rs.getMetaData();
+                int columnCount = metaData.getColumnCount();
+    
+                // Print column headers
+                for (int i = 1; i <= columnCount; i++) {
+                    System.out.print(metaData.getColumnName(i) + "\t");
+                }
+                System.out.println();
+    
+                // Print rows
+                while (rs.next()) {
+                    for (int i = 1; i <= columnCount; i++) {
+                        System.out.print(rs.getString(i) + "\t");
+                    }
+                    System.out.println();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error printing table contents for " + tableName + ": " + e.getMessage());
+            }
+        }
+
     private static int prepareModifyRecords(Connection dbconn, Scanner scanner) {
         System.out.println("Which record would you like to add/update/delete?");
         char entity = ' '; // arbitrary, gets set in following loop
         while (true) {
             System.out.println(
-                    "Member (m), Ski Pass (s), Equipment Inventory (l), Equipment Rental (r), Purchase Order (p), or Exit (e)");
+                    "Member (m), Ski Pass (s), Equipment Inventory (l), Equipment Rental (r), Purchase Order (p), or Exit to go back (e)");
 
             String input = scanner.nextLine();
             entity = input.toLowerCase().charAt(0); // get the first character of the input
@@ -418,7 +449,7 @@ public class Interface {
 
     private static int queryRecords(Connection dbconn, Scanner scanner) {
         while (true) {
-            System.out.println("Which query would you like to access (1, 2, 3, 4) or exit (e):");
+            System.out.println("Which query would you like to access (1, 2, 3, 4) or exit to go back (e):");
             System.out.println("1. For a given member, list all the ski lessons they have purchased, including the number of remaining\r\n"
                     + //
                     "sessions, instructor name, and scheduled time.");
@@ -462,7 +493,6 @@ public class Interface {
                 case 'e' -> {
                     // Exit
                     System.out.println("Exiting.");
-                    scanner.close(); // close the scanner
                     return 0;
                 }
 
@@ -1124,8 +1154,7 @@ public class Interface {
                         LessonOrder
                     JOIN LessonToOrder ON LessonOrder.lessonOrderID = LessonToOrder.lessonOrderID
                     JOIN Lesson ON LessonToOrder.LessonID = Lesson.LessonID
-                    JOIN Instructor ON Lesson.instructorID = Instructor.instructorID
-                    JOIN Employee ON Instructor.employeeID = Employee.employeeID
+                    JOIN Instructor ON Lesson.employeeID = Instructor.employeeID
                     WHERE
                         LessonOrder.memberID = ?
                 """;
@@ -1215,9 +1244,9 @@ public class Interface {
                     JOIN TrailLift ON Trail.trailName = TrailLift.trailName
                     JOIN Lift ON TrailLift.liftName = Lift.liftName
                     WHERE
-                        (Trail.difficulty = 'Beginner-Intermediate' OR Trail.difficulty = 'Intermediate-Expert')
-                        AND Trail.status = 'Open'
-                        AND Lift.status = 'Open'
+                        (Trail.difficulty = 'Intermediate')
+                        AND Trail.status = 'Active'
+                        AND Lift.status = 'Active'
                 """;
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             ResultSet res = pstmt.executeQuery();
