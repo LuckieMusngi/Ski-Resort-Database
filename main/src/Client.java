@@ -1,5 +1,8 @@
+
 import java.sql.*;
+
 public class Client {
+
     public static void main(String[] args) throws Exception {
         System.out.println("Hello, World!");
     }
@@ -127,9 +130,9 @@ public class Client {
             String activeRental = "SELECT COUNT(*) FROM EquipmentRental WHERE memberID = ? AND returnStatus = 'not returned'";
             String activeLesson = "SELECT COUNT(*) FROM LessonOrder WHERE memberID = ? AND usedStatus = 'unused'";
 
-            if (hasOpenRecords(conn, activeSkiPass, memberId) ||
-                    hasOpenRecords(conn, activeRental, memberId) ||
-                    hasOpenRecords(conn, activeLesson, memberId)) {
+            if (hasOpenRecords(conn, activeSkiPass, memberId)
+                    || hasOpenRecords(conn, activeRental, memberId)
+                    || hasOpenRecords(conn, activeLesson, memberId)) {
                 System.out.println("Cannot delete member: active ski passes, open rentals, or unused lessons exist.");
                 return false;
             }
@@ -380,7 +383,6 @@ public class Client {
 
     // #endregion // * update/delete/helpers + logging
     // #region // * queries
-
     // for a member, get all purchased ski lessons, the number of remaining
     // sessions, the lesson time, and lesson instructor
     public static void getMemberLessons(Connection conn, int memberId) {
@@ -441,8 +443,7 @@ public class Client {
                 """;
 
         try (
-                PreparedStatement pstmt = conn.prepareStatement(sql);
-                PreparedStatement pstmt2 = conn.prepareStatement(sql2);) {
+                PreparedStatement pstmt = conn.prepareStatement(sql); PreparedStatement pstmt2 = conn.prepareStatement(sql2);) {
             pstmt.setInt(1, skiPassID);
             pstmt2.setInt(1, skiPassID);
 

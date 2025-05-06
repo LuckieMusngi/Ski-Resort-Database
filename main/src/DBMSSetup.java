@@ -34,31 +34,11 @@ public class DBMSSetup {
 
         populateTables(dbconn);
 
-        // printTableContents(dbconn, "Equipment"); // print the contents of the
-        // Equipment table
-        // printTableContents(dbconn, "Member"); // print the contents of the Member
-        // table
-        // printTableContents(dbconn, "SkiPass"); // print the contents of the SkiPass
-        // table
-        // printTableContents(dbconn, "GearRental"); // print the contents of the
-        // GearRental table
-        // printTableContents(dbconn, "Employee"); // print the contents of the Employee
-        // table
-        // printTableContents(dbconn, "Trail"); // print the contents of the Trail table
-        // printTableContents(dbconn, "Lodge"); // print the contents of the Lodge table
-        // printTableContents(dbconn, "IncomeSource"); // print the contents of the
-        // IncomeSource table
-        // printTableContents(dbconn, "EmployeeIncomeSource"); // print the contents of
-        // the EmployeeIncomeSource table
-        // printTableContents(dbconn, "Instructor"); // print the contents of the
-        // Instructor table
-        // printTableContents(dbconn, "rentalEquipment"); // print the contents of the
-        // RentalEquipment table
-        // printTableContents(dbconn, "Lesson"); // print the contents of the Lesson
-        // table
-        // printTableContents(dbconn, "LessonSession"); // print the contents of the
-        // LessonSession table
-        printTupleCounts(dbconn); // print the number of tuples in each table
+        // printTableContents(dbconn, "Equipment"); // print the equipment table
+        // printTableContents(dbconn, "Member"); // print member table
+        // printTableContents(dbconn, "SkiPass"); // print skipass table
+
+        // printTupleCounts(dbconn); // print the number of tuples in each table
     }
 
   
