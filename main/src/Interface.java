@@ -46,7 +46,8 @@ public class Interface {
         System.out.println("Which record would you like to add/update/delete?");
         char entity = ' '; // arbitrary, gets set in following loop
         while (true) {
-            System.out.println("Member (m), Ski Pass (s), Equipment Inventory (l), Equipment Rental (r), Purchase Order (p), or Exit (e)");
+            System.out.println(
+                    "Member (m), Ski Pass (s), Equipment Inventory (l), Equipment Rental (r), Purchase Order (p), or Exit (e)");
 
             String input = scanner.nextLine();
             entity = input.toLowerCase().charAt(0); // get the first character of the input
@@ -77,7 +78,8 @@ public class Interface {
             }
         }
 
-        return modifyRecords(dbconn, scanner, action, entity); // call the modifyRecords method with the selected action and entity
+        return modifyRecords(dbconn, scanner, action, entity); // call the modifyRecords method with the selected action
+                                                               // and entity
     }
 
     private static int modifyRecords(Connection dbconn, Scanner scanner, char action, char entity) {
@@ -86,7 +88,8 @@ public class Interface {
                 switch (entity) {
                     case 'm' -> {
                         System.out.println("Adding a new member...");
-                        System.out.println("This needs the following parameters: name, phone#, email, dob, emergency contact");
+                        System.out.println(
+                                "This needs the following parameters: name, phone#, email, dob, emergency contact");
                         String name = (String) getArgument(scanner, "name", 1);
                         String phone = (String) getArgument(scanner, "phone#", 1);
                         String email = (String) getArgument(scanner, "email", 1);
@@ -102,10 +105,12 @@ public class Interface {
                     }
                     case 's' -> {
                         System.out.println("Adding a new ski pass...");
-                        System.out.println("This needs the following parameters: price, timeOfPurchase, expDate, totalUses, passType, memberID, rentalID");
+                        System.out.println(
+                                "This needs the following parameters: price, timeOfPurchase, expDate, totalUses, passType, memberID, rentalID");
                         int skiPassID = generateRandomID(dbconn, "SkiPass", "skiPassID");
                         int price = (int) getArgument(scanner, "price (numeric amount in cents)", 0);
-                        java.sql.Date timeOfPurchase = java.sql.Date.valueOf(java.time.LocalDate.now()); // default current date
+                        java.sql.Date timeOfPurchase = java.sql.Date.valueOf(java.time.LocalDate.now()); // default
+                                                                                                         // current date
                         java.sql.Date expDate = (java.sql.Date) getArgument(scanner, "expiration date", 2);
                         int totalUses = (int) getArgument(scanner, "total uses", 0);
                         int remainingUses = totalUses; // default to total uses
@@ -114,7 +119,8 @@ public class Interface {
                         int memberID = (int) getArgument(scanner, "member ID", 0);
                         int rentalID = (int) getArgument(scanner, "rental ID", 0);
                         // ! ski pass doesn't make its own ID
-                        int result = addSkiPass(dbconn, skiPassID, price, timeOfPurchase, expDate, totalUses, remainingUses, passType, status, memberID, rentalID);
+                        int result = addSkiPass(dbconn, skiPassID, price, timeOfPurchase, expDate, totalUses,
+                                remainingUses, passType, status, memberID, rentalID);
                         if (result != -1) {
                             System.out.println("Ski pass added with ID: " + skiPassID);
                         } else {
@@ -130,7 +136,8 @@ public class Interface {
                         int remainingSessions = lessonsPurchased; // default to lessons purchased
                         int lessonOrderID = generateRandomID(dbconn, "LessonOrder", "lessonOrderID");
                         // ! lesson order doesn't make its own ID
-                        int result = addLessonOrder(dbconn, lessonOrderID, memberID, lessonsPurchased, remainingSessions);
+                        int result = addLessonOrder(dbconn, lessonOrderID, memberID, lessonsPurchased,
+                                remainingSessions);
                         if (result != -1) {
                             System.out.println("Lesson order added with ID: " + lessonOrderID);
                         } else {
@@ -140,14 +147,17 @@ public class Interface {
                     }
                     case 'r' -> {
                         System.out.println("Adding a new gear rental...");
-                        System.out.println("This needs the following parameters: skiPassID, rentedEquipmentTypes (comma separated)");
-                        java.sql.Date startDate = java.sql.Date.valueOf(java.time.LocalDate.now()); // default current date
+                        System.out.println(
+                                "This needs the following parameters: skiPassID, rentedEquipmentTypes (comma separated)");
+                        java.sql.Date startDate = java.sql.Date.valueOf(java.time.LocalDate.now()); // default current
+                                                                                                    // date
                         String returnStatus = "Not Returned"; // default to Not Returned
                         String status = "Active"; // default to active
                         int skiPassID = (int) getArgument(scanner, "ski pass ID", 0);
                         int rentalID = generateRandomID(dbconn, "GearRental", "rentalID");
                         // ! rental doesn't make its own ID
-                        String[] rentedEquipmentTypeStrs = (String[]) getArgument(scanner, "rented equipment types (comma separated)", 3);
+                        String[] rentedEquipmentTypeStrs = (String[]) getArgument(scanner,
+                                "rented equipment types (comma separated)", 3);
                         int[] rentedEquipmentTypes = new int[rentedEquipmentTypeStrs.length];
 
                         // convert back into int array
@@ -165,11 +175,13 @@ public class Interface {
                                 case "helmet" ->
                                     rentedEquipmentTypes[i] = 4;
                                 default ->
-                                    throw new IllegalArgumentException("Invalid equipment type: " + rentedEquipmentTypeStrs[i]);
+                                    throw new IllegalArgumentException(
+                                            "Invalid equipment type: " + rentedEquipmentTypeStrs[i]);
                             }
                         }
 
-                        int result = addGearRental(dbconn, rentalID, startDate, returnStatus, status, skiPassID, rentedEquipmentTypes);
+                        int result = addGearRental(dbconn, rentalID, startDate, returnStatus, status, skiPassID,
+                                rentedEquipmentTypes);
                         if (result != -1) {
                             System.out.println("Gear rental added with ID: " + rentalID);
                         } else {
@@ -199,7 +211,8 @@ public class Interface {
                     case 'm' -> {
                         // ! rather faulty one might say TODO
                         System.out.println("Updating a member...");
-                        System.out.println("This needs the following parameters: memberID, new phone#, new email, new emergency contact");
+                        System.out.println(
+                                "This needs the following parameters: memberID, new phone#, new email, new emergency contact");
                         int memberID = (int) getArgument(scanner, "member ID", 0);
                         String newPhone = (String) getArgument(scanner, "new phone#", 1);
                         String newEmail = (String) getArgument(scanner, "new email", 1);
@@ -227,7 +240,8 @@ public class Interface {
                     }
                     case 'l' -> {
                         System.out.println("Updating a lesson order...");
-                        System.out.println("This needs the following parameters: lessonOrderID, new remaining sessions");
+                        System.out
+                                .println("This needs the following parameters: lessonOrderID, new remaining sessions");
                         int lessonOrderID = (int) getArgument(scanner, "lesson order ID", 0);
                         int newRemainingSessions = (int) getArgument(scanner, "new remaining sessions", 0);
                         boolean result = updateLessonUsage(dbconn, lessonOrderID, newRemainingSessions);
@@ -339,7 +353,7 @@ public class Interface {
     // * getArgument helper
     private static boolean isEquipment(String equipment) {
         // Check if the equipment is valid (e.g., "Ski boots", "Ski poles", etc.)
-        String[] validEquipments = {"Ski boots", "Ski poles", "Skis", "Snowboard", "Helmet"};
+        String[] validEquipments = { "Ski boots", "Ski poles", "Skis", "Snowboard", "Helmet" };
         for (String validEquipment : validEquipments) {
             if (equipment.equalsIgnoreCase(validEquipment)) {
                 return true; // valid equipment
@@ -349,7 +363,8 @@ public class Interface {
     }
 
     // * getArgument: get an argument from the user
-    static final String[] typeStr = {"int", "String", "Date", "equipment array (comma separated)"}; // types of arguments
+    static final String[] typeStr = { "int", "String", "Date", "equipment array (comma separated)" }; // types of
+                                                                                                      // arguments
 
     private static Object getArgument(Scanner scanner, String argName, int type) {
         while (true) {
@@ -372,7 +387,8 @@ public class Interface {
                     case 2 -> {
                         return java.sql.Date.valueOf(input); // Date
                     }
-                    case 3 -> { // Handle equipment array (comma-separated values) ["Ski boots", "Ski poles", "Skis", "Snowboard", "Helmet"]
+                    case 3 -> { // Handle equipment array (comma-separated values) ["Ski boots", "Ski poles",
+                                // "Skis", "Snowboard", "Helmet"]
                         String[] equipments = input.split(",");
                         for (int i = 0; i < equipments.length; i++) {
                             equipments[i] = equipments[i].trim(); // trim whitespace
@@ -380,7 +396,8 @@ public class Interface {
                                 continue; // skip empties
                             }
                             if (!isEquipment(equipments[i])) {
-                                System.out.println("The valid equipment types are: Ski boots, Ski poles, Skis, Snowboard, Helmet.");
+                                System.out.println(
+                                        "The valid equipment types are: Ski boots, Ski poles, Skis, Snowboard, Helmet.");
                                 throw new IllegalArgumentException("Invalid equipment type: " + equipments[i]);
                             }
                         }
@@ -404,8 +421,7 @@ public class Interface {
     }
 
     private static Connection getDbconn() {
-        final String oracleURL
-                = // Magic lectura -> aloe access spell
+        final String oracleURL = // Magic lectura -> aloe access spell
                 "jdbc:oracle:thin:@aloe.cs.arizona.edu:1521:oracle";
 
         String username = null, // Oracle DBMS username
@@ -590,7 +606,7 @@ public class Interface {
             }
 
             // [0]ski boots [1]ski poles [2]skis [3]snowboards [4]helmet
-            String[] types = {"Ski boots", "Ski poles", "Skis", "Snowboard", "Helmet"};
+            String[] types = { "Ski boots", "Ski poles", "Skis", "Snowboard", "Helmet" };
 
             // Add rented equipment to RentalEquipment table
             for (int equipmentType : rentedEquipmentTypes) {
@@ -1013,13 +1029,14 @@ public class Interface {
         String sql = """
                     SELECT
                         LessonOrder.remainingSessions,
-                        Instructor.name,
+                        Employee.name AS instructorName,
                         LessonOrder.scheduledTime
                     FROM
                         LessonOrder
                     JOIN LessonToOrder ON LessonOrder.orderID = LessonToOrder.orderID
                     JOIN Lesson ON LessonToOrder.LessonID = Lesson.LessonID
                     JOIN Instructor ON Lesson.instructorID = Instructor.instructorID
+                    JOIN Employee ON Instructor.employeeID = Employee.employeeID
                     WHERE
                         LessonOrder.memberID = ?
                 """;
@@ -1059,7 +1076,7 @@ public class Interface {
         String sql2 = """
                     SELECT
                         GearRental.startDate,
-                        GearRental.returnStatus,
+                        GearRental.returnStatus
                     FROM
                         GearRental
                     WHERE
@@ -1067,7 +1084,8 @@ public class Interface {
                 """;
 
         try (
-                PreparedStatement pstmt = conn.prepareStatement(sql); PreparedStatement pstmt2 = conn.prepareStatement(sql2);) {
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                PreparedStatement pstmt2 = conn.prepareStatement(sql2);) {
             pstmt.setInt(1, skiPassID);
             pstmt2.setInt(1, skiPassID);
 
@@ -1098,9 +1116,9 @@ public class Interface {
 
     // for intermediates, list all open trails, their category, and the lifts that
     // service them
-    public static void getTrailINfo(Connection conn) {
+    public static void getTrailInfo(Connection conn) {
         String sql = """
-                    SELECT
+                    SELECT DISTINCT
                         Trail.trailName,
                         Trail.category,
                         Lift.liftName
@@ -1129,61 +1147,81 @@ public class Interface {
 
     // given a memberID, do they have a ski pass?, do they have a rental?, if so
     // what equipment do they own?
-    public static void getMemberInfo(Connection conn, int MemberID) {
+    public static void getMemberInfo(Connection conn, int memberID) {
         String sql = """
                     SELECT
-                        SkiPass.skiPassID
+                        skiPassID
                     FROM
                         SkiPass
                     WHERE
-                        SkiPass.memberID = ?
+                        memberID = ?
                 """;
+
         String sql2 = """
-                Select
-                    GearRental.RentalID
-                FROM
-                    GEAR
-                WhHERE
-                    GearRental.memberID = ?
+                    SELECT
+                        rentalID
+                    FROM
+                        GearRental
+                    WHERE
+                        memberID = ?
                 """;
+
         String sql3 = """
                     SELECT
                         Equipment.type,
                         Equipment.size
                     FROM
                         Equipment
+                    JOIN RentalEquipment ON Equipment.equipmentID = RentalEquipment.equipmentID
                     JOIN GearRental ON RentalEquipment.rentalID = GearRental.rentalID
                     WHERE
                         GearRental.memberID = ?
                 """;
+
         boolean hasSkiPass = false;
         boolean hasRental = false;
 
-        try (
-                PreparedStatement pstmt = conn.prepareStatement(sql);) {
-            hasSkiPass = true;
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, memberID);
+            ResultSet res = pstmt.executeQuery();
+            if (res.next()) {
+                hasSkiPass = true;
+                System.out.println("Ski pass ID: " + res.getInt("skiPassID"));
+            }
         } catch (SQLException e) {
-            System.err.println("Error fetching skiPass: " + e.getMessage());
+            System.err.println("Error fetching ski pass: " + e.getMessage());
         }
+
         if (hasSkiPass) {
-            try (
-                    PreparedStatement pstmt2 = conn.prepareStatement(sql2);) {
-                hasRental = true;
+            try (PreparedStatement pstmt2 = conn.prepareStatement(sql2)) {
+                pstmt2.setInt(1, memberID);
+                ResultSet res2 = pstmt2.executeQuery();
+                if (res2.next()) {
+                    hasRental = true;
+                    System.out.println("Rental ID: " + res2.getInt("rentalID"));
+                }
             } catch (SQLException e) {
                 System.err.println("Error fetching rental: " + e.getMessage());
             }
         } else {
             System.out.println("Member does not have a ski pass.");
         }
-        if (hasRental) {
-            try (
-                    PreparedStatement pstmt3 = conn.prepareStatement(sql3);) {
 
+        if (hasRental) {
+            try (PreparedStatement pstmt3 = conn.prepareStatement(sql3)) {
+                pstmt3.setInt(1, memberID);
+                ResultSet res3 = pstmt3.executeQuery();
+                System.out.println("Equipment owned:");
+                while (res3.next()) {
+                    String type = res3.getString("type");
+                    String size = res3.getString("size");
+                    System.out.println("- " + type + " (" + size + ")");
+                }
             } catch (SQLException e) {
                 System.err.println("Error fetching equipment: " + e.getMessage());
             }
         } else {
-            System.out.println("Member does not have a rental.");
+            System.out.println("Member does not have any rentals.");
         }
     }
 
@@ -1218,5 +1256,5 @@ public class Interface {
             }
         }
     }
-    //#endregion // * queries
+    // #endregion // * queries
 }
