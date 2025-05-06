@@ -462,6 +462,75 @@ public class DBMSSetup {
 
     // #endregion // * Table Creation
 
+    // #region // * Populate tables
+    
+    // List of names (courtesy of https://1000randomnames.com)
+    static int currentName = 0;
+    // 300 names
+    static final String[] names = {
+            "Lilianna Branch", "Keenan Giles", "Bailee Ortega", "Kobe Faulkner", "Ansley Caldwell",
+            "Rylan Hutchinson", "Jamie Gonzalez", "Ethan Huff", "Karsyn Barajas", "Brennan Lyons",
+            "Kenzie Chandler", "Royal Waters", "Bristol Richardson", "Robert Montoya", "Kamryn Snyder",
+            "Thiago Gray", "Sarah Nixon", "Cory Davidson", "Jayla Walton", "Dominick Edwards",
+            "Ivy Pierce", "Nicolas Koch", "Milana Rice", "Graham Yang", "Angelina Beasley",
+            "Stanley Dejesus", "Julissa Blake", "Zyaire Bates", "Madilyn Lucero", "Felipe Boyer",
+            "Chaya Wolf", "Jase Camacho", "Armani Durham", "Kellen Acosta", "Kaia Tran",
+            "Braxton Eaton", "Miley Flowers", "Saul Hines", "Poppy Barron", "Dustin Vang",
+            "Madisyn Reyna", "Reginald Fernandez", "Amara Barber", "Solomon Small", "Zaria Lozano",
+            "Boone Simon", "Kalani Flynn", "Kannon Calderon", "Serena Pennington", "Bobby Waller",
+            "Whitley Peck", "Yousef Rollins", "Araceli Nolan", "Maximo Wood", "Natalia Shah",
+            "Zain Ellis", "Ayla Woodard", "Westley Gould", "Violeta Brock", "Julio Bowman",
+            "Fiona Monroe", "Colby Larson", "Alayna Dickson", "Maxton Huffman", "Hayley Delgado",
+            "Colt Wolfe", "Hallie Schultz", "Cody Cox", "Sadie Finley", "Calum Maldonado",
+            "Elaina Delgado", "Colt Atkinson", "Jazmin French", "Corey McIntyre", "Rebekah Rios",
+            "Israel Le", "Myla Craig", "Odin Wagner", "Maeve Gallagher", "Marcos Salgado",
+            "Avalynn Portillo", "Wallace Barker", "Remington Crosby", "Tristen Patterson", "Kaylee Zhang",
+            "Isaias Hensley", "Malaya Ingram", "Tripp Hudson", "Kamila Boyer", "Zeke O’Connor",
+            "Charli Christensen", "Gregory Parks", "Ainsley Hurley", "Van Stevens", "Katherine Tapia",
+            "Samir Shaw", "Emersyn Chase", "Otis Marks", "Monica McKay", "Joey Galindo",
+            "Corinne Roy", "Marcelo Jimenez", "Adeline Mahoney", "Kamryn Clarke", "Kaitlyn Mata",
+            "Ray Webb", "Ariella Graves", "Cesar Crawford", "Aubree Webb", "Lorenzo Oliver",
+            "Camille Ramsey", "Luciano Rosales", "Kinley McDaniel", "Major Sierra", "Marceline Galvan",
+            "Kingsley McPherson", "Emmaline Tapia", "Samir Sampson", "Meilani Dyer", "Atreus Cochran",
+            "Alma Humphrey", "Krew Arroyo", "Kyra Preston", "Vincenzo Gallagher", "Elliott Faulkner",
+            "Jabari Tran", "Kylie Villarreal", "Nikolai Meadows", "Pearl Perry", "Waylon Zavala",
+            "Liv Hubbard", "Forrest Wilson", "Luna Lu", "Duncan Romero", "Eliza Shepard",
+            "Damari Travis", "Mazikee Gross", "Quinn Daniels", "Ember McLaughlin", "Ibrahim James",
+            "Quinn Moore", "Levi Jones", "Sophia Buckley", "Aryan Oliver", "Camille Sanford",
+            "Truett Terry", "Wren Lowery", "Jaxxon Moody", "Elaine Anthony", "Shiloh Morse",
+            "Kairi Hess", "Lawrence Medrano", "Halle Rose", "Hayden Ball", "Abby Bates",
+            "Ellis McConnell", "Denise Orozco", "Keanu Lindsey", "Colette Melendez", "Nikolas Guevara",
+            "Teresa Taylor", "Jackson Glenn", "Blaire Bradshaw", "Emory McCoy", "Mckenzie Xiong",
+            "Azrael Horn", "Avah Novak", "Bishop Leon", "Amora Conway", "Orlando Rich",
+            "Sunny Campbell", "Christopher Luna", "Journey Michael", "Bronson Guzman", "Ashley Tran",
+            "Braxton Rose", "Magnolia Sosa", "Emir Nolan", "Itzayana Reyna", "Reginald Houston",
+            "Lylah Patrick", "Derrick James", "Quinn Michael", "Bronson Schmitt", "Queen Nielsen",
+            "Tru Heath", "Amani Avery", "Jakari Cohen", "Destiny Torres", "Jayden McCullough",
+            "Hana Rhodes", "Titus Novak", "Kaiya Donaldson", "Canaan Pena", "Rachel Medrano",
+            "Arian Mann", "Paislee Mata", "Ray Salas", "Amber Haley", "Leif Walker",
+            "Hazel Cooper", "Jonathan Horne", "Marlowe Underwood", "Reece Riley", "Kayla Horton",
+            "Garrett Rose", "Magnolia McFarland", "Dane David", "Haylee Harrington", "Omari Tanner",
+            "Harmoni Pittman", "Valentino Dougherty", "Alisson Harvey", "Cayden Parrish", "Tiana Nash",
+            "Chandler Lim", "Giavanna Tucker", "Ivan Ramirez", "Grace Padilla", "Jaden Alexander",
+            "Lyla Copeland", "Axton Ellison", "Raina Jefferson", "Raylan Rollins", "Araceli Cuevas",
+            "Brecken Ali", "Zelda Knox", "Valentin Pope", "Aurelia Pittman", "Valentino Dalton",
+            "Lilian Harrington", "Omari Barton", "Danna Keith", "Jagger Leonard", "Demi Baker",
+            "Ezra Rios", "Brooke Jimenez", "Silas Meadows", "Pearl Galvan", "Kingsley Harmon",
+            "Maren Avalos", "Coen Cabrera", "Daleyza Barry", "Emery Harper", "Ana Golden",
+            "Amias Dean", "Julianna Murillo", "Lance Pennington", "Yareli Chung", "Ira Jacobs",
+            "Camilla Moses", "Niklaus Chapman", "Zuri Vang", "Jimmy Hull", "Andi Moran",
+            "Tate Wiley", "Lauryn Love", "Jeffrey Burton", "Miriam Barron", "Dustin Vincent",
+            "Allyson Perkins", "Kyrie Murray", "Faith McCormick", "Jasiah Spencer", "Alyssa Martin",
+            "Mateo Stephenson", "Khaleesi Leon", "Marshall Meyer", "Sara Guzman", "Jude Spears",
+            "Isabela Peterson", "Santiago Allen", "Riley Wiley", "Mathew Zhang", "Sarai Lane",
+            "Matias Sanford", "Emerald Alvarez", "Xavier Avery", "Meghan Lester", "Lee Banks",
+            "Cali Nielsen", "Tru Nichols", "Aliyah Burke", "Jax Woodard", "Aubrie Vang",
+            "Jimmy Woodard", "Aubrie Glover", "Mack McKee", "Kori Paul", "Noel Young",
+            "Zoey Padilla", "Jaden Eaton", "Miley Gilbert", "Tobias Lam", "Karina Paul",
+            "Noel Graves", "Elle Skinner", "Ridge Barron", "Anya Madden", "Everest Lyons"
+    };
+
+    
     // * Member: memberID, name, phone#, email, dob, emergency contact
     // adds a member to the database
     private static int addMember(Connection dbconn, String name, String phone, String email, java.sql.Date dob,
@@ -643,106 +712,6 @@ public class DBMSSetup {
     }
     // * generate a random ID for a table (columnName should be the ID column)
     // this is a helper for the add methods
-
-    private static int generateRandomID(Connection dbconn, String tableName, String columnName) {
-        int i = 0;
-        while (true) {
-            int randomID = new java.util.Random().nextInt(100000); // Generate random ID
-
-            // counts how many already have that ID
-            // count everything from tableName where columnName = randomID
-            try (PreparedStatement checkStmt = dbconn
-                    .prepareStatement("SELECT COUNT(*) FROM " + tableName + " WHERE " + columnName + " = ? ")) {
-                checkStmt.setInt(1, randomID);
-
-                // execute and get result
-                ResultSet rs = checkStmt.executeQuery();
-
-                // if unique, return it
-                if (rs.next() && rs.getInt(1) == 0) {
-                    return randomID; // ID is unique, return it
-                }
-
-                // after 1000 tries, return -1
-                i++;
-                if (i > 1000) {
-                    System.err.println("Error: Unable to generate a unique ID for table (1000 tries in)" + tableName);
-                    return -1; // Return -1 if unable to generate a unique ID after 1000 attempts
-                }
-            } catch (SQLException e) {
-                System.err.println("Error checking ID uniqueness for table " + tableName + ": " + e.getMessage());
-                return -1; // Return -1 in case of an error
-            }
-        }
-    }
-
-    // #region // * Populate tables
-    
-    // List of names (courtesy of https://1000randomnames.com)
-    static int currentName = 0;
-    // 300 names
-    static final String[] names = {
-            "Lilianna Branch", "Keenan Giles", "Bailee Ortega", "Kobe Faulkner", "Ansley Caldwell",
-            "Rylan Hutchinson", "Jamie Gonzalez", "Ethan Huff", "Karsyn Barajas", "Brennan Lyons",
-            "Kenzie Chandler", "Royal Waters", "Bristol Richardson", "Robert Montoya", "Kamryn Snyder",
-            "Thiago Gray", "Sarah Nixon", "Cory Davidson", "Jayla Walton", "Dominick Edwards",
-            "Ivy Pierce", "Nicolas Koch", "Milana Rice", "Graham Yang", "Angelina Beasley",
-            "Stanley Dejesus", "Julissa Blake", "Zyaire Bates", "Madilyn Lucero", "Felipe Boyer",
-            "Chaya Wolf", "Jase Camacho", "Armani Durham", "Kellen Acosta", "Kaia Tran",
-            "Braxton Eaton", "Miley Flowers", "Saul Hines", "Poppy Barron", "Dustin Vang",
-            "Madisyn Reyna", "Reginald Fernandez", "Amara Barber", "Solomon Small", "Zaria Lozano",
-            "Boone Simon", "Kalani Flynn", "Kannon Calderon", "Serena Pennington", "Bobby Waller",
-            "Whitley Peck", "Yousef Rollins", "Araceli Nolan", "Maximo Wood", "Natalia Shah",
-            "Zain Ellis", "Ayla Woodard", "Westley Gould", "Violeta Brock", "Julio Bowman",
-            "Fiona Monroe", "Colby Larson", "Alayna Dickson", "Maxton Huffman", "Hayley Delgado",
-            "Colt Wolfe", "Hallie Schultz", "Cody Cox", "Sadie Finley", "Calum Maldonado",
-            "Elaina Delgado", "Colt Atkinson", "Jazmin French", "Corey McIntyre", "Rebekah Rios",
-            "Israel Le", "Myla Craig", "Odin Wagner", "Maeve Gallagher", "Marcos Salgado",
-            "Avalynn Portillo", "Wallace Barker", "Remington Crosby", "Tristen Patterson", "Kaylee Zhang",
-            "Isaias Hensley", "Malaya Ingram", "Tripp Hudson", "Kamila Boyer", "Zeke O’Connor",
-            "Charli Christensen", "Gregory Parks", "Ainsley Hurley", "Van Stevens", "Katherine Tapia",
-            "Samir Shaw", "Emersyn Chase", "Otis Marks", "Monica McKay", "Joey Galindo",
-            "Corinne Roy", "Marcelo Jimenez", "Adeline Mahoney", "Kamryn Clarke", "Kaitlyn Mata",
-            "Ray Webb", "Ariella Graves", "Cesar Crawford", "Aubree Webb", "Lorenzo Oliver",
-            "Camille Ramsey", "Luciano Rosales", "Kinley McDaniel", "Major Sierra", "Marceline Galvan",
-            "Kingsley McPherson", "Emmaline Tapia", "Samir Sampson", "Meilani Dyer", "Atreus Cochran",
-            "Alma Humphrey", "Krew Arroyo", "Kyra Preston", "Vincenzo Gallagher", "Elliott Faulkner",
-            "Jabari Tran", "Kylie Villarreal", "Nikolai Meadows", "Pearl Perry", "Waylon Zavala",
-            "Liv Hubbard", "Forrest Wilson", "Luna Lu", "Duncan Romero", "Eliza Shepard",
-            "Damari Travis", "Mazikee Gross", "Quinn Daniels", "Ember McLaughlin", "Ibrahim James",
-            "Quinn Moore", "Levi Jones", "Sophia Buckley", "Aryan Oliver", "Camille Sanford",
-            "Truett Terry", "Wren Lowery", "Jaxxon Moody", "Elaine Anthony", "Shiloh Morse",
-            "Kairi Hess", "Lawrence Medrano", "Halle Rose", "Hayden Ball", "Abby Bates",
-            "Ellis McConnell", "Denise Orozco", "Keanu Lindsey", "Colette Melendez", "Nikolas Guevara",
-            "Teresa Taylor", "Jackson Glenn", "Blaire Bradshaw", "Emory McCoy", "Mckenzie Xiong",
-            "Azrael Horn", "Avah Novak", "Bishop Leon", "Amora Conway", "Orlando Rich",
-            "Sunny Campbell", "Christopher Luna", "Journey Michael", "Bronson Guzman", "Ashley Tran",
-            "Braxton Rose", "Magnolia Sosa", "Emir Nolan", "Itzayana Reyna", "Reginald Houston",
-            "Lylah Patrick", "Derrick James", "Quinn Michael", "Bronson Schmitt", "Queen Nielsen",
-            "Tru Heath", "Amani Avery", "Jakari Cohen", "Destiny Torres", "Jayden McCullough",
-            "Hana Rhodes", "Titus Novak", "Kaiya Donaldson", "Canaan Pena", "Rachel Medrano",
-            "Arian Mann", "Paislee Mata", "Ray Salas", "Amber Haley", "Leif Walker",
-            "Hazel Cooper", "Jonathan Horne", "Marlowe Underwood", "Reece Riley", "Kayla Horton",
-            "Garrett Rose", "Magnolia McFarland", "Dane David", "Haylee Harrington", "Omari Tanner",
-            "Harmoni Pittman", "Valentino Dougherty", "Alisson Harvey", "Cayden Parrish", "Tiana Nash",
-            "Chandler Lim", "Giavanna Tucker", "Ivan Ramirez", "Grace Padilla", "Jaden Alexander",
-            "Lyla Copeland", "Axton Ellison", "Raina Jefferson", "Raylan Rollins", "Araceli Cuevas",
-            "Brecken Ali", "Zelda Knox", "Valentin Pope", "Aurelia Pittman", "Valentino Dalton",
-            "Lilian Harrington", "Omari Barton", "Danna Keith", "Jagger Leonard", "Demi Baker",
-            "Ezra Rios", "Brooke Jimenez", "Silas Meadows", "Pearl Galvan", "Kingsley Harmon",
-            "Maren Avalos", "Coen Cabrera", "Daleyza Barry", "Emery Harper", "Ana Golden",
-            "Amias Dean", "Julianna Murillo", "Lance Pennington", "Yareli Chung", "Ira Jacobs",
-            "Camilla Moses", "Niklaus Chapman", "Zuri Vang", "Jimmy Hull", "Andi Moran",
-            "Tate Wiley", "Lauryn Love", "Jeffrey Burton", "Miriam Barron", "Dustin Vincent",
-            "Allyson Perkins", "Kyrie Murray", "Faith McCormick", "Jasiah Spencer", "Alyssa Martin",
-            "Mateo Stephenson", "Khaleesi Leon", "Marshall Meyer", "Sara Guzman", "Jude Spears",
-            "Isabela Peterson", "Santiago Allen", "Riley Wiley", "Mathew Zhang", "Sarai Lane",
-            "Matias Sanford", "Emerald Alvarez", "Xavier Avery", "Meghan Lester", "Lee Banks",
-            "Cali Nielsen", "Tru Nichols", "Aliyah Burke", "Jax Woodard", "Aubrie Vang",
-            "Jimmy Woodard", "Aubrie Glover", "Mack McKee", "Kori Paul", "Noel Young",
-            "Zoey Padilla", "Jaden Eaton", "Miley Gilbert", "Tobias Lam", "Karina Paul",
-            "Noel Graves", "Elle Skinner", "Ridge Barron", "Anya Madden", "Everest Lyons"
-    };
 
     private static int populateTables(Connection dbconn) {
         // * add random entities to the database
@@ -1048,7 +1017,6 @@ public class DBMSSetup {
 
         return lessonID;
     }
-
 
     // * add lift to the database
     // * Lift: liftName, ability level, openTime, closeTime, status
@@ -1655,7 +1623,39 @@ public class DBMSSetup {
         return 0;
     }
     // * random entity generator (end)
-    // ---------------------------------------------------------------------------
+    
+    // * makes a random ID for the given table and column name
+    private static int generateRandomID(Connection dbconn, String tableName, String columnName) {
+        int i = 0;
+        while (true) {
+            int randomID = new java.util.Random().nextInt(100000); // Generate random ID
+
+            // counts how many already have that ID
+            // count everything from tableName where columnName = randomID
+            try (PreparedStatement checkStmt = dbconn
+                    .prepareStatement("SELECT COUNT(*) FROM " + tableName + " WHERE " + columnName + " = ? ")) {
+                checkStmt.setInt(1, randomID);
+
+                // execute and get result
+                ResultSet rs = checkStmt.executeQuery();
+
+                // if unique, return it
+                if (rs.next() && rs.getInt(1) == 0) {
+                    return randomID; // ID is unique, return it
+                }
+
+                // after 1000 tries, return -1
+                i++;
+                if (i > 1000) {
+                    System.err.println("Error: Unable to generate a unique ID for table (1000 tries in)" + tableName);
+                    return -1; // Return -1 if unable to generate a unique ID after 1000 attempts
+                }
+            } catch (SQLException e) {
+                System.err.println("Error checking ID uniqueness for table " + tableName + ": " + e.getMessage());
+                return -1; // Return -1 in case of an error
+            }
+        }
+    }
     // #endregion // * Populate tables
 
 }
