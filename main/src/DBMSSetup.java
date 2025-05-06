@@ -15,6 +15,7 @@
 //  *   Finally, run the program:
 //  *
 //  *         java JDBC <oracle username> <oracle password>
+
 import java.sql.*;
 import java.util.Random;
 
