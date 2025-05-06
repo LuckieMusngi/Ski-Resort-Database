@@ -1,3 +1,6 @@
+// Luckie Musngi and AJ Becerra
+// This is the main interface for the Ski Resort Database User Interface.
+// It allows the user to add, update, delete, and query records in the database.
 
 import java.sql.*;
 import java.util.Scanner;

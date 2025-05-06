@@ -1,20 +1,6 @@
 // Authors: Luckie Musngi and Aj Becerra
-
-// * To compile and execute this program on lectura:
-//  *
-//  *   Add the Oracle JDBC driver to your CLASSPATH environment variable:
-//  *
-//  *         export CLASSPATH=/usr/lib/oracle/19.8/client64/lib/ojdbc8.jar:${CLASSPATH}
-//  *     (or whatever shell variable set-up you need to perform to add the
-//  *     JAR file to your Java CLASSPATH)
-//  *
-//  *   Compile this file:
-//  *
-//  *         javac JDBC.java
-//  *
-//  *   Finally, run the program:
-//  *
-//  *         java JDBC <oracle username> <oracle password>
+// This sets up the database tables and populates them with data
+// this is expected to be run before interface.java
 
 import java.sql.*;
 import java.util.Random;
