@@ -1040,7 +1040,7 @@ public class Interface {
                         SkiPass ON GearRental.skiPassID = SkiPass.skiPassID
                     WHERE
                         SkiPass.memberID = ?
-                        AND GearRental.returnStatus = 'not returned'
+                        AND GearRental.returnStatus = 'Not Returned'
                     """;
 
             String activeLesson = """
@@ -1050,7 +1050,7 @@ public class Interface {
                         LessonOrder
                     WHERE
                         LessonOrder.memberID = ?
-                        AND LessonOrder.remainingSessions < LessonOrder.lessonsPurchased
+                        AND LessonOrder.remainingSessions > 0
                     """;
 
             if (hasOpenRecords(conn, activeSkiPass, memberId)
@@ -1109,12 +1109,12 @@ public class Interface {
 
     public static boolean deleteSkiPass(Connection conn, int skiPassId) {
         // Check if pass is not expired and has remaining uses
-        String checkPassSql = "SELECT expirationDate, remainingUses, status FROM SkiPass WHERE skiPassID = ?";
+        String checkPassSql = "SELECT expDate, remainingUses, status FROM SkiPass WHERE skiPassID = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(checkPassSql)) {
             pstmt.setInt(1, skiPassId); // Select the ski pass ID for review
             try (ResultSet res = pstmt.executeQuery()) {
                 if (res.next()) {
-                    Date expirationDate = res.getDate("expirationDate"); // Get the expiration date
+                    Date expirationDate = res.getDate("expDate"); // Get the expiration date
                     int remainingUses = res.getInt("remainingUses"); // Get the remaining uses
                     String status = res.getString("status"); // Get the current status
 

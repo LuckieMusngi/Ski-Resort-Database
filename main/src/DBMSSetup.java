@@ -19,9 +19,6 @@
 import java.sql.*;
 import java.util.Random;
 
-// TODO: add constraints to tables
-// TODO: add modify w/ constaints to tables
-// TODO: add delete w/ constaints to tables
 public class DBMSSetup {
     static final boolean printDebug = false; // set to true to print debug messages
 
