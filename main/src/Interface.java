@@ -1149,14 +1149,17 @@ public class Interface {
                     SELECT
                         LessonOrder.remainingSessions,
                         Employee.name AS instructorName,
-                        LessonOrder.scheduledTime
+                        LessonSession.startTime as scheduledTime
                     FROM
                         LessonOrder
                     JOIN LessonToOrder ON LessonOrder.lessonOrderID = LessonToOrder.lessonOrderID
-                    JOIN Lesson ON LessonToOrder.LessonID = Lesson.LessonID
-                    JOIN Instructor ON Lesson.employeeID = Instructor.employeeID
+                    JOIN LessonSession ON LessonToOrder.SessionID = LessonSession.SessionID
+                    JOIN Lesson ON LessonSession.lessonID = Lesson.lessonID
+                    JOIN Instructor ON lesson.employeeID = Instructor.employeeID
+                    JOIN Employee ON Instructor.employeeID = Employee.employeeID
                     WHERE
                         LessonOrder.memberID = ?
+                        AND LessonSession.startTime > CURRENT_DATE
                 """;
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
