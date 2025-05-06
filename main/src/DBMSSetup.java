@@ -685,41 +685,62 @@ public class DBMSSetup {
     private static void addForeignKeys(Connection dbconn) {
         try (Statement stmt = dbconn.createStatement()) {
             // Ski pass references Member and GearRental
-            stmt.executeUpdate("ALTER TABLE SkiPass ADD CONSTRAINT fk_member FOREIGN KEY (memberID) REFERENCES Member(memberID)");
-            stmt.executeUpdate("ALTER TABLE SkiPass ADD CONSTRAINT fk_rental FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE SkiPass ADD CONSTRAINT fk_member FOREIGN KEY (memberID) REFERENCES Member(memberID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE SkiPass ADD CONSTRAINT fk_rental FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID)");
             // GearRental references SkiPass
-            stmt.executeUpdate("ALTER TABLE GearRental ADD CONSTRAINT fk_skiPass FOREIGN KEY (skiPassID) REFERENCES SkiPass(skiPassID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE GearRental ADD CONSTRAINT fk_skiPass FOREIGN KEY (skiPassID) REFERENCES SkiPass(skiPassID)");
             // EquipmentUpdate references Equipment
-            stmt.executeUpdate("ALTER TABLE EquipmentUpdate ADD CONSTRAINT fk_equipment FOREIGN KEY (equipmentID) REFERENCES Equipment(equipmentID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE EquipmentUpdate ADD CONSTRAINT fk_equipment FOREIGN KEY (equipmentID) REFERENCES Equipment(equipmentID)");
             // GearRentalUpdate references GearRental
-            stmt.executeUpdate("ALTER TABLE GearRentalUpdate ADD CONSTRAINT fk_rentalUpdate FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE GearRentalUpdate ADD CONSTRAINT fk_rentalUpdate FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID)");
             // LessonOrder references Member
-            stmt.executeUpdate("ALTER TABLE LessonOrder ADD CONSTRAINT fk_lessonOrder_member FOREIGN KEY (memberID) REFERENCES Member(memberID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE LessonOrder ADD CONSTRAINT fk_lessonOrder_member FOREIGN KEY (memberID) REFERENCES Member(memberID)");
             // LessonSession references Lesson
-            stmt.executeUpdate("ALTER TABLE LessonSession ADD CONSTRAINT fk_lessonSession FOREIGN KEY (lessonID) REFERENCES Lesson(lessonID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE LessonSession ADD CONSTRAINT fk_lessonSession FOREIGN KEY (lessonID) REFERENCES Lesson(lessonID)");
             // Instructor references Employee
-            stmt.executeUpdate("ALTER TABLE Lesson ADD CONSTRAINT fk_lesson_employee FOREIGN KEY (employeeID) REFERENCES Instructor(employeeID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE Lesson ADD CONSTRAINT fk_lesson_employee FOREIGN KEY (employeeID) REFERENCES Instructor(employeeID)");
             // Employee references EmployeeIncomeSource
-            stmt.executeUpdate("ALTER TABLE IncomeSource ADD CONSTRAINT fk_incomeSource FOREIGN KEY (lodgeID) REFERENCES Lodge(lodgeID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE IncomeSource ADD CONSTRAINT fk_incomeSource FOREIGN KEY (lodgeID) REFERENCES Lodge(lodgeID)");
             // Shuttle references ShuttleLodge
-            stmt.executeUpdate("ALTER TABLE LessonToOrder ADD CONSTRAINT fk_lessonToOrder_lesson FOREIGN KEY (lessonID) REFERENCES Lesson(lessonID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE LessonToOrder ADD CONSTRAINT fk_lessonToOrder_lesson FOREIGN KEY (lessonID) REFERENCES Lesson(lessonID)");
             // ShuttleLodge references Shuttle and Lodge
-            stmt.executeUpdate("ALTER TABLE LessonToOrder ADD CONSTRAINT fk_lessonToOrder_order FOREIGN KEY (lessonOrderID) REFERENCES LessonOrder(lessonOrderID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE LessonToOrder ADD CONSTRAINT fk_lessonToOrder_order FOREIGN KEY (lessonOrderID) REFERENCES LessonOrder(lessonOrderID)");
             // TrailLift references Trail and Lift
-            stmt.executeUpdate("ALTER TABLE TrailLift ADD CONSTRAINT fk_trailLift_trail FOREIGN KEY (trailName) REFERENCES Trail(trailName)");
-            stmt.executeUpdate("ALTER TABLE TrailLift ADD CONSTRAINT fk_trailLift_lift FOREIGN KEY (liftName) REFERENCES Lift(liftName)");
-            // LiftPassUsage references SkiPass and Lift            
-            stmt.executeUpdate("ALTER TABLE LiftPassUsage ADD CONSTRAINT fk_liftPassUsage_skiPass FOREIGN KEY (skiPassID) REFERENCES SkiPass(skiPassID)");
-            stmt.executeUpdate("ALTER TABLE LiftPassUsage ADD CONSTRAINT fk_liftPassUsage_lift FOREIGN KEY (liftName) REFERENCES Lift(liftName)");
-            // ShuttleLodge references Shuttle and Lodge            
-            stmt.executeUpdate("ALTER TABLE ShuttleLodge ADD CONSTRAINT fk_shuttleLodge_shuttle FOREIGN KEY (shuttleID) REFERENCES Shuttle(shuttleID)");
-            stmt.executeUpdate("ALTER TABLE ShuttleLodge ADD CONSTRAINT fk_shuttleLodge_lodge FOREIGN KEY (lodgeID) REFERENCES Lodge(lodgeID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE TrailLift ADD CONSTRAINT fk_trailLift_trail FOREIGN KEY (trailName) REFERENCES Trail(trailName)");
+            stmt.executeUpdate(
+                    "ALTER TABLE TrailLift ADD CONSTRAINT fk_trailLift_lift FOREIGN KEY (liftName) REFERENCES Lift(liftName)");
+            // LiftPassUsage references SkiPass and Lift
+            stmt.executeUpdate(
+                    "ALTER TABLE LiftPassUsage ADD CONSTRAINT fk_liftPassUsage_skiPass FOREIGN KEY (skiPassID) REFERENCES SkiPass(skiPassID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE LiftPassUsage ADD CONSTRAINT fk_liftPassUsage_lift FOREIGN KEY (liftName) REFERENCES Lift(liftName)");
+            // ShuttleLodge references Shuttle and Lodge
+            stmt.executeUpdate(
+                    "ALTER TABLE ShuttleLodge ADD CONSTRAINT fk_shuttleLodge_shuttle FOREIGN KEY (shuttleID) REFERENCES Shuttle(shuttleID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE ShuttleLodge ADD CONSTRAINT fk_shuttleLodge_lodge FOREIGN KEY (lodgeID) REFERENCES Lodge(lodgeID)");
             // RentalEquipment references GearRental and Equipment
-            stmt.executeUpdate("ALTER TABLE RentalEquipment ADD CONSTRAINT fk_rentalEquipment_rental FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID)");
-            stmt.executeUpdate("ALTER TABLE RentalEquipment ADD CONSTRAINT fk_rentalEquipment_equipment FOREIGN KEY (equipmentID) REFERENCES Equipment(equipmentID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE RentalEquipment ADD CONSTRAINT fk_rentalEquipment_rental FOREIGN KEY (rentalID) REFERENCES GearRental(rentalID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE RentalEquipment ADD CONSTRAINT fk_rentalEquipment_equipment FOREIGN KEY (equipmentID) REFERENCES Equipment(equipmentID)");
             // EmployeeIncomeSource references Employee and IncomeSource
-            stmt.executeUpdate("ALTER TABLE EmployeeIncomeSource ADD CONSTRAINT fk_EISource_employee FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)");
-            stmt.executeUpdate("ALTER TABLE EmployeeIncomeSource ADD CONSTRAINT fk_EISource_source FOREIGN KEY (sourceID) REFERENCES IncomeSource(sourceID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE EmployeeIncomeSource ADD CONSTRAINT fk_EISource_employee FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)");
+            stmt.executeUpdate(
+                    "ALTER TABLE EmployeeIncomeSource ADD CONSTRAINT fk_EISource_source FOREIGN KEY (sourceID) REFERENCES IncomeSource(sourceID)");
         } catch (SQLException e) {
             System.err.println("Error adding foreign keys: " + e.getMessage());
         }
@@ -968,7 +989,8 @@ public class DBMSSetup {
 
             // counts how many already have that ID
             // count everything from tableName where columnName = randomID
-            try (PreparedStatement checkStmt = dbconn.prepareStatement("SELECT COUNT(*) FROM " + tableName + " WHERE " + columnName + " = ? ")) {
+            try (PreparedStatement checkStmt = dbconn
+                    .prepareStatement("SELECT COUNT(*) FROM " + tableName + " WHERE " + columnName + " = ? ")) {
                 checkStmt.setInt(1, randomID);
 
                 // execute and get result
@@ -1063,39 +1085,49 @@ public class DBMSSetup {
     }
 
     /*
-    public static void addMyEntities(Connection dbconn) {
-        // * John doe
-        int mID1 = addMember(dbconn, "John Doe", "2344234234", "johnDoe@gmail.com", java.sql.Date.valueOf("1990-05-15"),
-                "1234567890");
-
-        // ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses,
-        // remainingUses, passType, status, memberID, rentalID
-        // int skiPass1 = addSkiPass(dbconn, 300, java.sql.Date.valueOf("2025-3-01"),
-        // java.sql.Date.valueOf("2026-3-01"), 10, 2,
-        // "Season", "Active", mID1, -1);
-        addMember(dbconn, "Gavin Borquez", "5202629618", "gavin.borquez@gmail.com", java.sql.Date.valueOf("2006-10-17"),
-                "borquezgabriel@gmail.com");
-        addMember(dbconn, "Ahen Dridman", "5120000100", "we.will.lose.wahwahwah@gmail.com",
-                java.sql.Date.valueOf("2000-01-01"), "1234567890");
-        addMember(dbconn, "Thegor Rilla", "5329999999", "a.whole.gorilla@gmail.com",
-                java.sql.Date.valueOf("2000-01-01"), "1234567890");
-        addMember(dbconn, "Andrew Johnson", "5206683030", "ajbecerra@arizona.edu", java.sql.Date.valueOf("2000-05-14"),
-                "lmusngi@arizona.edu");
-        addMember(dbconn, "Steve Jobs", "5551234567", "appleinc@gmail.com", java.sql.Date.valueOf("1957-01-01"),
-                "Mike Wazowski");
-        addMember(dbconn, "Dennis Rodman", "5552345678", "bulls96@gmail.com", java.sql.Date.valueOf("1970-01-01"),
-                "Mike Wazowski");
-        addMember(dbconn, "Stephen Curry", "5553456789", "chefCurry@gmail.com", java.sql.Date.valueOf("1987-01-01"),
-                "Mike Wazowski");
-        addMember(dbconn, "LeBron James", "5554567890", "kingJames@gmail.com", java.sql.Date.valueOf("1960-01-01"),
-                "Mike Wazowski");
-        addMember(dbconn, "Zebulon Powell", "5555678901", "steezLord@gmail.com", java.sql.Date.valueOf("2000-01-01"),
-                "Mike Wazowski");
-
-        // *
-    }
+     * public static void addMyEntities(Connection dbconn) {
+     * // * John doe
+     * int mID1 = addMember(dbconn, "John Doe", "2344234234", "johnDoe@gmail.com",
+     * java.sql.Date.valueOf("1990-05-15"),
+     * "1234567890");
+     * 
+     * // ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses,
+     * // remainingUses, passType, status, memberID, rentalID
+     * // int skiPass1 = addSkiPass(dbconn, 300, java.sql.Date.valueOf("2025-3-01"),
+     * // java.sql.Date.valueOf("2026-3-01"), 10, 2,
+     * // "Season", "Active", mID1, -1);
+     * addMember(dbconn, "Gavin Borquez", "5202629618", "gavin.borquez@gmail.com",
+     * java.sql.Date.valueOf("2006-10-17"),
+     * "borquezgabriel@gmail.com");
+     * addMember(dbconn, "Ahen Dridman", "5120000100",
+     * "we.will.lose.wahwahwah@gmail.com",
+     * java.sql.Date.valueOf("2000-01-01"), "1234567890");
+     * addMember(dbconn, "Thegor Rilla", "5329999999", "a.whole.gorilla@gmail.com",
+     * java.sql.Date.valueOf("2000-01-01"), "1234567890");
+     * addMember(dbconn, "Andrew Johnson", "5206683030", "ajbecerra@arizona.edu",
+     * java.sql.Date.valueOf("2000-05-14"),
+     * "lmusngi@arizona.edu");
+     * addMember(dbconn, "Steve Jobs", "5551234567", "appleinc@gmail.com",
+     * java.sql.Date.valueOf("1957-01-01"),
+     * "Mike Wazowski");
+     * addMember(dbconn, "Dennis Rodman", "5552345678", "bulls96@gmail.com",
+     * java.sql.Date.valueOf("1970-01-01"),
+     * "Mike Wazowski");
+     * addMember(dbconn, "Stephen Curry", "5553456789", "chefCurry@gmail.com",
+     * java.sql.Date.valueOf("1987-01-01"),
+     * "Mike Wazowski");
+     * addMember(dbconn, "LeBron James", "5554567890", "kingJames@gmail.com",
+     * java.sql.Date.valueOf("1960-01-01"),
+     * "Mike Wazowski");
+     * addMember(dbconn, "Zebulon Powell", "5555678901", "steezLord@gmail.com",
+     * java.sql.Date.valueOf("2000-01-01"),
+     * "Mike Wazowski");
+     * 
+     * // *
+     * }
      */
-    // * random entity generator ------------------------------------------------------------------------------
+    // * random entity generator
+    // ------------------------------------------------------------------------------
     // rand param for seeding
     // * add random member to the database
     // * returns the memberID of the new member
@@ -1109,8 +1141,12 @@ public class DBMSSetup {
 
         String phone = String.format("%03d-%03d-%04d", rand.nextInt(1000), rand.nextInt(1000), rand.nextInt(10000));
         String email = randStr(rand, -1) + "@gmail.com";
-        java.sql.Date dob = new java.sql.Date(System.currentTimeMillis() - randLong(rand, 0, 100 * 365L * 24 * 60 * 60 * 1000)); // random date of birth 100 years ago
-        String emergencyContact = String.format("%03d-%03d-%04d", rand.nextInt(1000), rand.nextInt(1000), rand.nextInt(10000));
+        java.sql.Date dob = new java.sql.Date(
+                System.currentTimeMillis() - randLong(rand, 0, 100 * 365L * 24 * 60 * 60 * 1000)); // random date of
+        // birth 100 years
+        // ago
+        String emergencyContact = String.format("%03d-%03d-%04d", rand.nextInt(1000), rand.nextInt(1000),
+                rand.nextInt(10000));
 
         int memberID = addMember(dbconn, name, phone, email, dob, emergencyContact);
         if (memberID == -1) {
@@ -1185,10 +1221,24 @@ public class DBMSSetup {
             }
 
             if (status.equals("Active")) {
-                timeOfPurchase = new java.sql.Date(System.currentTimeMillis() - randLong(rand, 0, offset)); // random date up to offset ago
+                timeOfPurchase = new java.sql.Date(System.currentTimeMillis() - randLong(rand, 0, offset)); // random
+                // date up
+                // to offset
+                // ago
             } else {
-                // ! this can create rare cases in which a member holds multiple ski passes at the same time some time in the past when inactive is called multiple times
-                timeOfPurchase = new java.sql.Date(System.currentTimeMillis() - offset - randLong(rand, 0, 3L * 365 * 24 * 60 * 60 * 1000)); // random inactive date up to 3 years (+ offset) ago
+                // ! this can create rare cases in which a member holds multiple ski passes at
+                // the same time some time in the past when inactive is called multiple times
+                timeOfPurchase = new java.sql.Date(
+                        System.currentTimeMillis() - offset - randLong(rand, 0, 3L * 365 * 24 * 60 * 60 * 1000)); // random
+                // inactive
+                // date
+                // up
+                // to
+                // 3
+                // years
+                // (+
+                // offset)
+                // ago
             }
             expDate = new java.sql.Date(timeOfPurchase.getTime() + offset); // expiration date is offset from current
             // time
@@ -1273,7 +1323,8 @@ public class DBMSSetup {
         // gear rental: rentalID, startDate, expDate, return status, status, skiPassID
 
         java.sql.Date startDate = new java.sql.Date(randLong(rand, skiStartDate.getTime(),
-                Math.min(System.currentTimeMillis(), skiExpDate.getTime()))); // random date between start date, and min(now or skiExpDate)
+                Math.min(System.currentTimeMillis(), skiExpDate.getTime()))); // random date between start date, and
+        // min(now or skiExpDate)
         String returnStatus = rand.nextBoolean() ? "Returned" : "Not Returned"; // 50% chance of being returned
 
         String status = rand.nextInt(100) >= 5 ? "Active" : "Inactive"; // 5% chance of being inactive
@@ -1538,7 +1589,7 @@ public class DBMSSetup {
             String newEmergencyContact) {
         String sql = "UPDATE Member SET phoneNumber = ?, email = ?, emergencyContact = ? WHERE memberID = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setDouble(1, Double.parseDouble(newPhone));
+            pstmt.setString(1, newPhone);
             pstmt.setString(2, newEmail);
             pstmt.setString(3, newEmergencyContact);
             pstmt.setInt(4, memberId);
@@ -1561,8 +1612,8 @@ public class DBMSSetup {
                     int remainingUses = rs.getInt("remainingUses");
 
                     // Check if the pass is valid
-                    if (expirationDate.after(new java.util.Date()) && remainingUses >= 0) {
-                        // update remaining uses
+                    if (expirationDate.after(new java.util.Date()) && remainingUses >= 0 && newRemainingUses >= 0) {
+                        // update remaining uses, make sure then new value is non negative
                         String updateSql = "UPDATE SkiPass SET remainingUses = ? WHERE skiPassID = ?";
                         try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
                             updateStmt.setInt(1, newRemainingUses); // Set the new remaining uses value
@@ -1596,7 +1647,7 @@ public class DBMSSetup {
             if (rowsAffected > 0) {
                 // Log the update in the equipmentUpdate table
                 String note = String.format("Updated equipment type to '%s' and size to '%s'", newType, newSize);
-                logEquipmentUpdate(conn, equipmentId, note);
+                logEquipmentUpdate(conn, equipmentId, "UPDATE", note);
                 return true;
             } else {
                 System.out.println("No equipment found with ID: " + equipmentId);
@@ -1650,25 +1701,44 @@ public class DBMSSetup {
     // * delete member in the database
     public static boolean deleteMember(Connection conn, int memberId) {
         try {
-            // Check active ski passes
+            // Check active ski passes, rentals, lessons
             String activeSkiPass = "SELECT COUNT(*) FROM SkiPass WHERE memberID = ? AND expirationDate >= CURRENT_DATE";
             String activeRental = "SELECT COUNT(*) FROM EquipmentRental WHERE memberID = ? AND returnStatus = 'not returned'";
             String activeLesson = "SELECT COUNT(*) FROM LessonOrder WHERE memberID = ? AND usedStatus = 'unused'";
 
-            // dont close if ski pass, rental, or lesson is active
-            if (hasOpenRecords(conn, activeSkiPass, memberId) || hasOpenRecords(conn, activeRental, memberId)
+            if (hasOpenRecords(conn, activeSkiPass, memberId)
+                    || hasOpenRecords(conn, activeRental, memberId)
                     || hasOpenRecords(conn, activeLesson, memberId)) {
                 System.out.println("Cannot delete member: active ski passes, open rentals, or unused lessons exist.");
                 return false;
             }
 
-            // Delete skiPass data, lift usage, rental history, and lesson history
             conn.setAutoCommit(false);
-            try (Statement stmt = conn.createStatement()) {
-                stmt.executeUpdate("DELETE FROM LessonOrder WHERE memberID = " + memberId); // Delete lessons
-                stmt.executeUpdate("DELETE FROM EquipmentRental WHERE memberID = " + memberId); // Delete rentals
-                stmt.executeUpdate("DELETE FROM SkiPass WHERE memberID = " + memberId); // Delete ski passes
-                stmt.executeUpdate("DELETE FROM Member WHERE memberID = " + memberId); // Delete member
+            try {
+                // Delete lessons
+                try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM LessonOrder WHERE memberID = ?")) {
+                    stmt.setInt(1, memberId);
+                    stmt.executeUpdate();
+                }
+
+                // Delete rentals
+                try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM EquipmentRental WHERE memberID = ?")) {
+                    stmt.setInt(1, memberId);
+                    stmt.executeUpdate();
+                }
+
+                // Delete ski passes
+                try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM SkiPass WHERE memberID = ?")) {
+                    stmt.setInt(1, memberId);
+                    stmt.executeUpdate();
+                }
+
+                // Delete member
+                try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM Member WHERE memberID = ?")) {
+                    stmt.setInt(1, memberId);
+                    stmt.executeUpdate();
+                }
+
                 conn.commit();
                 return true;
             } catch (SQLException e) {
@@ -1727,11 +1797,9 @@ public class DBMSSetup {
     }
 
     public static boolean deleteEquipment(Connection conn, int equipmentId) {
-        // Check if equipment is rented or reserved
         String checkSql = "SELECT rentalStatus FROM EquipmentInventory WHERE equipmentID = ?";
         try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
             checkStmt.setInt(1, equipmentId);
-            // Check if the equipment is rented or reserved
             try (ResultSet rs = checkStmt.executeQuery()) {
                 if (rs.next()) {
                     String status = rs.getString("rentalStatus");
@@ -1740,13 +1808,13 @@ public class DBMSSetup {
                         return false;
                     }
 
-                    // Mark equipment as archived
+                    // Archive equipment
                     String archiveSql = "UPDATE EquipmentInventory SET status = 'archived' WHERE equipmentID = ?";
                     try (PreparedStatement archiveStmt = conn.prepareStatement(archiveSql)) {
                         archiveStmt.setInt(1, equipmentId);
                         int updated = archiveStmt.executeUpdate();
                         if (updated > 0) {
-                            logEquipmentUpdate(conn, equipmentId, "Equipment marked as archived.");
+                            logEquipmentUpdate(conn, equipmentId, "DELETE", "Equipment marked as archived.");
                             return true;
                         } else {
                             System.out.println("Equipment deletion failed.");
@@ -1765,26 +1833,22 @@ public class DBMSSetup {
     }
 
     // * delete lesson order in the database
-    public static boolean deleteLessonOrder(Connection conn, int OrderId) {
+    public static boolean deleteLessonOrder(Connection conn, int orderId) {
         String checkSql = "SELECT remainingSessions, totalSessions FROM LessonOrder WHERE orderID = ?";
-        // compare remaining sessions to total sessions
-        // if remaining sessions < total sessions, return false
-        // else delete the lesson order
         try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
-            checkStmt.setInt(1, OrderId);
+            checkStmt.setInt(1, orderId);
             try (ResultSet rs = checkStmt.executeQuery()) {
                 if (rs.next()) {
                     int remaining = rs.getInt("remainingSessions");
                     int total = rs.getInt("totalSessions");
-                    // check if remaining sessions are less than total sessions
-                    if (remaining < total) {
+                    if (remaining != total) {
                         System.out.println("Cannot delete: some sessions have already been used.");
                         return false;
                     }
-                    // lessons purchased are not used, so delete the lesson order
+
                     String deleteSql = "DELETE FROM LessonOrder WHERE orderID = ?";
                     try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
-                        deleteStmt.setInt(1, OrderId);
+                        deleteStmt.setInt(1, orderId);
                         return deleteStmt.executeUpdate() > 0;
                     }
                 } else {
@@ -1793,7 +1857,7 @@ public class DBMSSetup {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error deleting lesson Order: " + e.getMessage());
+            System.err.println("Error deleting lesson order: " + e.getMessage());
             return false;
         }
     }
@@ -1803,17 +1867,17 @@ public class DBMSSetup {
         String checkSql = "SELECT returnStatus FROM EquipmentRental WHERE rentalID = ?";
         try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
             checkStmt.setInt(1, rentalId);
-            ResultSet rs = checkStmt.executeQuery();
-            // check if rental has been used
-            if (rs.next()) {
-                boolean isReturned = rs.getBoolean("returnStatus");
-                if (isReturned) {
-                    System.out.println("Cannot delete rental: equipment has already been returned/used.");
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next()) {
+                    String status = rs.getString("returnStatus");
+                    if (!"not returned".equalsIgnoreCase(status)) {
+                        System.out.println("Cannot delete rental: equipment has already been returned/used.");
+                        return false;
+                    }
+                } else {
+                    System.out.println("Rental record not found.");
                     return false;
                 }
-            } else {
-                System.out.println("Rental record not found.");
-                return false;
             }
         } catch (SQLException e) {
             System.err.println("Error checking rental status: " + e.getMessage());
@@ -1825,7 +1889,6 @@ public class DBMSSetup {
         try (PreparedStatement pstmt = conn.prepareStatement(deleteSql)) {
             pstmt.setInt(1, rentalId);
             int rowsDeleted = pstmt.executeUpdate();
-
             if (rowsDeleted > 0) {
                 logGearRentalUpdate(conn, rentalId, "DELETE", "Rental record deleted.");
                 return true;
@@ -1853,27 +1916,21 @@ public class DBMSSetup {
     }
     // #endregion delete
 
-    // Logs the equipment update in the equipmentUpdate table
-    public static void logEquipmentUpdate(Connection conn, int equipmentId, String note) {
-        String sql = "INSERT INTO equipmentUpdate (equipmentID, updateDate, notes) VALUES (?, CURRENT_DATE, ?)";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, equipmentId); // Set the equipment ID
-            pstmt.setString(2, note); // Set the note for the update
-            pstmt.executeUpdate(); // update changelog
-        } catch (SQLException e) {
-            System.err.println("Error logging equipment update: " + e.getMessage());
-        }
-    }
-
-    // * Logs the gear rental update in the gearRentalUpdate table
-    // * rentalID, type, notes, number
+    // Logs the gear rental update in the gearRentalUpdate table
     public static void logGearRentalUpdate(Connection conn, int rentalId, String type, String notes) {
-        String sql = "INSERT INTO gearRentalUpdate (rentalID, type, notes, number) VALUES (?, ?, ?, ?)";
+        // Generate a new record ID for the gear rental update
+        int nextId = generateRandomID(conn, "GearRentalUpdate", "rentalUpdateID");
+        if (nextId == -1) {
+            System.err.println("Failed to generate a unique gear rental update ID.");
+            return;
+        }
+
+        String sql = "INSERT INTO GearRentalUpdate (rentalUpdateID, rentalID, type, notes, updateDate) VALUES (?, ?, ?, ?, CURRENT_DATE)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, rentalId);
-            pstmt.setString(2, type);
-            pstmt.setString(3, notes);
-            pstmt.setInt(4, 1); // or some logic to determine version or change number
+            pstmt.setInt(1, nextId); // Unique update ID
+            pstmt.setInt(2, rentalId); // Rental ID
+            pstmt.setString(3, type); // Type of update ("ADD", "UPDATE", "DELETE")
+            pstmt.setString(4, notes); // Description of change
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error logging gear rental update: " + e.getMessage());
