@@ -1165,9 +1165,11 @@ public class Interface {
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, memberId);
 
+            boolean hasLessons = false;
             try (ResultSet res = pstmt.executeQuery()) {
                 System.out.println("Lessons for member ID " + memberId + ":");
                 while (res.next()) {
+                    hasLessons = true;
                     int remaining = res.getInt("remainingSessions");
                     String instructor = res.getString("instructorName");
                     Timestamp time = res.getTimestamp("scheduledTime");
@@ -1175,6 +1177,9 @@ public class Interface {
                     System.out.println("Sessions remaining: " + remaining + ", Instructor: " + instructor
                             + ", Scheduled at: " + time);
                 }
+            }
+            if (!hasLessons) {
+                System.out.println("No lessons found for member ID " + memberId);
             }
         } catch (SQLException e) {
             System.err.println("Error fetching member lessons: " + e.getMessage());
@@ -1265,8 +1270,8 @@ public class Interface {
         }
     }
 
-    // given a memberID, do they have a ski pass?, do they have a rental?, if so
-    // what equipment do they own?
+    // given a memberID, do they have a ski pass?, do they have a rental?
+    // along with the information on all the equipment they have rented
     public static void getMemberInfo(Connection conn, int memberID) {
         String sql = """
                     SELECT
@@ -1294,8 +1299,10 @@ public class Interface {
                         Equipment
                     JOIN RentalEquipment ON Equipment.equipmentID = RentalEquipment.equipmentID
                     JOIN GearRental ON RentalEquipment.rentalID = GearRental.rentalID
+                    JOIN SkiPass ON GearRental.skiPassID = SkiPass.skiPassID
                     WHERE
-                        GearRental.memberID = ?
+                        SkiPass.memberID = ?
+                        AND GearRental.returnStatus = 'not returned'
                 """;
 
         boolean hasSkiPass = false;
