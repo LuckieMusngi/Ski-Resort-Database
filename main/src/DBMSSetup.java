@@ -39,7 +39,7 @@ public class DBMSSetup {
         // printTableContents(dbconn, "Member"); // print member table
         // printTableContents(dbconn, "SkiPass"); // print skipass table
 
-        // printTupleCounts(dbconn); // print the number of tuples in each table
+        printTupleCounts(dbconn); // print the number of tuples in each table
     }
 
   
@@ -262,7 +262,7 @@ public class DBMSSetup {
             // Instructor: EmployeeID, Certification level
             "CREATE TABLE Instructor ("
                     + "employeeID INTEGER PRIMARY KEY, "
-                    + "certificationLevel VARCHAR2(10))",
+                    + "certificationLevel VARCHAR2(20))",
             // Employee: employeeID, name, age, sex, race, monthly salary, job title
             "CREATE TABLE Employee ("
                     + "employeeID INTEGER, "
@@ -802,7 +802,7 @@ public class DBMSSetup {
         // makes 20 members
         //   makes ski passes (80% active, 20% inactive) <- seperate chances
         //   makes lesson orders (40% chance)
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 100; i++) {
             int memberID = addRandomMember(dbconn, rand); // add a random member to the database
 
             // 20% chance for inactive ski pass

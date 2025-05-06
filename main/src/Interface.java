@@ -1,3 +1,4 @@
+
 import java.sql.*;
 import java.util.Scanner;
 
@@ -41,8 +42,6 @@ public class Interface {
         }
     }
 
-    
-
     private static int prepareModifyRecords(Connection dbconn, Scanner scanner) {
         System.out.println("Which record would you like to add/update/delete?");
         char entity = ' '; // arbitrary, gets set in following loop
@@ -80,7 +79,7 @@ public class Interface {
         }
 
         return modifyRecords(dbconn, scanner, action, entity); // call the modifyRecords method with the selected action
-                                                               // and entity
+        // and entity
     }
 
     private static int modifyRecords(Connection dbconn, Scanner scanner, char action, char entity) {
@@ -111,7 +110,7 @@ public class Interface {
                         int skiPassID = generateRandomID(dbconn, "SkiPass", "skiPassID");
                         int price = (int) getArgument(scanner, "price (numeric amount in cents)", 0);
                         java.sql.Date timeOfPurchase = java.sql.Date.valueOf(java.time.LocalDate.now()); // default
-                                                                                                         // current date
+                        // current date
                         java.sql.Date expDate = (java.sql.Date) getArgument(scanner, "expiration date", 2);
                         int totalUses = (int) getArgument(scanner, "total uses", 0);
                         int remainingUses = totalUses; // default to total uses
@@ -151,7 +150,7 @@ public class Interface {
                         System.out.println(
                                 "This needs the following parameters: skiPassID, rentedEquipmentTypes (comma separated)");
                         java.sql.Date startDate = java.sql.Date.valueOf(java.time.LocalDate.now()); // default current
-                                                                                                    // date
+                        // date
                         String returnStatus = "Not Returned"; // default to Not Returned
                         String status = "Active"; // default to active
                         int skiPassID = (int) getArgument(scanner, "ski pass ID", 0);
@@ -354,7 +353,7 @@ public class Interface {
     // * getArgument helper
     private static boolean isEquipment(String equipment) {
         // Check if the equipment is valid (e.g., "Ski boots", "Ski poles", etc.)
-        String[] validEquipments = { "Ski boots", "Ski poles", "Skis", "Snowboard", "Helmet" };
+        String[] validEquipments = {"Ski boots", "Ski poles", "Skis", "Snowboard", "Helmet"};
         for (String validEquipment : validEquipments) {
             if (equipment.equalsIgnoreCase(validEquipment)) {
                 return true; // valid equipment
@@ -364,8 +363,8 @@ public class Interface {
     }
 
     // * getArgument: get an argument from the user
-    static final String[] typeStr = { "int", "String", "Date", "equipment array (comma separated)" }; // types of
-                                                                                                      // arguments
+    static final String[] typeStr = {"int", "String", "Date", "equipment array (comma separated)"}; // types of
+    // arguments
 
     private static Object getArgument(Scanner scanner, String argName, int type) {
         while (true) {
@@ -389,7 +388,7 @@ public class Interface {
                         return java.sql.Date.valueOf(input); // Date
                     }
                     case 3 -> { // Handle equipment array (comma-separated values) ["Ski boots", "Ski poles",
-                                // "Skis", "Snowboard", "Helmet"]
+                        // "Skis", "Snowboard", "Helmet"]
                         String[] equipments = input.split(",");
                         for (int i = 0; i < equipments.length; i++) {
                             equipments[i] = equipments[i].trim(); // trim whitespace
@@ -418,11 +417,65 @@ public class Interface {
     }
 
     private static int queryRecords(Connection dbconn, Scanner scanner) {
-        return 0;
+        while (true) {
+            System.out.println("Which query would you like to access (1, 2, 3, 4) or exit (e):");
+            System.out.println("1. For a given member, list all the ski lessons they have purchased, including the number of remaining\r\n"
+                    + //
+                    "sessions, instructor name, and scheduled time.");
+            System.out.println("2. For a given ski pass, list all lift rides and equipment rentals associated with it, along with timestamps\r\n"
+                    + //
+                    "and return status.");
+            System.out.println("3. List all open trails suitable for intermediate-level skiers, along with their category and connected lifts\r\n"
+                    + //
+                    "that are currently operational.");
+            System.out.println("4. Lists all the ski passees, rentals, and equipment rented from a given memberID");
+            String input = scanner.nextLine();
+
+            switch (input.toLowerCase().charAt(0)) {
+                case '1' -> {
+                    // query1: getMemberLessons
+                    System.out.println("Querying member lessons: ");
+                    int memberID = (int) getArgument(scanner, "member ID", 0);
+                    getMemberLessons(dbconn, memberID);
+                }
+
+                case '2' -> {
+                    // query2: getSkiPassInfo
+                    System.out.println("Querying ski pass info: ");
+                    int skiPassID = (int) getArgument(scanner, "ski pass ID", 0);
+                    getSkiPassInfo(dbconn, skiPassID);
+                }
+
+                case '3' -> {
+                    // query3: getTrailInfo
+                    System.out.println("Querying open intermediate trails: ");
+                    getTrailInfo(dbconn);
+                }
+
+                case '4' -> {
+                    // query4: getMemberInfo
+                    System.out.println("Querying member info: ");
+                    int memberID = (int) getArgument(scanner, "member ID", 0);
+                    getMemberInfo(dbconn, memberID);
+                }
+
+                case 'e' -> {
+                    // Exit
+                    System.out.println("Exiting.");
+                    scanner.close(); // close the scanner
+                    return 0;
+                }
+
+                default ->
+                    // ask again
+                    System.out.println("Invalid input. Please try again.");
+            }
+        }
     }
 
     private static Connection getDbconn() {
-        final String oracleURL = // Magic lectura -> aloe access spell
+        final String oracleURL
+                = // Magic lectura -> aloe access spell
                 "jdbc:oracle:thin:@aloe.cs.arizona.edu:1521:oracle";
 
         String username = null, // Oracle DBMS username
@@ -607,7 +660,7 @@ public class Interface {
             }
 
             // [0]ski boots [1]ski poles [2]skis [3]snowboards [4]helmet
-            String[] types = { "Ski boots", "Ski poles", "Skis", "Snowboard", "Helmet" };
+            String[] types = {"Ski boots", "Ski poles", "Skis", "Snowboard", "Helmet"};
 
             // Add rented equipment to RentalEquipment table
             for (int equipmentType : rentedEquipmentTypes) {
@@ -1085,8 +1138,7 @@ public class Interface {
                 """;
 
         try (
-                PreparedStatement pstmt = conn.prepareStatement(sql);
-                PreparedStatement pstmt2 = conn.prepareStatement(sql2);) {
+                PreparedStatement pstmt = conn.prepareStatement(sql); PreparedStatement pstmt2 = conn.prepareStatement(sql2);) {
             pstmt.setInt(1, skiPassID);
             pstmt2.setInt(1, skiPassID);
 
