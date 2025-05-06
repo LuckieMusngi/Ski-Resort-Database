@@ -27,66 +27,66 @@ public class DBMSSetup {
     static int currentName = 0;
     // 300 names
     static final String[] names = {
-        "Lilianna Branch", "Keenan Giles", "Bailee Ortega", "Kobe Faulkner", "Ansley Caldwell",
-        "Rylan Hutchinson", "Jamie Gonzalez", "Ethan Huff", "Karsyn Barajas", "Brennan Lyons",
-        "Kenzie Chandler", "Royal Waters", "Bristol Richardson", "Robert Montoya", "Kamryn Snyder",
-        "Thiago Gray", "Sarah Nixon", "Cory Davidson", "Jayla Walton", "Dominick Edwards",
-        "Ivy Pierce", "Nicolas Koch", "Milana Rice", "Graham Yang", "Angelina Beasley",
-        "Stanley Dejesus", "Julissa Blake", "Zyaire Bates", "Madilyn Lucero", "Felipe Boyer",
-        "Chaya Wolf", "Jase Camacho", "Armani Durham", "Kellen Acosta", "Kaia Tran",
-        "Braxton Eaton", "Miley Flowers", "Saul Hines", "Poppy Barron", "Dustin Vang",
-        "Madisyn Reyna", "Reginald Fernandez", "Amara Barber", "Solomon Small", "Zaria Lozano",
-        "Boone Simon", "Kalani Flynn", "Kannon Calderon", "Serena Pennington", "Bobby Waller",
-        "Whitley Peck", "Yousef Rollins", "Araceli Nolan", "Maximo Wood", "Natalia Shah",
-        "Zain Ellis", "Ayla Woodard", "Westley Gould", "Violeta Brock", "Julio Bowman",
-        "Fiona Monroe", "Colby Larson", "Alayna Dickson", "Maxton Huffman", "Hayley Delgado",
-        "Colt Wolfe", "Hallie Schultz", "Cody Cox", "Sadie Finley", "Calum Maldonado",
-        "Elaina Delgado", "Colt Atkinson", "Jazmin French", "Corey McIntyre", "Rebekah Rios",
-        "Israel Le", "Myla Craig", "Odin Wagner", "Maeve Gallagher", "Marcos Salgado",
-        "Avalynn Portillo", "Wallace Barker", "Remington Crosby", "Tristen Patterson", "Kaylee Zhang",
-        "Isaias Hensley", "Malaya Ingram", "Tripp Hudson", "Kamila Boyer", "Zeke O’Connor",
-        "Charli Christensen", "Gregory Parks", "Ainsley Hurley", "Van Stevens", "Katherine Tapia",
-        "Samir Shaw", "Emersyn Chase", "Otis Marks", "Monica McKay", "Joey Galindo",
-        "Corinne Roy", "Marcelo Jimenez", "Adeline Mahoney", "Kamryn Clarke", "Kaitlyn Mata",
-        "Ray Webb", "Ariella Graves", "Cesar Crawford", "Aubree Webb", "Lorenzo Oliver",
-        "Camille Ramsey", "Luciano Rosales", "Kinley McDaniel", "Major Sierra", "Marceline Galvan",
-        "Kingsley McPherson", "Emmaline Tapia", "Samir Sampson", "Meilani Dyer", "Atreus Cochran",
-        "Alma Humphrey", "Krew Arroyo", "Kyra Preston", "Vincenzo Gallagher", "Elliott Faulkner",
-        "Jabari Tran", "Kylie Villarreal", "Nikolai Meadows", "Pearl Perry", "Waylon Zavala",
-        "Liv Hubbard", "Forrest Wilson", "Luna Lu", "Duncan Romero", "Eliza Shepard",
-        "Damari Travis", "Mazikee Gross", "Quinn Daniels", "Ember McLaughlin", "Ibrahim James",
-        "Quinn Moore", "Levi Jones", "Sophia Buckley", "Aryan Oliver", "Camille Sanford",
-        "Truett Terry", "Wren Lowery", "Jaxxon Moody", "Elaine Anthony", "Shiloh Morse",
-        "Kairi Hess", "Lawrence Medrano", "Halle Rose", "Hayden Ball", "Abby Bates",
-        "Ellis McConnell", "Denise Orozco", "Keanu Lindsey", "Colette Melendez", "Nikolas Guevara",
-        "Teresa Taylor", "Jackson Glenn", "Blaire Bradshaw", "Emory McCoy", "Mckenzie Xiong",
-        "Azrael Horn", "Avah Novak", "Bishop Leon", "Amora Conway", "Orlando Rich",
-        "Sunny Campbell", "Christopher Luna", "Journey Michael", "Bronson Guzman", "Ashley Tran",
-        "Braxton Rose", "Magnolia Sosa", "Emir Nolan", "Itzayana Reyna", "Reginald Houston",
-        "Lylah Patrick", "Derrick James", "Quinn Michael", "Bronson Schmitt", "Queen Nielsen",
-        "Tru Heath", "Amani Avery", "Jakari Cohen", "Destiny Torres", "Jayden McCullough",
-        "Hana Rhodes", "Titus Novak", "Kaiya Donaldson", "Canaan Pena", "Rachel Medrano",
-        "Arian Mann", "Paislee Mata", "Ray Salas", "Amber Haley", "Leif Walker",
-        "Hazel Cooper", "Jonathan Horne", "Marlowe Underwood", "Reece Riley", "Kayla Horton",
-        "Garrett Rose", "Magnolia McFarland", "Dane David", "Haylee Harrington", "Omari Tanner",
-        "Harmoni Pittman", "Valentino Dougherty", "Alisson Harvey", "Cayden Parrish", "Tiana Nash",
-        "Chandler Lim", "Giavanna Tucker", "Ivan Ramirez", "Grace Padilla", "Jaden Alexander",
-        "Lyla Copeland", "Axton Ellison", "Raina Jefferson", "Raylan Rollins", "Araceli Cuevas",
-        "Brecken Ali", "Zelda Knox", "Valentin Pope", "Aurelia Pittman", "Valentino Dalton",
-        "Lilian Harrington", "Omari Barton", "Danna Keith", "Jagger Leonard", "Demi Baker",
-        "Ezra Rios", "Brooke Jimenez", "Silas Meadows", "Pearl Galvan", "Kingsley Harmon",
-        "Maren Avalos", "Coen Cabrera", "Daleyza Barry", "Emery Harper", "Ana Golden",
-        "Amias Dean", "Julianna Murillo", "Lance Pennington", "Yareli Chung", "Ira Jacobs",
-        "Camilla Moses", "Niklaus Chapman", "Zuri Vang", "Jimmy Hull", "Andi Moran",
-        "Tate Wiley", "Lauryn Love", "Jeffrey Burton", "Miriam Barron", "Dustin Vincent",
-        "Allyson Perkins", "Kyrie Murray", "Faith McCormick", "Jasiah Spencer", "Alyssa Martin",
-        "Mateo Stephenson", "Khaleesi Leon", "Marshall Meyer", "Sara Guzman", "Jude Spears",
-        "Isabela Peterson", "Santiago Allen", "Riley Wiley", "Mathew Zhang", "Sarai Lane",
-        "Matias Sanford", "Emerald Alvarez", "Xavier Avery", "Meghan Lester", "Lee Banks",
-        "Cali Nielsen", "Tru Nichols", "Aliyah Burke", "Jax Woodard", "Aubrie Vang",
-        "Jimmy Woodard", "Aubrie Glover", "Mack McKee", "Kori Paul", "Noel Young",
-        "Zoey Padilla", "Jaden Eaton", "Miley Gilbert", "Tobias Lam", "Karina Paul",
-        "Noel Graves", "Elle Skinner", "Ridge Barron", "Anya Madden", "Everest Lyons"
+            "Lilianna Branch", "Keenan Giles", "Bailee Ortega", "Kobe Faulkner", "Ansley Caldwell",
+            "Rylan Hutchinson", "Jamie Gonzalez", "Ethan Huff", "Karsyn Barajas", "Brennan Lyons",
+            "Kenzie Chandler", "Royal Waters", "Bristol Richardson", "Robert Montoya", "Kamryn Snyder",
+            "Thiago Gray", "Sarah Nixon", "Cory Davidson", "Jayla Walton", "Dominick Edwards",
+            "Ivy Pierce", "Nicolas Koch", "Milana Rice", "Graham Yang", "Angelina Beasley",
+            "Stanley Dejesus", "Julissa Blake", "Zyaire Bates", "Madilyn Lucero", "Felipe Boyer",
+            "Chaya Wolf", "Jase Camacho", "Armani Durham", "Kellen Acosta", "Kaia Tran",
+            "Braxton Eaton", "Miley Flowers", "Saul Hines", "Poppy Barron", "Dustin Vang",
+            "Madisyn Reyna", "Reginald Fernandez", "Amara Barber", "Solomon Small", "Zaria Lozano",
+            "Boone Simon", "Kalani Flynn", "Kannon Calderon", "Serena Pennington", "Bobby Waller",
+            "Whitley Peck", "Yousef Rollins", "Araceli Nolan", "Maximo Wood", "Natalia Shah",
+            "Zain Ellis", "Ayla Woodard", "Westley Gould", "Violeta Brock", "Julio Bowman",
+            "Fiona Monroe", "Colby Larson", "Alayna Dickson", "Maxton Huffman", "Hayley Delgado",
+            "Colt Wolfe", "Hallie Schultz", "Cody Cox", "Sadie Finley", "Calum Maldonado",
+            "Elaina Delgado", "Colt Atkinson", "Jazmin French", "Corey McIntyre", "Rebekah Rios",
+            "Israel Le", "Myla Craig", "Odin Wagner", "Maeve Gallagher", "Marcos Salgado",
+            "Avalynn Portillo", "Wallace Barker", "Remington Crosby", "Tristen Patterson", "Kaylee Zhang",
+            "Isaias Hensley", "Malaya Ingram", "Tripp Hudson", "Kamila Boyer", "Zeke O’Connor",
+            "Charli Christensen", "Gregory Parks", "Ainsley Hurley", "Van Stevens", "Katherine Tapia",
+            "Samir Shaw", "Emersyn Chase", "Otis Marks", "Monica McKay", "Joey Galindo",
+            "Corinne Roy", "Marcelo Jimenez", "Adeline Mahoney", "Kamryn Clarke", "Kaitlyn Mata",
+            "Ray Webb", "Ariella Graves", "Cesar Crawford", "Aubree Webb", "Lorenzo Oliver",
+            "Camille Ramsey", "Luciano Rosales", "Kinley McDaniel", "Major Sierra", "Marceline Galvan",
+            "Kingsley McPherson", "Emmaline Tapia", "Samir Sampson", "Meilani Dyer", "Atreus Cochran",
+            "Alma Humphrey", "Krew Arroyo", "Kyra Preston", "Vincenzo Gallagher", "Elliott Faulkner",
+            "Jabari Tran", "Kylie Villarreal", "Nikolai Meadows", "Pearl Perry", "Waylon Zavala",
+            "Liv Hubbard", "Forrest Wilson", "Luna Lu", "Duncan Romero", "Eliza Shepard",
+            "Damari Travis", "Mazikee Gross", "Quinn Daniels", "Ember McLaughlin", "Ibrahim James",
+            "Quinn Moore", "Levi Jones", "Sophia Buckley", "Aryan Oliver", "Camille Sanford",
+            "Truett Terry", "Wren Lowery", "Jaxxon Moody", "Elaine Anthony", "Shiloh Morse",
+            "Kairi Hess", "Lawrence Medrano", "Halle Rose", "Hayden Ball", "Abby Bates",
+            "Ellis McConnell", "Denise Orozco", "Keanu Lindsey", "Colette Melendez", "Nikolas Guevara",
+            "Teresa Taylor", "Jackson Glenn", "Blaire Bradshaw", "Emory McCoy", "Mckenzie Xiong",
+            "Azrael Horn", "Avah Novak", "Bishop Leon", "Amora Conway", "Orlando Rich",
+            "Sunny Campbell", "Christopher Luna", "Journey Michael", "Bronson Guzman", "Ashley Tran",
+            "Braxton Rose", "Magnolia Sosa", "Emir Nolan", "Itzayana Reyna", "Reginald Houston",
+            "Lylah Patrick", "Derrick James", "Quinn Michael", "Bronson Schmitt", "Queen Nielsen",
+            "Tru Heath", "Amani Avery", "Jakari Cohen", "Destiny Torres", "Jayden McCullough",
+            "Hana Rhodes", "Titus Novak", "Kaiya Donaldson", "Canaan Pena", "Rachel Medrano",
+            "Arian Mann", "Paislee Mata", "Ray Salas", "Amber Haley", "Leif Walker",
+            "Hazel Cooper", "Jonathan Horne", "Marlowe Underwood", "Reece Riley", "Kayla Horton",
+            "Garrett Rose", "Magnolia McFarland", "Dane David", "Haylee Harrington", "Omari Tanner",
+            "Harmoni Pittman", "Valentino Dougherty", "Alisson Harvey", "Cayden Parrish", "Tiana Nash",
+            "Chandler Lim", "Giavanna Tucker", "Ivan Ramirez", "Grace Padilla", "Jaden Alexander",
+            "Lyla Copeland", "Axton Ellison", "Raina Jefferson", "Raylan Rollins", "Araceli Cuevas",
+            "Brecken Ali", "Zelda Knox", "Valentin Pope", "Aurelia Pittman", "Valentino Dalton",
+            "Lilian Harrington", "Omari Barton", "Danna Keith", "Jagger Leonard", "Demi Baker",
+            "Ezra Rios", "Brooke Jimenez", "Silas Meadows", "Pearl Galvan", "Kingsley Harmon",
+            "Maren Avalos", "Coen Cabrera", "Daleyza Barry", "Emery Harper", "Ana Golden",
+            "Amias Dean", "Julianna Murillo", "Lance Pennington", "Yareli Chung", "Ira Jacobs",
+            "Camilla Moses", "Niklaus Chapman", "Zuri Vang", "Jimmy Hull", "Andi Moran",
+            "Tate Wiley", "Lauryn Love", "Jeffrey Burton", "Miriam Barron", "Dustin Vincent",
+            "Allyson Perkins", "Kyrie Murray", "Faith McCormick", "Jasiah Spencer", "Alyssa Martin",
+            "Mateo Stephenson", "Khaleesi Leon", "Marshall Meyer", "Sara Guzman", "Jude Spears",
+            "Isabela Peterson", "Santiago Allen", "Riley Wiley", "Mathew Zhang", "Sarai Lane",
+            "Matias Sanford", "Emerald Alvarez", "Xavier Avery", "Meghan Lester", "Lee Banks",
+            "Cali Nielsen", "Tru Nichols", "Aliyah Burke", "Jax Woodard", "Aubrie Vang",
+            "Jimmy Woodard", "Aubrie Glover", "Mack McKee", "Kori Paul", "Noel Young",
+            "Zoey Padilla", "Jaden Eaton", "Miley Gilbert", "Tobias Lam", "Karina Paul",
+            "Noel Graves", "Elle Skinner", "Ridge Barron", "Anya Madden", "Everest Lyons"
     };
 
     static final boolean printDebug = false; // set to true to print debug messages
@@ -101,19 +101,30 @@ public class DBMSSetup {
 
         populateTables(dbconn);
 
-        // printTableContents(dbconn, "Equipment"); // print the contents of the Equipment table
-        // printTableContents(dbconn, "Member"); // print the contents of the Member table
-        // printTableContents(dbconn, "SkiPass"); // print the contents of the SkiPass table
-        // printTableContents(dbconn, "GearRental"); // print the contents of the GearRental table
-        // printTableContents(dbconn, "Employee"); // print the contents of the Employee table
+        // printTableContents(dbconn, "Equipment"); // print the contents of the
+        // Equipment table
+        // printTableContents(dbconn, "Member"); // print the contents of the Member
+        // table
+        // printTableContents(dbconn, "SkiPass"); // print the contents of the SkiPass
+        // table
+        // printTableContents(dbconn, "GearRental"); // print the contents of the
+        // GearRental table
+        // printTableContents(dbconn, "Employee"); // print the contents of the Employee
+        // table
         // printTableContents(dbconn, "Trail"); // print the contents of the Trail table
         // printTableContents(dbconn, "Lodge"); // print the contents of the Lodge table
-        // printTableContents(dbconn, "IncomeSource"); // print the contents of the IncomeSource table
-        // printTableContents(dbconn, "EmployeeIncomeSource"); // print the contents of the EmployeeIncomeSource table
-        // printTableContents(dbconn, "Instructor"); // print the contents of the Instructor table
-        // printTableContents(dbconn, "rentalEquipment"); // print the contents of the RentalEquipment table
-        // printTableContents(dbconn, "Lesson"); // print the contents of the Lesson table
-        // printTableContents(dbconn, "LessonSession"); // print the contents of the LessonSession table
+        // printTableContents(dbconn, "IncomeSource"); // print the contents of the
+        // IncomeSource table
+        // printTableContents(dbconn, "EmployeeIncomeSource"); // print the contents of
+        // the EmployeeIncomeSource table
+        // printTableContents(dbconn, "Instructor"); // print the contents of the
+        // Instructor table
+        // printTableContents(dbconn, "rentalEquipment"); // print the contents of the
+        // RentalEquipment table
+        // printTableContents(dbconn, "Lesson"); // print the contents of the Lesson
+        // table
+        // printTableContents(dbconn, "LessonSession"); // print the contents of the
+        // LessonSession table
         printTupleCounts(dbconn); // print the number of tuples in each table
     }
 
@@ -138,10 +149,11 @@ public class DBMSSetup {
 
     // lessons (6): snowboad, ski; beginner, intermediate, advanced
     // lodge: lodgeID, location
-    // lodge 1: 1, N visitory centery 123 
+    // lodge 1: 1, N visitory centery 123
     // lodge 2: 2, N therestaurant 456
     // lodge 3: 3, N theschool 789
-    private static int makeIncomeSourceRecords(Connection dbconn, Random rand, int[] employees, int lodgeID, String sourceName) {
+    private static int makeIncomeSourceRecords(Connection dbconn, Random rand, int[] employees, int lodgeID,
+            String sourceName) {
         // * add random income sources to the database
         // * returns the number of income sources added
         int sourceID = -1;
@@ -151,7 +163,8 @@ public class DBMSSetup {
             sourceID = addRandomIncomeSource(dbconn, rand, lodgeID, sourceName, day);
 
             if (sourceID == -1) {
-                System.err.println("Error adding income source for lodge " + lodgeID + " on day " + day + " for source " + sourceName);
+                System.err.println("Error adding income source for lodge " + lodgeID + " on day " + day + " for source "
+                        + sourceName);
                 return -1;
             }
 
@@ -167,11 +180,12 @@ public class DBMSSetup {
                 }
                 employee = employees[employee]; // Get the actual employee ID
 
-                int employeeIncomeSource = rawAddToTable(dbconn, "EmployeeIncomeSource", new String[]{
-                    String.valueOf(employee), String.valueOf(sourceID)});
+                int employeeIncomeSource = rawAddToTable(dbconn, "EmployeeIncomeSource", new String[] {
+                        String.valueOf(employee), String.valueOf(sourceID) });
 
                 if (employeeIncomeSource == -1) {
-                    System.err.println("Error adding employee income source for employee " + employee + " on day " + day);
+                    System.err
+                            .println("Error adding employee income source for employee " + employee + " on day " + day);
                     return -1;
                 }
             }
@@ -207,7 +221,8 @@ public class DBMSSetup {
         String endTime = String.format("%02d:00:00", startHour + 3); // 3 hours later
 
         if (printDebug) {
-            System.out.println("Session Details: Day1: " + day1 + ", Day2: " + day2 + ", StartTime: " + startTime + ", EndTime: " + endTime);
+            System.out.println("Session Details: Day1: " + day1 + ", Day2: " + day2 + ", StartTime: " + startTime
+                    + ", EndTime: " + endTime);
         }
 
         int sessionID = -1;
@@ -215,21 +230,29 @@ public class DBMSSetup {
         // * returns the number of sessions added
         for (int i = -2; i <= 3; i++) { // Loop from 2 weeks ago (-14) to 2 weeks forward (+14)
             // current day + i weeks + day days
-            java.sql.Date sessionDate1 = new java.sql.Date(System.currentTimeMillis() + i * 24L * 60 * 60 * 1000 * 7 + day1 * 24L * 60 * 60 * 1000); // Calculate the session date
-            java.sql.Date sessionDate2 = new java.sql.Date(System.currentTimeMillis() + i * 24L * 60 * 60 * 1000 * 7 + day2 * 24L * 60 * 60 * 1000); // Calculate the session date
+            java.sql.Date sessionDate1 = new java.sql.Date(
+                    System.currentTimeMillis() + i * 24L * 60 * 60 * 1000 * 7 + day1 * 24L * 60 * 60 * 1000); // Calculate
+                                                                                                              // the
+                                                                                                              // session
+                                                                                                              // date
+            java.sql.Date sessionDate2 = new java.sql.Date(
+                    System.currentTimeMillis() + i * 24L * 60 * 60 * 1000 * 7 + day2 * 24L * 60 * 60 * 1000); // Calculate
+                                                                                                              // the
+                                                                                                              // session
+                                                                                                              // date
 
             // Add session for day 1
-            sessionID = addToTable(dbconn, "LessonSession", "sessionID", new String[]{
-                "TO_DATE('" + sessionDate1 + " " + startTime + "', 'YYYY-MM-DD HH24:MI:SS')",
-                "TO_DATE('" + sessionDate1 + " " + endTime + "', 'YYYY-MM-DD HH24:MI:SS')",
-                String.valueOf(lessonID)
+            sessionID = addToTable(dbconn, "LessonSession", "sessionID", new String[] {
+                    "TO_DATE('" + sessionDate1 + " " + startTime + "', 'YYYY-MM-DD HH24:MI:SS')",
+                    "TO_DATE('" + sessionDate1 + " " + endTime + "', 'YYYY-MM-DD HH24:MI:SS')",
+                    String.valueOf(lessonID)
             });
 
             // Add session for day 2
-            sessionID = addToTable(dbconn, "LessonSession", "sessionID", new String[]{
-                "TO_DATE('" + sessionDate2 + " " + startTime + "', 'YYYY-MM-DD HH24:MI:SS')",
-                "TO_DATE('" + sessionDate2 + " " + endTime + "', 'YYYY-MM-DD HH24:MI:SS')",
-                String.valueOf(lessonID)
+            sessionID = addToTable(dbconn, "LessonSession", "sessionID", new String[] {
+                    "TO_DATE('" + sessionDate2 + " " + startTime + "', 'YYYY-MM-DD HH24:MI:SS')",
+                    "TO_DATE('" + sessionDate2 + " " + endTime + "', 'YYYY-MM-DD HH24:MI:SS')",
+                    String.valueOf(lessonID)
             });
 
         }
@@ -239,8 +262,9 @@ public class DBMSSetup {
 
     private static int makeRandomLesson(Connection dbconn, Random rand, String lessonName, String certification) {
         int instructorID = addRandomEmployee(dbconn, rand, "Instructor");
-        rawAddToTable(dbconn, "Instructor", new String[]{String.valueOf(instructorID), "'" + certification + "'"});
-        int lessonID = addToTable(dbconn, "Lesson", "lessonID", new String[]{"'" + lessonName + "'", String.valueOf(instructorID)});
+        rawAddToTable(dbconn, "Instructor", new String[] { String.valueOf(instructorID), "'" + certification + "'" });
+        int lessonID = addToTable(dbconn, "Lesson", "lessonID",
+                new String[] { "'" + lessonName + "'", String.valueOf(instructorID) });
 
         if (lessonID == -1) {
             System.err.println("Error adding lesson: " + lessonName);
@@ -267,18 +291,19 @@ public class DBMSSetup {
         // lessons (6): snowboad, ski; beginner, intermediate, advanced
         // lodge: lodgeID, location
         // lodge 2: 2, N therestaurant 456
-        //  5 employees: 2 restaurant, 2 gift shop, 1 parking lot manager
+        // 5 employees: 2 restaurant, 2 gift shop, 1 parking lot manager
         // lodge 3: 3, N theschool 789
-        //  5 employee: 3 instructors, 2 gift shop owners
-        // *lodge 1: 1, N visitory centery 123 
-        //  7 employees: 3 pass managers, 2 restaurant, 2 gift shop
-        int visitorCenterID = addToTable(dbconn, "Lodge", "lodgeID", new String[]{"'North Visitry Centery 123'"});
+        // 5 employee: 3 instructors, 2 gift shop owners
+        // *lodge 1: 1, N visitory centery 123
+        // 7 employees: 3 pass managers, 2 restaurant, 2 gift shop
+        int visitorCenterID = addToTable(dbconn, "Lodge", "lodgeID", new String[] { "'North Visitry Centery 123'" });
 
         int employee1 = addRandomEmployee(dbconn, rand, "Clerk");
         int employee2 = addRandomEmployee(dbconn, rand, "Clerk");
         int employee3 = addRandomEmployee(dbconn, rand, "Manager");
 
-        makeIncomeSourceRecords(dbconn, rand, new int[]{employee1, employee2, employee3}, visitorCenterID, "'Ski pass and rental'");
+        makeIncomeSourceRecords(dbconn, rand, new int[] { employee1, employee2, employee3 }, visitorCenterID,
+                "'Ski pass and rental'");
 
         employee1 = addRandomEmployee(dbconn, rand, "Restaurant worker");
         employee2 = addRandomEmployee(dbconn, rand, "Restaurant worker");
@@ -288,10 +313,12 @@ public class DBMSSetup {
         int employee7 = addRandomEmployee(dbconn, rand, "Restaurant worker");
         int employee6 = addRandomEmployee(dbconn, rand, "Manager");
 
-        int sourceID = makeIncomeSourceRecords(dbconn, rand, new int[]{employee1, employee2, employee3, employee4, employee5, employee6, employee7}, visitorCenterID, "'Restaurant'");
+        int sourceID = makeIncomeSourceRecords(dbconn, rand,
+                new int[] { employee1, employee2, employee3, employee4, employee5, employee6, employee7 },
+                visitorCenterID, "'Restaurant'");
 
-        int restaurantID = addToTable(dbconn, "Lodge", "lodgeID", new String[]{"'el restaurante 456'"});
-        int schoolID = addToTable(dbconn, "Lodge", "lodgeID", new String[]{"'N schoolStreet 789'"});
+        int restaurantID = addToTable(dbconn, "Lodge", "lodgeID", new String[] { "'el restaurante 456'" });
+        int schoolID = addToTable(dbconn, "Lodge", "lodgeID", new String[] { "'N schoolStreet 789'" });
 
         // Add snowboard lessons
         int boardBeginnerID = makeRandomLesson(dbconn, rand, "Snowboard Beginner", "Certified");
@@ -304,21 +331,23 @@ public class DBMSSetup {
         int skiAdvancedID = makeRandomLesson(dbconn, rand, "Ski Advanced", "Certified");
 
         // add shuttles
-        int shuttle1 = addToTable(dbconn, "Shuttle", "shuttleID", new String[]{"'Shuttle 1'", "'active'"});
-        int shuttle2 = addToTable(dbconn, "Shuttle", "shuttleID", new String[]{"'Shuttle 2'", "'active'"});
-        int shuttle3 = addToTable(dbconn, "Shuttle", "shuttleID", new String[]{"'Shuttle 2'", "'inactive'"});
+        int shuttle1 = addToTable(dbconn, "Shuttle", "shuttleID", new String[] { "'Shuttle 1'", "'active'" });
+        int shuttle2 = addToTable(dbconn, "Shuttle", "shuttleID", new String[] { "'Shuttle 2'", "'active'" });
+        int shuttle3 = addToTable(dbconn, "Shuttle", "shuttleID", new String[] { "'Shuttle 2'", "'inactive'" });
 
         // Shuttle 1 goes to lodge 1 and lodge 2
-        rawAddToTable(dbconn, "ShuttleLodge", new String[]{String.valueOf(shuttle1), String.valueOf(visitorCenterID)});
-        rawAddToTable(dbconn, "ShuttleLodge", new String[]{String.valueOf(shuttle1), String.valueOf(restaurantID)});
+        rawAddToTable(dbconn, "ShuttleLodge",
+                new String[] { String.valueOf(shuttle1), String.valueOf(visitorCenterID) });
+        rawAddToTable(dbconn, "ShuttleLodge", new String[] { String.valueOf(shuttle1), String.valueOf(restaurantID) });
 
         // Shuttle 2 goes to lodge 2 and lodge 3
-        rawAddToTable(dbconn, "ShuttleLodge", new String[]{String.valueOf(shuttle2), String.valueOf(restaurantID)});
-        rawAddToTable(dbconn, "ShuttleLodge", new String[]{String.valueOf(shuttle2), String.valueOf(schoolID)});
+        rawAddToTable(dbconn, "ShuttleLodge", new String[] { String.valueOf(shuttle2), String.valueOf(restaurantID) });
+        rawAddToTable(dbconn, "ShuttleLodge", new String[] { String.valueOf(shuttle2), String.valueOf(schoolID) });
 
         // Shuttle 3 goes to lodge 3 and lodge 1
-        rawAddToTable(dbconn, "ShuttleLodge", new String[]{String.valueOf(shuttle3), String.valueOf(visitorCenterID)});
-        rawAddToTable(dbconn, "ShuttleLodge", new String[]{String.valueOf(shuttle3), String.valueOf(schoolID)});
+        rawAddToTable(dbconn, "ShuttleLodge",
+                new String[] { String.valueOf(shuttle3), String.valueOf(visitorCenterID) });
+        rawAddToTable(dbconn, "ShuttleLodge", new String[] { String.valueOf(shuttle3), String.valueOf(schoolID) });
 
         // make 50 of each equipment type
         for (int i = 0; i < 50; i++) {
@@ -336,7 +365,7 @@ public class DBMSSetup {
         addLift(dbconn, "Lift B", "Beginner-Intermediate", Time.valueOf("08:30:00"), Time.valueOf("16:30:00"), "Open");
         addLift(dbconn, "Lift C", "Intermediate-Expert", Time.valueOf("10:00:00"), Time.valueOf("15:00:00"), "Closed");
         addLift(dbconn, "Lift D", "Intermediate-Expert", Time.valueOf("09:00:00"), Time.valueOf("17:00:00"), "Open");
-        String[] liftNames = new String[]{"Lift A", "Lift B", "Lift C", "Lift D"};
+        String[] liftNames = new String[] { "Lift A", "Lift B", "Lift C", "Lift D" };
         for (int i = 0; i < 48; i++) {
             String trailID = addRandomTrail(dbconn, rand, liftNames);
             if (trailID == "-1") {
@@ -345,7 +374,8 @@ public class DBMSSetup {
             }
         }
 
-        // member loop (includes ski pass, gear rental, and lesson orders n their relation entities)
+        // member loop (includes ski pass, gear rental, and lesson orders n their
+        // relation entities)
         for (int i = 0; i < 20; i++) {
             int memberID = addRandomMember(dbconn, rand); // add a random member to the database
 
@@ -368,7 +398,8 @@ public class DBMSSetup {
 
             int lessonOrderID = 0;
             if (rand.nextInt(100) < 40) { // 40% chance to make an order
-                lessonOrderID = makeRandomLessonOrder(dbconn, rand, memberID, new int[]{boardBeginnerID, boardIntermediateID, boardAdvancedID, skiBeginnerID, skiIntermediateID, skiAdvancedID});
+                lessonOrderID = makeRandomLessonOrder(dbconn, rand, memberID, new int[] { boardBeginnerID,
+                        boardIntermediateID, boardAdvancedID, skiBeginnerID, skiIntermediateID, skiAdvancedID });
             }
 
             if (status == -1 || lessonOrderID == -1 || memberID == -1) {
@@ -398,10 +429,10 @@ public class DBMSSetup {
         int remainingSessions = rand.nextInt(lessonAmount); // Random number of remaining sessions
 
         lessonOrderID = addToTable(dbconn, "LessonOrder", "lessonOrderID",
-                new String[]{
-                    String.valueOf(memberID),
-                    String.valueOf(lessonsPurchased),
-                    String.valueOf(remainingSessions)});
+                new String[] {
+                        String.valueOf(memberID),
+                        String.valueOf(lessonsPurchased),
+                        String.valueOf(remainingSessions) });
         int i = 0;
         boolean[] pickedLessons = new boolean[lessons.length]; // Track picked lessons
         while (i < lessonAmount) {
@@ -412,7 +443,8 @@ public class DBMSSetup {
 
                 // add lesson to the order
                 int lessonID = lessons[lessonIndex];
-                int lessonToOrderID = rawAddToTable(dbconn, "LessonToOrder", new String[]{String.valueOf(lessonID), String.valueOf(lessonOrderID)});
+                int lessonToOrderID = rawAddToTable(dbconn, "LessonToOrder",
+                        new String[] { String.valueOf(lessonID), String.valueOf(lessonOrderID) });
 
                 if (lessonToOrderID == -1) {
                     System.err.println("Error adding lesson to order for member " + memberID);
@@ -428,8 +460,7 @@ public class DBMSSetup {
 
     // * gets and returns a connection to the database
     private static Connection getDbconn() {
-        final String oracleURL
-                = // Magic lectura -> aloe access spell
+        final String oracleURL = // Magic lectura -> aloe access spell
                 "jdbc:oracle:thin:@aloe.cs.arizona.edu:1521:oracle";
 
         String username = null, // Oracle DBMS username
@@ -503,183 +534,187 @@ public class DBMSSetup {
     // #endregion Main methods
     // #region // * Table Creation
     // #region Tables creation consts
-    static final String[] tableNames = new String[]{
-        // main entities
-        "Member",
-        "SkiPass",
-        "GearRental",
-        "Equipment",
-        "EquipmentUpdate",
-        "GearRentalUpdate",
-        "Trail",
-        "Lift",
-        "LessonOrder",
-        "Lesson",
-        "LessonSession",
-        "Instructor",
-        "Employee",
-        "Lodge",
-        "IncomeSource",
-        "Shuttle",
-        // relation entities
-        "LessonToOrder",
-        "TrailLift",
-        "LiftPassUsage",
-        "ShuttleLodge",
-        "RentalEquipment",
-        "EmployeeIncomeSource"
+    static final String[] tableNames = new String[] {
+            // main entities
+            "Member",
+            "SkiPass",
+            "GearRental",
+            "Equipment",
+            "EquipmentUpdate",
+            "GearRentalUpdate",
+            "Trail",
+            "Lift",
+            "LessonOrder",
+            "Lesson",
+            "LessonSession",
+            "Instructor",
+            "Employee",
+            "Lodge",
+            "IncomeSource",
+            "Shuttle",
+            // relation entities
+            "LessonToOrder",
+            "TrailLift",
+            "LiftPassUsage",
+            "ShuttleLodge",
+            "RentalEquipment",
+            "EmployeeIncomeSource"
     };
 
-    static final String[] tableCreateStatements = new String[]{
-        // Member: memberID, name, phone#, email, dob, emergency contact
-        "CREATE TABLE Member ("
-        + "memberID INTEGER, "
-        + "name VARCHAR(50), "
-        + "phone VARCHAR(20), " // 20 bc of international numbers
-        + "email VARCHAR(50), "
-        + "dob DATE, "
-        + "emergencyContact VARCHAR(50), "
-        + "PRIMARY KEY (memberID))",
-        // Ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses,
-        // remainingUses, passType, status, memberID, rentalID
-        "CREATE TABLE SkiPass ("
-        + "skiPassID INTEGER PRIMARY KEY, "
-        + "price INTEGER NOT NULL, "
-        + "timeOfPurchase TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
-        + "expDate DATE NOT NULL, "
-        + "totalUses INTEGER, "
-        + "remainingUses INTEGER, "
-        + "passType VARCHAR(20), "
-        + "status VARCHAR(10), "
-        + "memberID INTEGER, "
-        + "rentalID INTEGER)",
-        // Gear Rental: rentalID, startDate, expDate, return status, status, skiPassID
-        "CREATE TABLE GearRental ("
-        + "rentalID INTEGER, "
-        + "startDate DATE, "
-        + "returnStatus VARCHAR(50), "
-        + "status VARCHAR(50), "
-        + "skiPassID INTEGER, "
-        + "PRIMARY KEY (rentalID))",
-        // Equipment: EquipmentID, type, size, status
-        "CREATE TABLE Equipment ("
-        + "equipmentID INTEGER, "
-        + "type VARCHAR(20), "
-        + "eSize VARCHAR(10), "
-        + "status VARCHAR(10),"
-        + "PRIMARY KEY (equipmentID))",
-        // Equipment Update: equipmentUpdateID, equipmentID, type, notes
-        "CREATE TABLE EquipmentUpdate ("
-        + "equipmentUpdateID INTEGER, "
-        + "equipmentID INTEGER, "
-        + "type VARCHAR(20), "
-        + "notes VARCHAR(200), "
-        + "updateDate DATE, " // ! just added
-        + "PRIMARY KEY (equipmentUpdateID))",
-        // Gear Rental Update: rentalUpdateID, rentalID, type, notes
-        "CREATE TABLE GearRentalUpdate ("
-        + "rentalUpdateID INTEGER, "
-        + "rentalID INTEGER, "
-        + "type VARCHAR(20), "
-        + "notes VARCHAR(200), "
-        + "updateDate DATE, " // ! just added
-        + "PRIMARY KEY (rentalUpdateID))",
-        // Trail: trailName, location, difficulty, category, status
-        "CREATE TABLE Trail ("
-        + "trailName VARCHAR(50), "
-        + "location VARCHAR(50), "
-        + "difficulty VARCHAR(20), "
-        + "category VARCHAR(20), "
-        + "status VARCHAR(10), "
-        + "PRIMARY KEY (trailName))",
-        // Lift: liftName, ability level, openTime, closeTime, status
-        "CREATE TABLE Lift ("
-        + "liftName VARCHAR2(25) PRIMARY KEY, "
-        + "abilityLevel VARCHAR2(25), "
-        + "openTime TIMESTAMP, " // * time doesn't exist so we use date's time component. ignore the calender components
-        + "closeTime TIMESTAMP, " // * time doesn't exist so we use date's time component. ignore the calender components
-        + "status VARCHAR2(10))",
-        // LessonOrder: lessonOrderID, memberID, lessonsPurchased, remainingSessions
-        "CREATE TABLE LessonOrder ("
-        + "lessonOrderID INTEGER, "
-        + "memberID INTEGER, "
-        + "lessonsPurchased INTEGER, "
-        + "remainingSessions INTEGER, "
-        + "PRIMARY KEY (lessonOrderID))",
-        // Lesson: LessonID, lessonName, EmployeeID
-        "CREATE TABLE Lesson ("
-        + "lessonID INTEGER PRIMARY KEY, "
-        + "lessonName VARCHAR2(25) NOT NULL, "
-        + "employeeID INTEGER)",
-        // LessonSession: sessionID, date, startTime, endTime, lessonID
-        "CREATE TABLE LessonSession ("
-        + "sessionID INTEGER, " // ! removed Date
-        + "startTime TIMESTAMP, " // * time doesn't exist so we use date's time component. ignore other components
-        + "endTime TIMESTAMP, " // * time doesn't exist so we use date's time component. ignore other components
-        + "lessonID INTEGER, "
-        + "PRIMARY KEY (sessionID))",
-        // Instructor: EmployeeID, Certification level
-        "CREATE TABLE Instructor ("
-        + "employeeID INTEGER PRIMARY KEY, "
-        + "certificationLevel VARCHAR2(10))",
-        // Employee: employeeID, name, age, sex, race, monthly salary, job title
-        "CREATE TABLE Employee ("
-        + "employeeID INTEGER, "
-        + "name VARCHAR(50), "
-        + "age INTEGER, "
-        + "sex VARCHAR(20), "
-        + "race VARCHAR(20), "
-        + "monthlySalary INTEGER, "
-        + "jobTitle VARCHAR(50), "
-        + "PRIMARY KEY (employeeID))",
-        // Lodge: lodgeID, location
-        "CREATE TABLE Lodge ("
-        + "lodgeID INTEGER PRIMARY KEY, "
-        + "location VARCHAR2(30))",
-        // IncomeSource: sourceID, day, lodgeID, sourceName, dailyIncome
-        "CREATE TABLE IncomeSource ("
-        + "sourceID INTEGER, "
-        + "day DATE, "
-        + "lodgeID INTEGER, "
-        + "sourceName VARCHAR(50), "
-        + "dailyIncome INTEGER, "
-        + "PRIMARY KEY (sourceID))",
-        // Shuttle: shuttleID, location, capacity, status
-        "CREATE TABLE Shuttle ("
-        + "shuttleID INTEGER PRIMARY KEY, "
-        + "shuttleName VARCHAR2(20), "
-        + "status VARCHAR2(10))",
-        // LessonToOrder: lessonID, lessonOrderID
-        "CREATE TABLE LessonToOrder ("
-        + "lessonID INTEGER, "
-        + "lessonOrderID INTEGER, "
-        + "PRIMARY KEY (lessonID, lessonOrderID))",
-        // TrailLift: trailName, liftName
-        "CREATE TABLE TrailLift ("
-        + "trailName VARCHAR(25), "
-        + "liftName VARCHAR(25), "
-        + "PRIMARY KEY (trailName, liftName))",
-        // LiftPassUsage: skiPassID, liftName, dateUsed, timeUsed
-        "CREATE TABLE LiftPassUsage ("
-        + "skiPassID INTEGER, "
-        + "liftName VARCHAR(25), "
-        + "dateUsed DATE, " // * date includes time
-        + "PRIMARY KEY (skiPassID, liftName, dateUsed))",
-        // ShuttleLodge: shuttleID, lodgeID
-        "CREATE TABLE ShuttleLodge ("
-        + "shuttleID INTEGER, "
-        + "lodgeID INTEGER, "
-        + "PRIMARY KEY (shuttleID, lodgeID))",
-        // RentalEquipment: rentalID, equipmentID
-        "CREATE TABLE RentalEquipment ("
-        + "rentalID INTEGER, "
-        + "equipmentID INTEGER, "
-        + "PRIMARY KEY (rentalID, equipmentID))",
-        // EmployeeIncomeSource: employeeID, sourceID, day
-        "CREATE TABLE EmployeeIncomeSource ("
-        + "employeeID INTEGER, "
-        + "sourceID INTEGER, "
-        + "PRIMARY KEY (employeeID, sourceID))"
+    static final String[] tableCreateStatements = new String[] {
+            // Member: memberID, name, phone#, email, dob, emergency contact
+            "CREATE TABLE Member ("
+                    + "memberID INTEGER, "
+                    + "name VARCHAR(50), "
+                    + "phone VARCHAR(20), " // 20 bc of international numbers
+                    + "email VARCHAR(50), "
+                    + "dob DATE, "
+                    + "emergencyContact VARCHAR(50), "
+                    + "PRIMARY KEY (memberID))",
+            // Ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses,
+            // remainingUses, passType, status, memberID, rentalID
+            "CREATE TABLE SkiPass ("
+                    + "skiPassID INTEGER PRIMARY KEY, "
+                    + "price INTEGER NOT NULL, "
+                    + "timeOfPurchase TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
+                    + "expDate DATE NOT NULL, "
+                    + "totalUses INTEGER, "
+                    + "remainingUses INTEGER, "
+                    + "passType VARCHAR(20), "
+                    + "status VARCHAR(10), "
+                    + "memberID INTEGER, "
+                    + "rentalID INTEGER)",
+            // Gear Rental: rentalID, startDate, expDate, return status, status, skiPassID
+            "CREATE TABLE GearRental ("
+                    + "rentalID INTEGER, "
+                    + "startDate DATE, "
+                    + "returnStatus VARCHAR(50), "
+                    + "status VARCHAR(50), "
+                    + "skiPassID INTEGER, "
+                    + "PRIMARY KEY (rentalID))",
+            // Equipment: EquipmentID, type, size, status
+            "CREATE TABLE Equipment ("
+                    + "equipmentID INTEGER, "
+                    + "type VARCHAR(20), "
+                    + "eSize VARCHAR(10), "
+                    + "status VARCHAR(10),"
+                    + "PRIMARY KEY (equipmentID))",
+            // Equipment Update: equipmentUpdateID, equipmentID, type, notes
+            "CREATE TABLE EquipmentUpdate ("
+                    + "equipmentUpdateID INTEGER, "
+                    + "equipmentID INTEGER, "
+                    + "type VARCHAR(20), "
+                    + "notes VARCHAR(200), "
+                    + "updateDate DATE, " // ! just added
+                    + "PRIMARY KEY (equipmentUpdateID))",
+            // Gear Rental Update: rentalUpdateID, rentalID, type, notes
+            "CREATE TABLE GearRentalUpdate ("
+                    + "rentalUpdateID INTEGER, "
+                    + "rentalID INTEGER, "
+                    + "type VARCHAR(20), "
+                    + "notes VARCHAR(200), "
+                    + "updateDate DATE, " // ! just added
+                    + "PRIMARY KEY (rentalUpdateID))",
+            // Trail: trailName, location, difficulty, category, status
+            "CREATE TABLE Trail ("
+                    + "trailName VARCHAR(50), "
+                    + "location VARCHAR(50), "
+                    + "difficulty VARCHAR(20), "
+                    + "category VARCHAR(20), "
+                    + "status VARCHAR(10), "
+                    + "PRIMARY KEY (trailName))",
+            // Lift: liftName, ability level, openTime, closeTime, status
+            "CREATE TABLE Lift ("
+                    + "liftName VARCHAR2(25) PRIMARY KEY, "
+                    + "abilityLevel VARCHAR2(25), "
+                    + "openTime TIMESTAMP, " // * time doesn't exist so we use date's time component. ignore the
+                                             // calender components
+                    + "closeTime TIMESTAMP, " // * time doesn't exist so we use date's time component. ignore the
+                                              // calender components
+                    + "status VARCHAR2(10))",
+            // LessonOrder: lessonOrderID, memberID, lessonsPurchased, remainingSessions
+            "CREATE TABLE LessonOrder ("
+                    + "lessonOrderID INTEGER, "
+                    + "memberID INTEGER, "
+                    + "lessonsPurchased INTEGER, "
+                    + "remainingSessions INTEGER, "
+                    + "PRIMARY KEY (lessonOrderID))",
+            // Lesson: LessonID, lessonName, EmployeeID
+            "CREATE TABLE Lesson ("
+                    + "lessonID INTEGER PRIMARY KEY, "
+                    + "lessonName VARCHAR2(25) NOT NULL, "
+                    + "employeeID INTEGER)",
+            // LessonSession: sessionID, date, startTime, endTime, lessonID
+            "CREATE TABLE LessonSession ("
+                    + "sessionID INTEGER, " // ! removed Date
+                    + "startTime TIMESTAMP, " // * time doesn't exist so we use date's time component. ignore other
+                                              // components
+                    + "endTime TIMESTAMP, " // * time doesn't exist so we use date's time component. ignore other
+                                            // components
+                    + "lessonID INTEGER, "
+                    + "PRIMARY KEY (sessionID))",
+            // Instructor: EmployeeID, Certification level
+            "CREATE TABLE Instructor ("
+                    + "employeeID INTEGER PRIMARY KEY, "
+                    + "certificationLevel VARCHAR2(10))",
+            // Employee: employeeID, name, age, sex, race, monthly salary, job title
+            "CREATE TABLE Employee ("
+                    + "employeeID INTEGER, "
+                    + "name VARCHAR(50), "
+                    + "age INTEGER, "
+                    + "sex VARCHAR(20), "
+                    + "race VARCHAR(20), "
+                    + "monthlySalary INTEGER, "
+                    + "jobTitle VARCHAR(50), "
+                    + "PRIMARY KEY (employeeID))",
+            // Lodge: lodgeID, location
+            "CREATE TABLE Lodge ("
+                    + "lodgeID INTEGER PRIMARY KEY, "
+                    + "location VARCHAR2(30))",
+            // IncomeSource: sourceID, day, lodgeID, sourceName, dailyIncome
+            "CREATE TABLE IncomeSource ("
+                    + "sourceID INTEGER, "
+                    + "day DATE, "
+                    + "lodgeID INTEGER, "
+                    + "sourceName VARCHAR(50), "
+                    + "dailyIncome INTEGER, "
+                    + "PRIMARY KEY (sourceID))",
+            // Shuttle: shuttleID, location, capacity, status
+            "CREATE TABLE Shuttle ("
+                    + "shuttleID INTEGER PRIMARY KEY, "
+                    + "shuttleName VARCHAR2(20), "
+                    + "status VARCHAR2(10))",
+            // LessonToOrder: lessonID, lessonOrderID
+            "CREATE TABLE LessonToOrder ("
+                    + "lessonID INTEGER, "
+                    + "lessonOrderID INTEGER, "
+                    + "PRIMARY KEY (lessonID, lessonOrderID))",
+            // TrailLift: trailName, liftName
+            "CREATE TABLE TrailLift ("
+                    + "trailName VARCHAR(25), "
+                    + "liftName VARCHAR(25), "
+                    + "PRIMARY KEY (trailName, liftName))",
+            // LiftPassUsage: skiPassID, liftName, dateUsed, timeUsed
+            "CREATE TABLE LiftPassUsage ("
+                    + "skiPassID INTEGER, "
+                    + "liftName VARCHAR(25), "
+                    + "dateUsed DATE, " // * date includes time
+                    + "PRIMARY KEY (skiPassID, liftName, dateUsed))",
+            // ShuttleLodge: shuttleID, lodgeID
+            "CREATE TABLE ShuttleLodge ("
+                    + "shuttleID INTEGER, "
+                    + "lodgeID INTEGER, "
+                    + "PRIMARY KEY (shuttleID, lodgeID))",
+            // RentalEquipment: rentalID, equipmentID
+            "CREATE TABLE RentalEquipment ("
+                    + "rentalID INTEGER, "
+                    + "equipmentID INTEGER, "
+                    + "PRIMARY KEY (rentalID, equipmentID))",
+            // EmployeeIncomeSource: employeeID, sourceID, day
+            "CREATE TABLE EmployeeIncomeSource ("
+                    + "employeeID INTEGER, "
+                    + "sourceID INTEGER, "
+                    + "PRIMARY KEY (employeeID, sourceID))"
     };
 
     private static void addForeignKeys(Connection dbconn) {
@@ -942,7 +977,7 @@ public class DBMSSetup {
             }
 
             // [0]ski boots [1]ski poles [2]skis [3]snowboards [4]helmet
-            String[] types = {"Ski boots", "Ski poles", "Skis", "Snowboard", "Helmet"};
+            String[] types = { "Ski boots", "Ski poles", "Skis", "Snowboard", "Helmet" };
 
             // Add rented equipment to RentalEquipment table
             for (int equipmentType : rentedEquipmentTypes) {
@@ -1159,7 +1194,8 @@ public class DBMSSetup {
     // * add random ski pass to the database
     // * returns the skiPassID of the new ski pass, or -1 on failure
     // ! isn't really a way to get the gear rentalID from the ski passID
-    private static int addRandomSkiPass(Connection dbconn, Random rand, int memberID, boolean active, String[] liftNames) {
+    private static int addRandomSkiPass(Connection dbconn, Random rand, int memberID, boolean active,
+            String[] liftNames) {
         // ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses,
         // remainingUses, passType, status, memberID, rentalID
 
@@ -1189,8 +1225,11 @@ public class DBMSSetup {
                 price = 15000; // 150.00
             }
 
-            timeOfPurchase = new java.sql.Date(System.currentTimeMillis() - randLong(rand, 0, 3L * 365 * 24 * 60 * 60 * 1000)); // random date up to 3 years ago
-            expDate = new java.sql.Date(timeOfPurchase.getTime()); // * exp date is the same as time of purchase for punch cards
+            timeOfPurchase = new java.sql.Date(
+                    System.currentTimeMillis() - randLong(rand, 0, 3L * 365 * 24 * 60 * 60 * 1000)); // random date up
+                                                                                                     // to 3 years ago
+            expDate = new java.sql.Date(timeOfPurchase.getTime()); // * exp date is the same as time of purchase for
+                                                                   // punch cards
 
             if (status.equals("Active")) {
                 remainingUses = rand.nextInt(totalUses) + 1; // random remaining uses between 1 and totalUses
@@ -1248,7 +1287,8 @@ public class DBMSSetup {
         int rentalID = -1; // rental ID is -1 by default
 
         // * ski pass added
-        int result = addSkiPass(dbconn, skiPassID, price, timeOfPurchase, expDate, totalUses, remainingUses, passType, status,
+        int result = addSkiPass(dbconn, skiPassID, price, timeOfPurchase, expDate, totalUses, remainingUses, passType,
+                status,
                 memberID, rentalID);
 
         if (rand.nextBoolean()) {
@@ -1282,14 +1322,16 @@ public class DBMSSetup {
         for (int i = 0; i < liftPassUsageCount; i++) {
             String liftName = liftNames[rand.nextInt(liftNames.length)]; // Random lift name
             // Random date between min(current time or purchase) and expiration
-            java.sql.Date usageDate = new java.sql.Date(randLong(rand, Math.min(System.currentTimeMillis(), timeOfPurchase.getTime()), expDate.getTime()));
-            String usageTime = String.format("%02d:%02d:%02d", rand.nextInt(24), rand.nextInt(60), rand.nextInt(60)); // Random time
+            java.sql.Date usageDate = new java.sql.Date(
+                    randLong(rand, Math.min(System.currentTimeMillis(), timeOfPurchase.getTime()), expDate.getTime()));
+            String usageTime = String.format("%02d:%02d:%02d", rand.nextInt(24), rand.nextInt(60), rand.nextInt(60)); // Random
+                                                                                                                      // time
 
             // * Add lift pass usages added
-            int liftPassUsageResult = rawAddToTable(dbconn, "LiftPassUsage", new String[]{
-                String.valueOf(skiPassID),
-                "'" + liftName + "'",
-                "TO_DATE('" + usageDate + " " + usageTime + "', 'YYYY-MM-DD HH24:MI:SS')"
+            int liftPassUsageResult = rawAddToTable(dbconn, "LiftPassUsage", new String[] {
+                    String.valueOf(skiPassID),
+                    "'" + liftName + "'",
+                    "TO_DATE('" + usageDate + " " + usageTime + "', 'YYYY-MM-DD HH24:MI:SS')"
             });
 
             if (liftPassUsageResult == -1) {
@@ -1336,9 +1378,11 @@ public class DBMSSetup {
             draftEquipment[0] = rand.nextInt(5);
             count++;
             for (int i = 1; i < draftEquipment.length; i++) {
-                int next = rand.nextInt(10); // random number between 0 and 9. equipment types are 0-4, so 5-9 are purposefully invalid
+                int next = rand.nextInt(10); // random number between 0 and 9. equipment types are 0-4, so 5-9 are
+                                             // purposefully invalid
 
-                // 50% chance of being the same equipment type as before and therefore breaking the loop
+                // 50% chance of being the same equipment type as before and therefore breaking
+                // the loop
                 if (intInArr(draftEquipment, next) || next > 4) {
                     break;
                 } else {
@@ -1358,14 +1402,16 @@ public class DBMSSetup {
         }
 
         if (status.equals("Inactive")) {
-            java.sql.Date date = new java.sql.Date(System.currentTimeMillis() - randLong(rand, 0, 3L * 365 * 24 * 60 * 60 * 1000)); // random date up to 3 years ago
+            java.sql.Date date = new java.sql.Date(
+                    System.currentTimeMillis() - randLong(rand, 0, 3L * 365 * 24 * 60 * 60 * 1000)); // random date up
+                                                                                                     // to 3 years ago
 
             // * log the gear rental update
-            int updateResult = addToTable(dbconn, "GearRentalUpdate", "rentalUpdateID", new String[]{
-                String.valueOf(rentalID),
-                "'Delete'",
-                "'Rental deleted (error occured).'",
-                "TO_DATE('" + date + "', 'YYYY-MM-DD')"
+            int updateResult = addToTable(dbconn, "GearRentalUpdate", "rentalUpdateID", new String[] {
+                    String.valueOf(rentalID),
+                    "'Delete'",
+                    "'Rental deleted (error occured).'",
+                    "TO_DATE('" + date + "', 'YYYY-MM-DD')"
             });
             if (updateResult == -1) {
                 System.err.println("Error logging gear rental update.");
@@ -1384,11 +1430,11 @@ public class DBMSSetup {
         String trailName = randStr(rand, -1);
         String location = randStr(rand, -1);
 
-        String[] difficulties = new String[]{"Beginner", "Intermediate", "Expert"};
+        String[] difficulties = new String[] { "Beginner", "Intermediate", "Expert" };
         int difficultyIndex = rand.nextInt(difficulties.length);
         String difficulty = difficulties[difficultyIndex];
 
-        String[] categories = new String[]{"groomed", "park", "moguls", "glade skiing"};
+        String[] categories = new String[] { "groomed", "park", "moguls", "glade skiing" };
         String category = categories[rand.nextInt(categories.length)];
 
         String status = rand.nextBoolean() ? "Active" : "Inactive"; // * open, closed
@@ -1403,17 +1449,18 @@ public class DBMSSetup {
         int[] possibleLifts;
         switch (difficultyIndex) {
             case 0 ->
-                possibleLifts = new int[]{0, 1}; // easy lifts
+                possibleLifts = new int[] { 0, 1 }; // easy lifts
             case 1 ->
-                possibleLifts = new int[]{0, 1, 2, 3}; // easy and intermediate lifts
+                possibleLifts = new int[] { 0, 1, 2, 3 }; // easy and intermediate lifts
             case 2 ->
-                possibleLifts = new int[]{2, 3}; // intermediate and expert lifts
+                possibleLifts = new int[] { 2, 3 }; // intermediate and expert lifts
             default ->
                 throw new AssertionError();
         }
 
         // * add the lift to the trail
-        String liftName = liftNames[possibleLifts[rand.nextInt(possibleLifts.length)]]; // random lift name from the possible lifts
+        String liftName = liftNames[possibleLifts[rand.nextInt(possibleLifts.length)]]; // random lift name from the
+                                                                                        // possible lifts
         String sql = "INSERT INTO TrailLift (trailName, liftName) VALUES (?, ?)";
         try (PreparedStatement pstmt = dbconn.prepareStatement(sql)) {
             pstmt.setString(1, trailName + " trail");
@@ -1429,10 +1476,12 @@ public class DBMSSetup {
 
         // 30% chance to add a second lift
         if (rand.nextInt(100) < 30) {
-            String secondLiftName = liftNames[possibleLifts[rand.nextInt(possibleLifts.length)]]; // random second lift name
+            String secondLiftName = liftNames[possibleLifts[rand.nextInt(possibleLifts.length)]]; // random second lift
+                                                                                                  // name
 
             // if same as first, just ignore it
-            // this decreases the chance more, and makes it more likely for trails w/ multiple possible lifts to have multiple
+            // this decreases the chance more, and makes it more likely for trails w/
+            // multiple possible lifts to have multiple
             if (!secondLiftName.equals(liftName)) {
                 try (PreparedStatement pstmt = dbconn.prepareStatement(sql)) {
                     pstmt.setString(1, trailName + " trail");
@@ -1455,19 +1504,21 @@ public class DBMSSetup {
     private static int addRandomEquipment(Connection dbconn, Random rand, int eqType) {
         // equipment: equipmentID, type, size, status
         // int eqType = rand.nextInt(types.length);
-        String[] types = new String[]{"Ski boots", "Ski poles", "Skis", "Snowboard", "Helmet"};
+        String[] types = new String[] { "Ski boots", "Ski poles", "Skis", "Snowboard", "Helmet" };
         String type = types[eqType];
 
-        int[] lowerBound = new int[]{4, 80, 70, 90, 48};
-        int[] upperBound = new int[]{15, 145, 210, 180, 65};
+        int[] lowerBound = new int[] { 4, 80, 70, 90, 48 };
+        int[] upperBound = new int[] { 15, 145, 210, 180, 65 };
 
-        int size = rand.nextInt(upperBound[eqType] - lowerBound[eqType]) + lowerBound[eqType]; // random size between lower and upper bound
+        int size = rand.nextInt(upperBound[eqType] - lowerBound[eqType]) + lowerBound[eqType]; // random size between
+                                                                                               // lower and upper bound
         String sizeStr = String.valueOf(size); // convert to string
 
         String status = rand.nextInt(100) < 95 ? "Active" : "Inactive"; // 95% chance of being available
 
-        int equipmentID = addToTable(dbconn, "Equipment", "equipmentID", new String[]{"'" + type + "'", "'" + sizeStr + "'",
-            "'" + status + "'"});
+        int equipmentID = addToTable(dbconn, "Equipment", "equipmentID",
+                new String[] { "'" + type + "'", "'" + sizeStr + "'",
+                        "'" + status + "'" });
         if (equipmentID == -1) {
             System.err.println("Error adding equipment: " + type + ", " + sizeStr + ", " + status);
             return -1;
@@ -1475,13 +1526,15 @@ public class DBMSSetup {
 
         if (status.equals("Inactive")) {
             // * log the equipment update
-            java.sql.Date date = new java.sql.Date(System.currentTimeMillis() - randLong(rand, 0, 3L * 365 * 24 * 60 * 60 * 1000)); // random date up to 3 years ago
+            java.sql.Date date = new java.sql.Date(
+                    System.currentTimeMillis() - randLong(rand, 0, 3L * 365 * 24 * 60 * 60 * 1000)); // random date up
+                                                                                                     // to 3 years ago
 
-            int updateResult = addToTable(dbconn, "EquipmentUpdate", "equipmentUpdateID", new String[]{
-                String.valueOf(equipmentID),
-                "'Delete'",
-                "'Equipment broken or missing.'",
-                "TO_DATE('" + date + "', 'YYYY-MM-DD')"
+            int updateResult = addToTable(dbconn, "EquipmentUpdate", "equipmentUpdateID", new String[] {
+                    String.valueOf(equipmentID),
+                    "'Delete'",
+                    "'Equipment broken or missing.'",
+                    "TO_DATE('" + date + "', 'YYYY-MM-DD')"
             });
             if (updateResult == -1) {
                 System.err.println("Error logging equipment update.");
@@ -1498,21 +1551,23 @@ public class DBMSSetup {
         // Employee: employeeID, name, age, sex, race, monthly salary, job title
         String name = nextName(); // get a random name from the list
         int age = rand.nextInt(50) + 20; // random age between 20 and 70
-        String[] sexes = {"Male", "Female", "Other"};
+        String[] sexes = { "Male", "Female", "Other" };
         String sex = sexes[rand.nextInt(sexes.length)];
-        String[] races = {"White", "Black", "Asian", "Hispanic", "Other"};
+        String[] races = { "White", "Black", "Asian", "Hispanic", "Other" };
         String race = races[rand.nextInt(races.length)];
         int monthlySalary = rand.nextInt(5000) + 3000; // random salary between $3000 and $8000
 
-        // String[] jobTitles = { "Instructor", "Manager", "Technician", "Clerk", "Shuttle driver", "Janitor", "Security" }; // ! used for if we want random titles (felt like it was kinda bad)
+        // String[] jobTitles = { "Instructor", "Manager", "Technician", "Clerk",
+        // "Shuttle driver", "Janitor", "Security" }; // ! used for if we want random
+        // titles (felt like it was kinda bad)
         // String jobTitle = jobTitles[rand.nextInt(jobTitles.length)];
-        int employeeID = addToTable(dbconn, "Employee", "employeeID", new String[]{
-            "'" + name + "'",
-            String.valueOf(age),
-            "'" + sex + "'",
-            "'" + race + "'",
-            String.valueOf(monthlySalary),
-            "'" + jobTitle + "'"
+        int employeeID = addToTable(dbconn, "Employee", "employeeID", new String[] {
+                "'" + name + "'",
+                String.valueOf(age),
+                "'" + sex + "'",
+                "'" + race + "'",
+                String.valueOf(monthlySalary),
+                "'" + jobTitle + "'"
         });
 
         if (employeeID == -1) {
@@ -1522,27 +1577,31 @@ public class DBMSSetup {
         }
         return employeeID;
     }
-//         "CREATE TABLE IncomeSource ("
-// + "sourceID INTEGER, "
-// + "day DATE, "
-// + "lodgeID INTEGER, "
-// + "sourceName VARCHAR(50), "
-// + "dailyIncome INTEGER, "
-// + "PRIMARY KEY (sourceID))",
+    // "CREATE TABLE IncomeSource ("
+    // + "sourceID INTEGER, "
+    // + "day DATE, "
+    // + "lodgeID INTEGER, "
+    // + "sourceName VARCHAR(50), "
+    // + "dailyIncome INTEGER, "
+    // + "PRIMARY KEY (sourceID))",
 
     // * adds an income source with the given name to the database
-    // ! note: income sources are per day and per lodge. It is maybe better to have an income source entity but this goes
-    private static int addRandomIncomeSource(Connection dbconn, Random rand, int lodgeID, String sourceName, java.sql.Date day) {
+    // ! note: income sources are per day and per lodge. It is maybe better to have
+    // an income source entity but this goes
+    private static int addRandomIncomeSource(Connection dbconn, Random rand, int lodgeID, String sourceName,
+            java.sql.Date day) {
         // IncomeSource: sourceID, day, lodgeID, sourceName, dailyIncome
 
         // ! we want to ensure out source names with the way ours works right now
-        // String[] sourceNames = { "Lift ticket sales", "Ski pass sales", "Equipment rentals", "Food and beverage sales",
-        //         "Merchandise sales", "Ski lessons", "Ski patrol services", "Parking sales" };
-        // String sourceName = sourceNames[rand.nextInt(sourceNames.length)]; // randomly select a source name
+        // String[] sourceNames = { "Lift ticket sales", "Ski pass sales", "Equipment
+        // rentals", "Food and beverage sales",
+        // "Merchandise sales", "Ski lessons", "Ski patrol services", "Parking sales" };
+        // String sourceName = sourceNames[rand.nextInt(sourceNames.length)]; //
+        // randomly select a source name
         int dailyIncome = rand.nextInt(1000) + 100; // random daily income between $100 and $1100
 
-        int result = addToTable(dbconn, "IncomeSource", "sourceID", new String[]{
-            "TO_DATE('" + day + "', 'YYYY-MM-DD')", String.valueOf(lodgeID), sourceName, String.valueOf(dailyIncome)
+        int result = addToTable(dbconn, "IncomeSource", "sourceID", new String[] {
+                "TO_DATE('" + day + "', 'YYYY-MM-DD')", String.valueOf(lodgeID), sourceName, String.valueOf(dailyIncome)
         });
 
         if (result == -1) {
@@ -1580,10 +1639,12 @@ public class DBMSSetup {
     private static long randLong(Random rand, long min, long max) {
         return min + (long) (rand.nextDouble() * (max - min)); // generate random long between min and max
     }
-    // * random entity generator (end) ---------------------------------------------------------------------------
+    // * random entity generator (end)
+    // ---------------------------------------------------------------------------
     // #endregion Populate tables
 
-    // #region // * update
+    // #endregion Populate tables
+    // region // * update
     // * update member in the database
     public static boolean updateMember(Connection conn, int memberId, String newPhone, String newEmail,
             String newEmergencyContact) {
@@ -1696,8 +1757,8 @@ public class DBMSSetup {
         }
     }
 
-    // #endregion // * update
-    // #region delete
+    // #endregion update
+    // #region // * delete
     // * delete member in the database
     public static boolean deleteMember(Connection conn, int memberId) {
         try {
@@ -1706,9 +1767,9 @@ public class DBMSSetup {
             String activeRental = "SELECT COUNT(*) FROM EquipmentRental WHERE memberID = ? AND returnStatus = 'not returned'";
             String activeLesson = "SELECT COUNT(*) FROM LessonOrder WHERE memberID = ? AND usedStatus = 'unused'";
 
-            if (hasOpenRecords(conn, activeSkiPass, memberId)
-                    || hasOpenRecords(conn, activeRental, memberId)
-                    || hasOpenRecords(conn, activeLesson, memberId)) {
+            if (hasOpenRecords(conn, activeSkiPass, memberId) ||
+                    hasOpenRecords(conn, activeRental, memberId) ||
+                    hasOpenRecords(conn, activeLesson, memberId)) {
                 System.out.println("Cannot delete member: active ski passes, open rentals, or unused lessons exist.");
                 return false;
             }
@@ -1902,7 +1963,8 @@ public class DBMSSetup {
         }
     }
 
-    // * update/delete helpers
+    // #endregion delete
+    // #region // * update/delete/helpers + logging
     // checks if the member has open records in the database
     // returns true if there are open records, false otherwise
     private static boolean hasOpenRecords(Connection conn, String sql, int memberId) throws SQLException {
@@ -1914,7 +1976,6 @@ public class DBMSSetup {
             }
         }
     }
-    // #endregion delete
 
     // Logs the gear rental update in the gearRentalUpdate table
     public static void logGearRentalUpdate(Connection conn, int rentalId, String type, String notes) {
@@ -1936,4 +1997,209 @@ public class DBMSSetup {
             System.err.println("Error logging gear rental update: " + e.getMessage());
         }
     }
+
+    // logs changes in the equipment in the equipmentUpdate table
+    public static void logEquipmentUpdate(Connection conn, int equipmentId, String type, String note) {
+        int nextId = generateRandomID(conn, "EquipmentUpdate", "equipmentUpdateID");
+        if (nextId == -1) {
+            System.err.println("Failed to generate a unique equipment update ID.");
+            return;
+        }
+
+        String sql = "INSERT INTO EquipmentUpdate (equipmentUpdateID, equipmentID, type, notes, updateDate) VALUES (?, ?, ?, ?, CURRENT_DATE)";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, nextId); // Unique update ID
+            pstmt.setInt(2, equipmentId); // Equipment ID
+            pstmt.setString(3, type); // Type of update ("ADD", "UPDATE", "DELETE")
+            pstmt.setString(4, note); // Description of what changed
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error logging equipment update: " + e.getMessage());
+        }
+    }
+
+    // #endregion // * update/delete/helpers + logging
+    // region // * queries
+
+    // for a member, get all purchased ski lessons, the number of remaining
+    // sessions, the lesson time, and lesson instructor
+    public static void getMemberLessons(Connection conn, int memberId) {
+        String sql = """
+                    SELECT
+                        LessonOrder.remainingSessions,
+                        Instructor.name,
+                        LessonOrder.scheduledTime
+                    FROM
+                        LessonOrder
+                    JOIN LessonToOrder ON LessonOrder.orderID = LessonToOrder.orderID
+                    JOIN Lesson ON LessonToOrder.LessonID = Lesson.LessonID
+                    JOIN Instructor ON Lesson.instructorID = Instructor.instructorID
+                    WHERE
+                        LessonOrder.memberID = ?
+                """;
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, memberId);
+
+            try (ResultSet res = pstmt.executeQuery()) {
+                System.out.println("Lessons for member ID " + memberId + ":");
+                while (res.next()) {
+                    int remaining = res.getInt("remainingSessions");
+                    String instructor = res.getString("instructorName");
+                    Timestamp time = res.getTimestamp("scheduledTime");
+
+                    System.out.println("Sessions remaining: " + remaining + ", Instructor: " + instructor
+                            + ", Scheduled at: " + time);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching member lessons: " + e.getMessage());
+        }
+    }
+
+    // for a ski pass, list all lift usage, and gear rentals with timestamps and
+    // return status
+    public static void getSkiPassInfo(Connection conn, int skiPassID) {
+        // get
+        String sql = """
+                    SELECT
+                        LiftPassUsage.liftName,
+                        LiftPassUsage.timeUsed
+                    FROM
+                        LiftPassUsage
+                    WHERE
+                        LiftPassUsage.skiPassID = ?
+                """;
+        String sql2 = """
+                    SELECT
+                        GearRental.startDate,
+                        GearRental.returnStatus,
+                    FROM
+                        GearRental
+                    WHERE
+                        GearRental.skiPassID = ?
+                """;
+
+        try (
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                PreparedStatement pstmt2 = conn.prepareStatement(sql2);) {
+            pstmt.setInt(1, skiPassID);
+            pstmt2.setInt(1, skiPassID);
+
+            try (ResultSet res = pstmt.executeQuery()) {
+                System.out.println("Lift usage for ski pass ID " + skiPassID + ":");
+                while (res.next()) {
+                    String liftName = res.getString("liftName");
+                    Timestamp timeUsed = res.getTimestamp("timeUsed");
+
+                    System.out.println("Lift: " + liftName + ", Time used: " + timeUsed);
+                }
+            }
+
+            try (ResultSet res2 = pstmt2.executeQuery()) {
+                System.out.println("Gear rentals for ski pass ID " + skiPassID + ":");
+                while (res2.next()) {
+                    Date startDate = res2.getDate("startDate");
+                    String returnStatus = res2.getString("returnStatus");
+
+                    System.out.println("Start date: " + startDate + ", Return status: " + returnStatus);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error fetching ski pass info: " + e.getMessage());
+        }
+    }
+
+    // for intermediates, list all open trails, their category, and the lifts that
+    // service them
+    public static void getTrailINfo(Connection conn) {
+        String sql = """
+                    SELECT
+                        Trail.trailName,
+                        Trail.category,
+                        Lift.liftName
+                    FROM
+                        Trail
+                    JOIN TrailLift ON Trail.trailName = TrailLift.trailName
+                    JOIN Lift ON TrailLift.liftName = Lift.liftName
+                    WHERE
+                        (Trail.difficulty = 'Beginner-Intermediate' OR Trail.difficulty = 'Intermediate-Expert')
+                        AND Trail.status = 'Open'
+                        AND Lift.status = 'Open'
+                """;
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            ResultSet res = pstmt.executeQuery();
+            while (res.next()) {
+                String trailName = res.getString("trailName");
+                String category = res.getString("category");
+                String liftName = res.getString("liftName");
+
+                System.out.println("Trail: " + trailName + ", Category: " + category + ", Lift: " + liftName);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching trail info: " + e.getMessage());
+        }
+    }
+
+    // given a memberID, do they have a ski pass?, do they have a rental?, if so
+    // what equipment do they own?
+    public static void getMemberInfo(Connection conn, int MemberID) {
+        String sql = """
+                    SELECT
+                        SkiPass.skiPassID
+                    FROM
+                        SkiPass
+                    WHERE
+                        SkiPass.memberID = ?
+                """;
+        String sql2 = """
+                Select
+                    GearRental.RentalID
+                FROM
+                    GEAR
+                WhHERE
+                    GearRental.memberID = ?
+                """;
+        String sql3 = """
+                    SELECT
+                        Equipment.type,
+                        Equipment.size
+                    FROM
+                        Equipment
+                    JOIN GearRental ON RentalEquipment.rentalID = GearRental.rentalID
+                    WHERE
+                        GearRental.memberID = ?
+                """;
+        boolean hasSkiPass = false;
+        boolean hasRental = false;
+
+        try (
+                PreparedStatement pstmt = conn.prepareStatement(sql);) {
+            hasSkiPass = true;
+        } catch (SQLException e) {
+            System.err.println("Error fetching skiPass: " + e.getMessage());
+        }
+        if (hasSkiPass) {
+            try (
+                    PreparedStatement pstmt2 = conn.prepareStatement(sql2);) {
+                hasRental = true;
+            } catch (SQLException e) {
+                System.err.println("Error fetching rental: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Member does not have a ski pass.");
+        }
+        if (hasRental) {
+            try (
+                    PreparedStatement pstmt3 = conn.prepareStatement(sql3);) {
+
+            } catch (SQLException e) {
+                System.err.println("Error fetching equipment: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Member does not have a rental.");
+        }
+    }
+
 }
