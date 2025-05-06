@@ -22,73 +22,6 @@ import java.util.Random;
 // TODO: add modify w/ constaints to tables
 // TODO: add delete w/ constaints to tables
 public class DBMSSetup {
-
-    // List of names (courtesy of https://1000randomnames.com)
-    static int currentName = 0;
-    // 300 names
-    static final String[] names = {
-            "Lilianna Branch", "Keenan Giles", "Bailee Ortega", "Kobe Faulkner", "Ansley Caldwell",
-            "Rylan Hutchinson", "Jamie Gonzalez", "Ethan Huff", "Karsyn Barajas", "Brennan Lyons",
-            "Kenzie Chandler", "Royal Waters", "Bristol Richardson", "Robert Montoya", "Kamryn Snyder",
-            "Thiago Gray", "Sarah Nixon", "Cory Davidson", "Jayla Walton", "Dominick Edwards",
-            "Ivy Pierce", "Nicolas Koch", "Milana Rice", "Graham Yang", "Angelina Beasley",
-            "Stanley Dejesus", "Julissa Blake", "Zyaire Bates", "Madilyn Lucero", "Felipe Boyer",
-            "Chaya Wolf", "Jase Camacho", "Armani Durham", "Kellen Acosta", "Kaia Tran",
-            "Braxton Eaton", "Miley Flowers", "Saul Hines", "Poppy Barron", "Dustin Vang",
-            "Madisyn Reyna", "Reginald Fernandez", "Amara Barber", "Solomon Small", "Zaria Lozano",
-            "Boone Simon", "Kalani Flynn", "Kannon Calderon", "Serena Pennington", "Bobby Waller",
-            "Whitley Peck", "Yousef Rollins", "Araceli Nolan", "Maximo Wood", "Natalia Shah",
-            "Zain Ellis", "Ayla Woodard", "Westley Gould", "Violeta Brock", "Julio Bowman",
-            "Fiona Monroe", "Colby Larson", "Alayna Dickson", "Maxton Huffman", "Hayley Delgado",
-            "Colt Wolfe", "Hallie Schultz", "Cody Cox", "Sadie Finley", "Calum Maldonado",
-            "Elaina Delgado", "Colt Atkinson", "Jazmin French", "Corey McIntyre", "Rebekah Rios",
-            "Israel Le", "Myla Craig", "Odin Wagner", "Maeve Gallagher", "Marcos Salgado",
-            "Avalynn Portillo", "Wallace Barker", "Remington Crosby", "Tristen Patterson", "Kaylee Zhang",
-            "Isaias Hensley", "Malaya Ingram", "Tripp Hudson", "Kamila Boyer", "Zeke O’Connor",
-            "Charli Christensen", "Gregory Parks", "Ainsley Hurley", "Van Stevens", "Katherine Tapia",
-            "Samir Shaw", "Emersyn Chase", "Otis Marks", "Monica McKay", "Joey Galindo",
-            "Corinne Roy", "Marcelo Jimenez", "Adeline Mahoney", "Kamryn Clarke", "Kaitlyn Mata",
-            "Ray Webb", "Ariella Graves", "Cesar Crawford", "Aubree Webb", "Lorenzo Oliver",
-            "Camille Ramsey", "Luciano Rosales", "Kinley McDaniel", "Major Sierra", "Marceline Galvan",
-            "Kingsley McPherson", "Emmaline Tapia", "Samir Sampson", "Meilani Dyer", "Atreus Cochran",
-            "Alma Humphrey", "Krew Arroyo", "Kyra Preston", "Vincenzo Gallagher", "Elliott Faulkner",
-            "Jabari Tran", "Kylie Villarreal", "Nikolai Meadows", "Pearl Perry", "Waylon Zavala",
-            "Liv Hubbard", "Forrest Wilson", "Luna Lu", "Duncan Romero", "Eliza Shepard",
-            "Damari Travis", "Mazikee Gross", "Quinn Daniels", "Ember McLaughlin", "Ibrahim James",
-            "Quinn Moore", "Levi Jones", "Sophia Buckley", "Aryan Oliver", "Camille Sanford",
-            "Truett Terry", "Wren Lowery", "Jaxxon Moody", "Elaine Anthony", "Shiloh Morse",
-            "Kairi Hess", "Lawrence Medrano", "Halle Rose", "Hayden Ball", "Abby Bates",
-            "Ellis McConnell", "Denise Orozco", "Keanu Lindsey", "Colette Melendez", "Nikolas Guevara",
-            "Teresa Taylor", "Jackson Glenn", "Blaire Bradshaw", "Emory McCoy", "Mckenzie Xiong",
-            "Azrael Horn", "Avah Novak", "Bishop Leon", "Amora Conway", "Orlando Rich",
-            "Sunny Campbell", "Christopher Luna", "Journey Michael", "Bronson Guzman", "Ashley Tran",
-            "Braxton Rose", "Magnolia Sosa", "Emir Nolan", "Itzayana Reyna", "Reginald Houston",
-            "Lylah Patrick", "Derrick James", "Quinn Michael", "Bronson Schmitt", "Queen Nielsen",
-            "Tru Heath", "Amani Avery", "Jakari Cohen", "Destiny Torres", "Jayden McCullough",
-            "Hana Rhodes", "Titus Novak", "Kaiya Donaldson", "Canaan Pena", "Rachel Medrano",
-            "Arian Mann", "Paislee Mata", "Ray Salas", "Amber Haley", "Leif Walker",
-            "Hazel Cooper", "Jonathan Horne", "Marlowe Underwood", "Reece Riley", "Kayla Horton",
-            "Garrett Rose", "Magnolia McFarland", "Dane David", "Haylee Harrington", "Omari Tanner",
-            "Harmoni Pittman", "Valentino Dougherty", "Alisson Harvey", "Cayden Parrish", "Tiana Nash",
-            "Chandler Lim", "Giavanna Tucker", "Ivan Ramirez", "Grace Padilla", "Jaden Alexander",
-            "Lyla Copeland", "Axton Ellison", "Raina Jefferson", "Raylan Rollins", "Araceli Cuevas",
-            "Brecken Ali", "Zelda Knox", "Valentin Pope", "Aurelia Pittman", "Valentino Dalton",
-            "Lilian Harrington", "Omari Barton", "Danna Keith", "Jagger Leonard", "Demi Baker",
-            "Ezra Rios", "Brooke Jimenez", "Silas Meadows", "Pearl Galvan", "Kingsley Harmon",
-            "Maren Avalos", "Coen Cabrera", "Daleyza Barry", "Emery Harper", "Ana Golden",
-            "Amias Dean", "Julianna Murillo", "Lance Pennington", "Yareli Chung", "Ira Jacobs",
-            "Camilla Moses", "Niklaus Chapman", "Zuri Vang", "Jimmy Hull", "Andi Moran",
-            "Tate Wiley", "Lauryn Love", "Jeffrey Burton", "Miriam Barron", "Dustin Vincent",
-            "Allyson Perkins", "Kyrie Murray", "Faith McCormick", "Jasiah Spencer", "Alyssa Martin",
-            "Mateo Stephenson", "Khaleesi Leon", "Marshall Meyer", "Sara Guzman", "Jude Spears",
-            "Isabela Peterson", "Santiago Allen", "Riley Wiley", "Mathew Zhang", "Sarai Lane",
-            "Matias Sanford", "Emerald Alvarez", "Xavier Avery", "Meghan Lester", "Lee Banks",
-            "Cali Nielsen", "Tru Nichols", "Aliyah Burke", "Jax Woodard", "Aubrie Vang",
-            "Jimmy Woodard", "Aubrie Glover", "Mack McKee", "Kori Paul", "Noel Young",
-            "Zoey Padilla", "Jaden Eaton", "Miley Gilbert", "Tobias Lam", "Karina Paul",
-            "Noel Graves", "Elle Skinner", "Ridge Barron", "Anya Madden", "Everest Lyons"
-    };
-
     static final boolean printDebug = false; // set to true to print debug messages
 
     // #region // * Main methods
@@ -128,336 +61,7 @@ public class DBMSSetup {
         printTupleCounts(dbconn); // print the number of tuples in each table
     }
 
-    private static void printTupleCounts(Connection dbconn) {
-        for (String tableName : tableNames) {
-            String query = "SELECT COUNT(*) AS tupleCount FROM " + tableName;
-            try (Statement stmt = dbconn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
-                if (rs.next()) {
-                    int count = rs.getInt("tupleCount");
-
-                    if (count == 0) {
-                        System.out.printf("%-20s %10d tuples !%n", tableName, count);
-                    } else {
-                        System.out.printf("%-20s %10d tuples%n", tableName, count);
-                    }
-                }
-            } catch (SQLException e) {
-                System.err.println("Error counting tuples for table " + tableName + ": " + e.getMessage());
-            }
-        }
-    }
-
-    // lessons (6): snowboad, ski; beginner, intermediate, advanced
-    // lodge: lodgeID, location
-    // lodge 1: 1, N visitory centery 123
-    // lodge 2: 2, N therestaurant 456
-    // lodge 3: 3, N theschool 789
-    private static int makeIncomeSourceRecords(Connection dbconn, Random rand, int[] employees, int lodgeID,
-            String sourceName) {
-        // * add random income sources to the database
-        // * returns the number of income sources added
-        int sourceID = -1;
-        for (int i = 0; i < 30; i++) {
-            long dayOffset = i * 24L * 60 * 60 * 1000; // Offset in milliseconds for each day
-            java.sql.Date day = new java.sql.Date(System.currentTimeMillis() - dayOffset);
-            sourceID = addRandomIncomeSource(dbconn, rand, lodgeID, sourceName, day);
-
-            if (sourceID == -1) {
-                System.err.println("Error adding income source for lodge " + lodgeID + " on day " + day + " for source "
-                        + sourceName);
-                return -1;
-            }
-
-            int[] pickedEmployees = new int[employees.length];
-            for (int j = 0; j < rand.nextInt(employees.length) + 1; j++) { // Pick a random number of employees
-                int employee;
-                while (true) {
-                    employee = rand.nextInt(employees.length);
-                    if (pickedEmployees[employee] == 0) { // Check if the employee has already been picked
-                        pickedEmployees[employee] = 1; // Mark as picked
-                        break;
-                    }
-                }
-                employee = employees[employee]; // Get the actual employee ID
-
-                int employeeIncomeSource = rawAddToTable(dbconn, "EmployeeIncomeSource", new String[] {
-                        String.valueOf(employee), String.valueOf(sourceID) });
-
-                if (employeeIncomeSource == -1) {
-                    System.err
-                            .println("Error adding employee income source for employee " + employee + " on day " + day);
-                    return -1;
-                }
-            }
-        }
-
-        return sourceID;
-    }
-
-    private static int rawAddToTable(Connection dbconn, String tableName, String[] values) {
-        String sql = "INSERT INTO " + tableName + " VALUES (" + String.join(", ", values) + ")";
-        try (Statement stmt = dbconn.createStatement()) {
-            stmt.executeUpdate(sql);
-        } catch (SQLException e) {
-            System.err.println("Error adding to table " + tableName + ": " + e.getMessage());
-            System.out.println("SQL Statement: " + sql);
-            return -1; // Return -1 in case of an error
-        }
-        return 0;
-    }
-
-    private static int addRandomSessions(Connection dbconn, Random rand, int lessonID) {
-        // LessonSession: sessionID, startTime, endTime, lessonID
-
-        // Generate two random days of the week
-        int day1 = rand.nextInt(7) - 3; // Random day between -3 and 3 (3 days forward)
-        int day2 = rand.nextInt(7) - 3; // Random day between -3 and 3 (3 days forward)
-        while (day1 == day2) {
-            day2 = rand.nextInt(7) - 3; // Ensure the two days are different
-        }
-
-        int startHour = 10 + rand.nextInt(5); // Random hour between 10 and 14 (2 PM)
-        String startTime = String.format("%02d:00:00", startHour);
-        String endTime = String.format("%02d:00:00", startHour + 3); // 3 hours later
-
-        if (printDebug) {
-            System.out.println("Session Details: Day1: " + day1 + ", Day2: " + day2 + ", StartTime: " + startTime
-                    + ", EndTime: " + endTime);
-        }
-
-        int sessionID = -1;
-        // * add lesson sessions to the database for the past 2 weeks to 2 weeks forward
-        // * returns the number of sessions added
-        for (int i = -2; i <= 3; i++) { // Loop from 2 weeks ago (-14) to 2 weeks forward (+14)
-            // current day + i weeks + day days
-            java.sql.Date sessionDate1 = new java.sql.Date(
-                    System.currentTimeMillis() + i * 24L * 60 * 60 * 1000 * 7 + day1 * 24L * 60 * 60 * 1000); // Calculate
-                                                                                                              // the
-                                                                                                              // session
-                                                                                                              // date
-            java.sql.Date sessionDate2 = new java.sql.Date(
-                    System.currentTimeMillis() + i * 24L * 60 * 60 * 1000 * 7 + day2 * 24L * 60 * 60 * 1000); // Calculate
-                                                                                                              // the
-                                                                                                              // session
-                                                                                                              // date
-
-            // Add session for day 1
-            sessionID = addToTable(dbconn, "LessonSession", "sessionID", new String[] {
-                    "TO_DATE('" + sessionDate1 + " " + startTime + "', 'YYYY-MM-DD HH24:MI:SS')",
-                    "TO_DATE('" + sessionDate1 + " " + endTime + "', 'YYYY-MM-DD HH24:MI:SS')",
-                    String.valueOf(lessonID)
-            });
-
-            // Add session for day 2
-            sessionID = addToTable(dbconn, "LessonSession", "sessionID", new String[] {
-                    "TO_DATE('" + sessionDate2 + " " + startTime + "', 'YYYY-MM-DD HH24:MI:SS')",
-                    "TO_DATE('" + sessionDate2 + " " + endTime + "', 'YYYY-MM-DD HH24:MI:SS')",
-                    String.valueOf(lessonID)
-            });
-
-        }
-
-        return sessionID;
-    }
-
-    private static int makeRandomLesson(Connection dbconn, Random rand, String lessonName, String certification) {
-        int instructorID = addRandomEmployee(dbconn, rand, "Instructor");
-        rawAddToTable(dbconn, "Instructor", new String[] { String.valueOf(instructorID), "'" + certification + "'" });
-        int lessonID = addToTable(dbconn, "Lesson", "lessonID",
-                new String[] { "'" + lessonName + "'", String.valueOf(instructorID) });
-
-        if (lessonID == -1) {
-            System.err.println("Error adding lesson: " + lessonName);
-            return -1;
-        }
-
-        int sessionID = addRandomSessions(dbconn, rand, lessonID);
-        if (sessionID == -1) {
-            System.err.println("Error adding sessions for lesson: " + lessonName);
-            return -1;
-        }
-
-        return lessonID;
-    }
-
-    private static int populateTables(Connection dbconn) {
-        // * add random entities to the database
-        // * returns the number of entities added
-        Random rand = new Random(); // random number generator
-        rand.setSeed(0); // set seed for reproducibility
-
-        int status = 0;
-
-        // lessons (6): snowboad, ski; beginner, intermediate, advanced
-        // lodge: lodgeID, location
-        // lodge 2: 2, N therestaurant 456
-        // 5 employees: 2 restaurant, 2 gift shop, 1 parking lot manager
-        // lodge 3: 3, N theschool 789
-        // 5 employee: 3 instructors, 2 gift shop owners
-        // *lodge 1: 1, N visitory centery 123
-        // 7 employees: 3 pass managers, 2 restaurant, 2 gift shop
-        int visitorCenterID = addToTable(dbconn, "Lodge", "lodgeID", new String[] { "'North Visitry Centery 123'" });
-
-        int employee1 = addRandomEmployee(dbconn, rand, "Clerk");
-        int employee2 = addRandomEmployee(dbconn, rand, "Clerk");
-        int employee3 = addRandomEmployee(dbconn, rand, "Manager");
-
-        makeIncomeSourceRecords(dbconn, rand, new int[] { employee1, employee2, employee3 }, visitorCenterID,
-                "'Ski pass and rental'");
-
-        employee1 = addRandomEmployee(dbconn, rand, "Restaurant worker");
-        employee2 = addRandomEmployee(dbconn, rand, "Restaurant worker");
-        employee3 = addRandomEmployee(dbconn, rand, "Restaurant worker");
-        int employee4 = addRandomEmployee(dbconn, rand, "Restaurant worker");
-        int employee5 = addRandomEmployee(dbconn, rand, "Restaurant worker");
-        int employee7 = addRandomEmployee(dbconn, rand, "Restaurant worker");
-        int employee6 = addRandomEmployee(dbconn, rand, "Manager");
-
-        int sourceID = makeIncomeSourceRecords(dbconn, rand,
-                new int[] { employee1, employee2, employee3, employee4, employee5, employee6, employee7 },
-                visitorCenterID, "'Restaurant'");
-
-        int restaurantID = addToTable(dbconn, "Lodge", "lodgeID", new String[] { "'el restaurante 456'" });
-        int schoolID = addToTable(dbconn, "Lodge", "lodgeID", new String[] { "'N schoolStreet 789'" });
-
-        // Add snowboard lessons
-        int boardBeginnerID = makeRandomLesson(dbconn, rand, "Snowboard Beginner", "Certified");
-        int boardIntermediateID = makeRandomLesson(dbconn, rand, "Snowboard Intermediate", "Certified");
-        int boardAdvancedID = makeRandomLesson(dbconn, rand, "Snowboard Advanced", "Certified");
-
-        // Add ski lessons
-        int skiBeginnerID = makeRandomLesson(dbconn, rand, "Ski Beginner", "Certified");
-        int skiIntermediateID = makeRandomLesson(dbconn, rand, "Ski Intermediate", "Certified");
-        int skiAdvancedID = makeRandomLesson(dbconn, rand, "Ski Advanced", "Certified");
-
-        // add shuttles
-        int shuttle1 = addToTable(dbconn, "Shuttle", "shuttleID", new String[] { "'Shuttle 1'", "'active'" });
-        int shuttle2 = addToTable(dbconn, "Shuttle", "shuttleID", new String[] { "'Shuttle 2'", "'active'" });
-        int shuttle3 = addToTable(dbconn, "Shuttle", "shuttleID", new String[] { "'Shuttle 2'", "'inactive'" });
-
-        // Shuttle 1 goes to lodge 1 and lodge 2
-        rawAddToTable(dbconn, "ShuttleLodge",
-                new String[] { String.valueOf(shuttle1), String.valueOf(visitorCenterID) });
-        rawAddToTable(dbconn, "ShuttleLodge", new String[] { String.valueOf(shuttle1), String.valueOf(restaurantID) });
-
-        // Shuttle 2 goes to lodge 2 and lodge 3
-        rawAddToTable(dbconn, "ShuttleLodge", new String[] { String.valueOf(shuttle2), String.valueOf(restaurantID) });
-        rawAddToTable(dbconn, "ShuttleLodge", new String[] { String.valueOf(shuttle2), String.valueOf(schoolID) });
-
-        // Shuttle 3 goes to lodge 3 and lodge 1
-        rawAddToTable(dbconn, "ShuttleLodge",
-                new String[] { String.valueOf(shuttle3), String.valueOf(visitorCenterID) });
-        rawAddToTable(dbconn, "ShuttleLodge", new String[] { String.valueOf(shuttle3), String.valueOf(schoolID) });
-
-        // make 50 of each equipment type
-        for (int i = 0; i < 50; i++) {
-            for (int j = 0; j < 5; j++) {
-                int equipmentID = addRandomEquipment(dbconn, rand, j);
-                if (equipmentID == -1) {
-                    System.err.println("Error adding random equipment to the database");
-                    status = -1; // error
-                }
-            }
-        }
-
-        // Add lifts to the database
-        addLift(dbconn, "Lift A", "Beginner-Intermediate", Time.valueOf("09:00:00"), Time.valueOf("16:00:00"), "Open");
-        addLift(dbconn, "Lift B", "Beginner-Intermediate", Time.valueOf("08:30:00"), Time.valueOf("16:30:00"), "Open");
-        addLift(dbconn, "Lift C", "Intermediate-Expert", Time.valueOf("10:00:00"), Time.valueOf("15:00:00"), "Closed");
-        addLift(dbconn, "Lift D", "Intermediate-Expert", Time.valueOf("09:00:00"), Time.valueOf("17:00:00"), "Open");
-        String[] liftNames = new String[] { "Lift A", "Lift B", "Lift C", "Lift D" };
-        for (int i = 0; i < 48; i++) {
-            String trailID = addRandomTrail(dbconn, rand, liftNames);
-            if (trailID == "-1") {
-                System.err.println("Error adding random trail to the database");
-                status = -1; // error
-            }
-        }
-
-        // member loop (includes ski pass, gear rental, and lesson orders n their
-        // relation entities)
-        for (int i = 0; i < 20; i++) {
-            int memberID = addRandomMember(dbconn, rand); // add a random member to the database
-
-            // 20% chance for inactive ski pass
-            if (rand.nextInt(100) < 20) {
-                int inactiveSkiPassID = addRandomSkiPass(dbconn, rand, memberID, false, liftNames);
-                if (inactiveSkiPassID == -1) {
-                    System.err.println("Error adding inactive ski pass for member " + memberID);
-                    status = -1; // error
-                }
-            }
-            // seperate 80% chance for active ski pass
-            if (rand.nextInt(100) < 80) {
-                int activeSkiPassID = addRandomSkiPass(dbconn, rand, memberID, true, liftNames);
-                if (activeSkiPassID == -1) {
-                    System.err.println("Error adding active ski pass for member " + memberID);
-                    status = -1; // error
-                }
-            }
-
-            int lessonOrderID = 0;
-            if (rand.nextInt(100) < 40) { // 40% chance to make an order
-                lessonOrderID = makeRandomLessonOrder(dbconn, rand, memberID, new int[] { boardBeginnerID,
-                        boardIntermediateID, boardAdvancedID, skiBeginnerID, skiIntermediateID, skiAdvancedID });
-            }
-
-            if (status == -1 || lessonOrderID == -1 || memberID == -1) {
-                System.err.println("Error adding random entities to the database");
-
-                status = -1; // error
-            }
-        }
-
-        for (int i = 0; i < 20; i++) {
-            int employeeID = addRandomEmployee(dbconn, rand, "test subject");
-            if (employeeID == -1) {
-                System.err.println("Error adding random employee to the database");
-                status = -1; // error
-            }
-        }
-
-        return status;
-    }
-
-    private static int makeRandomLessonOrder(Connection dbconn, Random rand, int memberID, int[] lessons) {
-        // LessonOrder: lessonOrderID, memberID, lessonsPurchased, remainingSessions
-        int lessonOrderID = -1;
-        int lessonAmount = rand.nextInt(10) + 1; // Random number of lessons between 1 and 10
-
-        int lessonsPurchased = lessonAmount; // Lessons purchased start as the total lessons purchased
-        int remainingSessions = rand.nextInt(lessonAmount); // Random number of remaining sessions
-
-        lessonOrderID = addToTable(dbconn, "LessonOrder", "lessonOrderID",
-                new String[] {
-                        String.valueOf(memberID),
-                        String.valueOf(lessonsPurchased),
-                        String.valueOf(remainingSessions) });
-        int i = 0;
-        boolean[] pickedLessons = new boolean[lessons.length]; // Track picked lessons
-        while (i < lessonAmount) {
-            int lessonIndex = rand.nextInt(lessons.length); // Pick a random lesson index
-
-            if (!pickedLessons[lessonIndex]) { // Check if the lesson has already been picked
-                pickedLessons[lessonIndex] = true; // Mark the lesson as picked
-
-                // add lesson to the order
-                int lessonID = lessons[lessonIndex];
-                int lessonToOrderID = rawAddToTable(dbconn, "LessonToOrder",
-                        new String[] { String.valueOf(lessonID), String.valueOf(lessonOrderID) });
-
-                if (lessonToOrderID == -1) {
-                    System.err.println("Error adding lesson to order for member " + memberID);
-                    return -1; // error
-                }
-            }
-
-            i++; // increment whether or not we end up adding a lesson to the order (for variety)
-        }
-
-        return lessonOrderID;
-    }
-
+  
     // * gets and returns a connection to the database
     private static Connection getDbconn() {
         final String oracleURL = // Magic lectura -> aloe access spell
@@ -504,6 +108,26 @@ public class DBMSSetup {
 
         return dbconn;
     }
+    
+    // * prints out the number of tuples in each table
+    private static void printTupleCounts(Connection dbconn) {
+        for (String tableName : tableNames) {
+            String query = "SELECT COUNT(*) AS tupleCount FROM " + tableName;
+            try (Statement stmt = dbconn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+                if (rs.next()) {
+                    int count = rs.getInt("tupleCount");
+
+                    if (count == 0) {
+                        System.out.printf("%-20s %10d tuples !%n", tableName, count);
+                    } else {
+                        System.out.printf("%-20s %10d tuples%n", tableName, count);
+                    }
+                }
+            } catch (SQLException e) {
+                System.err.println("Error counting tuples for table " + tableName + ": " + e.getMessage());
+            }
+        }
+    }
 
     // * Prints the contents of a table
     private static void printTableContents(Connection dbconn, String tableName) {
@@ -532,6 +156,7 @@ public class DBMSSetup {
     }
 
     // #endregion Main methods
+    
     // #region // * Table Creation
     // #region Tables creation consts
     static final String[] tableNames = new String[] {
@@ -716,6 +341,8 @@ public class DBMSSetup {
                     + "sourceID INTEGER, "
                     + "PRIMARY KEY (employeeID, sourceID))"
     };
+    // #endregion Tables creation consts
+
 
     private static void addForeignKeys(Connection dbconn) {
         try (Statement stmt = dbconn.createStatement()) {
@@ -833,8 +460,8 @@ public class DBMSSetup {
         }
     }
 
-    // #endregion Table Creation
-    // #region // * Add/Update/Delete
+    // #endregion // * Table Creation
+
     // * Member: memberID, name, phone#, email, dob, emergency contact
     // adds a member to the database
     private static int addMember(Connection dbconn, String name, String phone, String email, java.sql.Date dob,
@@ -1049,23 +676,379 @@ public class DBMSSetup {
         }
     }
 
-    // #endregion Add/Update/Delete
     // #region // * Populate tables
-    // * the goat: adds a row to the table with the given name and values
-    // doesn't work on lift and trail tables (bc. no id primary key)
-    private static int addToTable(Connection dbconn, String tableName, String idName, String[] values) {
-        int id = generateRandomID(dbconn, tableName, idName); // Generate a random ID for the new entry
+    
+    // List of names (courtesy of https://1000randomnames.com)
+    static int currentName = 0;
+    // 300 names
+    static final String[] names = {
+            "Lilianna Branch", "Keenan Giles", "Bailee Ortega", "Kobe Faulkner", "Ansley Caldwell",
+            "Rylan Hutchinson", "Jamie Gonzalez", "Ethan Huff", "Karsyn Barajas", "Brennan Lyons",
+            "Kenzie Chandler", "Royal Waters", "Bristol Richardson", "Robert Montoya", "Kamryn Snyder",
+            "Thiago Gray", "Sarah Nixon", "Cory Davidson", "Jayla Walton", "Dominick Edwards",
+            "Ivy Pierce", "Nicolas Koch", "Milana Rice", "Graham Yang", "Angelina Beasley",
+            "Stanley Dejesus", "Julissa Blake", "Zyaire Bates", "Madilyn Lucero", "Felipe Boyer",
+            "Chaya Wolf", "Jase Camacho", "Armani Durham", "Kellen Acosta", "Kaia Tran",
+            "Braxton Eaton", "Miley Flowers", "Saul Hines", "Poppy Barron", "Dustin Vang",
+            "Madisyn Reyna", "Reginald Fernandez", "Amara Barber", "Solomon Small", "Zaria Lozano",
+            "Boone Simon", "Kalani Flynn", "Kannon Calderon", "Serena Pennington", "Bobby Waller",
+            "Whitley Peck", "Yousef Rollins", "Araceli Nolan", "Maximo Wood", "Natalia Shah",
+            "Zain Ellis", "Ayla Woodard", "Westley Gould", "Violeta Brock", "Julio Bowman",
+            "Fiona Monroe", "Colby Larson", "Alayna Dickson", "Maxton Huffman", "Hayley Delgado",
+            "Colt Wolfe", "Hallie Schultz", "Cody Cox", "Sadie Finley", "Calum Maldonado",
+            "Elaina Delgado", "Colt Atkinson", "Jazmin French", "Corey McIntyre", "Rebekah Rios",
+            "Israel Le", "Myla Craig", "Odin Wagner", "Maeve Gallagher", "Marcos Salgado",
+            "Avalynn Portillo", "Wallace Barker", "Remington Crosby", "Tristen Patterson", "Kaylee Zhang",
+            "Isaias Hensley", "Malaya Ingram", "Tripp Hudson", "Kamila Boyer", "Zeke O’Connor",
+            "Charli Christensen", "Gregory Parks", "Ainsley Hurley", "Van Stevens", "Katherine Tapia",
+            "Samir Shaw", "Emersyn Chase", "Otis Marks", "Monica McKay", "Joey Galindo",
+            "Corinne Roy", "Marcelo Jimenez", "Adeline Mahoney", "Kamryn Clarke", "Kaitlyn Mata",
+            "Ray Webb", "Ariella Graves", "Cesar Crawford", "Aubree Webb", "Lorenzo Oliver",
+            "Camille Ramsey", "Luciano Rosales", "Kinley McDaniel", "Major Sierra", "Marceline Galvan",
+            "Kingsley McPherson", "Emmaline Tapia", "Samir Sampson", "Meilani Dyer", "Atreus Cochran",
+            "Alma Humphrey", "Krew Arroyo", "Kyra Preston", "Vincenzo Gallagher", "Elliott Faulkner",
+            "Jabari Tran", "Kylie Villarreal", "Nikolai Meadows", "Pearl Perry", "Waylon Zavala",
+            "Liv Hubbard", "Forrest Wilson", "Luna Lu", "Duncan Romero", "Eliza Shepard",
+            "Damari Travis", "Mazikee Gross", "Quinn Daniels", "Ember McLaughlin", "Ibrahim James",
+            "Quinn Moore", "Levi Jones", "Sophia Buckley", "Aryan Oliver", "Camille Sanford",
+            "Truett Terry", "Wren Lowery", "Jaxxon Moody", "Elaine Anthony", "Shiloh Morse",
+            "Kairi Hess", "Lawrence Medrano", "Halle Rose", "Hayden Ball", "Abby Bates",
+            "Ellis McConnell", "Denise Orozco", "Keanu Lindsey", "Colette Melendez", "Nikolas Guevara",
+            "Teresa Taylor", "Jackson Glenn", "Blaire Bradshaw", "Emory McCoy", "Mckenzie Xiong",
+            "Azrael Horn", "Avah Novak", "Bishop Leon", "Amora Conway", "Orlando Rich",
+            "Sunny Campbell", "Christopher Luna", "Journey Michael", "Bronson Guzman", "Ashley Tran",
+            "Braxton Rose", "Magnolia Sosa", "Emir Nolan", "Itzayana Reyna", "Reginald Houston",
+            "Lylah Patrick", "Derrick James", "Quinn Michael", "Bronson Schmitt", "Queen Nielsen",
+            "Tru Heath", "Amani Avery", "Jakari Cohen", "Destiny Torres", "Jayden McCullough",
+            "Hana Rhodes", "Titus Novak", "Kaiya Donaldson", "Canaan Pena", "Rachel Medrano",
+            "Arian Mann", "Paislee Mata", "Ray Salas", "Amber Haley", "Leif Walker",
+            "Hazel Cooper", "Jonathan Horne", "Marlowe Underwood", "Reece Riley", "Kayla Horton",
+            "Garrett Rose", "Magnolia McFarland", "Dane David", "Haylee Harrington", "Omari Tanner",
+            "Harmoni Pittman", "Valentino Dougherty", "Alisson Harvey", "Cayden Parrish", "Tiana Nash",
+            "Chandler Lim", "Giavanna Tucker", "Ivan Ramirez", "Grace Padilla", "Jaden Alexander",
+            "Lyla Copeland", "Axton Ellison", "Raina Jefferson", "Raylan Rollins", "Araceli Cuevas",
+            "Brecken Ali", "Zelda Knox", "Valentin Pope", "Aurelia Pittman", "Valentino Dalton",
+            "Lilian Harrington", "Omari Barton", "Danna Keith", "Jagger Leonard", "Demi Baker",
+            "Ezra Rios", "Brooke Jimenez", "Silas Meadows", "Pearl Galvan", "Kingsley Harmon",
+            "Maren Avalos", "Coen Cabrera", "Daleyza Barry", "Emery Harper", "Ana Golden",
+            "Amias Dean", "Julianna Murillo", "Lance Pennington", "Yareli Chung", "Ira Jacobs",
+            "Camilla Moses", "Niklaus Chapman", "Zuri Vang", "Jimmy Hull", "Andi Moran",
+            "Tate Wiley", "Lauryn Love", "Jeffrey Burton", "Miriam Barron", "Dustin Vincent",
+            "Allyson Perkins", "Kyrie Murray", "Faith McCormick", "Jasiah Spencer", "Alyssa Martin",
+            "Mateo Stephenson", "Khaleesi Leon", "Marshall Meyer", "Sara Guzman", "Jude Spears",
+            "Isabela Peterson", "Santiago Allen", "Riley Wiley", "Mathew Zhang", "Sarai Lane",
+            "Matias Sanford", "Emerald Alvarez", "Xavier Avery", "Meghan Lester", "Lee Banks",
+            "Cali Nielsen", "Tru Nichols", "Aliyah Burke", "Jax Woodard", "Aubrie Vang",
+            "Jimmy Woodard", "Aubrie Glover", "Mack McKee", "Kori Paul", "Noel Young",
+            "Zoey Padilla", "Jaden Eaton", "Miley Gilbert", "Tobias Lam", "Karina Paul",
+            "Noel Graves", "Elle Skinner", "Ridge Barron", "Anya Madden", "Everest Lyons"
+    };
 
-        String sql = "INSERT INTO " + tableName + " VALUES (" + id + ", " + String.join(", ", values) + ")";
-        try (Statement stmt = dbconn.createStatement()) {
-            stmt.executeUpdate(sql);
-        } catch (SQLException e) {
-            System.err.println("Error adding to table " + tableName + ": " + e.getMessage());
-            System.out.println("SQL Statement: " + sql);
-            return -1; // Return -1 in case of an error
+    private static int populateTables(Connection dbconn) {
+        // * add random entities to the database
+        // * this is extremely long, but it is necessary due to the ID overlaps and how some of the created IDs are used in other tables
+
+        Random rand = new Random(); // random number generator
+        rand.setSeed(0); // set seed for reproducibility
+        int status = 0;
+
+
+        // * Visitor Center Lodge: 1, N visitory centery 123 
+        //  pass management, restaurant
+        int visitorCenterID = addToTable(dbconn, "Lodge", "lodgeID", new String[]{"'North Visitry Centery 123'"});
+        int employee1 = addRandomEmployee(dbconn, rand, "Ski Clerk");
+        int employee2 = addRandomEmployee(dbconn, rand, "Ski Clerk");
+        int employee3 = addRandomEmployee(dbconn, rand, "General Manager");
+        makeIncomeSourceRecords(dbconn, rand, new int[]{employee1, employee2, employee3}, visitorCenterID, "'Ski pass and rental'");
+
+        employee1 = addRandomEmployee(dbconn, rand, "Restaurant worker");
+        employee2 = addRandomEmployee(dbconn, rand, "Restaurant worker");
+        employee3 = addRandomEmployee(dbconn, rand, "Restaurant worker");
+        int employee4 = addRandomEmployee(dbconn, rand, "Restaurant worker");
+        int employee5 = addRandomEmployee(dbconn, rand, "Restaurant worker");
+        int employee7 = addRandomEmployee(dbconn, rand, "Restaurant worker");
+        int employee6 = addRandomEmployee(dbconn, rand, "General Manager");
+        makeIncomeSourceRecords(dbconn, rand, new int[]{employee1, employee2, employee3, employee4, employee5, employee6, employee7}, visitorCenterID, "'Restaurant'");
+
+        // * Restaurant Lodge: 2, N therestaurant 456
+        //  restaurant, gift shop, parking lot
+        int restaurantID = addToTable(dbconn, "Lodge", "lodgeID", new String[]{"'el restaurante 456'"});
+        employee1 = addRandomEmployee(dbconn, rand, "Restaurant worker");
+        employee2 = addRandomEmployee(dbconn, rand, "Restaurant worker");
+        employee3 = addRandomEmployee(dbconn, rand, "Gift shop worker");
+        employee4 = addRandomEmployee(dbconn, rand, "Gift shop worker");
+        employee5 = addRandomEmployee(dbconn, rand, "Parking lot manager");
+        makeIncomeSourceRecords(dbconn, rand, new int[]{employee1, employee2}, restaurantID, "'Restaurant'");
+        makeIncomeSourceRecords(dbconn, rand, new int[]{employee3, employee4}, restaurantID, "'Gift shop'");
+        makeIncomeSourceRecords(dbconn, rand, new int[]{employee5}, restaurantID, "'Parking lot'");
+
+        // * School Lodge: 3, N theschool 789
+        //  school, gift shop
+        int schoolID = addToTable(dbconn, "Lodge", "lodgeID", new String[]{"'N schoolStreet 789'"});
+        employee1 = addRandomEmployee(dbconn, rand, "Instructor");
+        employee2 = addRandomEmployee(dbconn, rand, "Instructor");
+        employee3 = addRandomEmployee(dbconn, rand, "Instructor");
+        employee4 = addRandomEmployee(dbconn, rand, "Gift shop worker");
+        employee5 = addRandomEmployee(dbconn, rand, "Gift shop worker");
+        makeIncomeSourceRecords(dbconn, rand, new int[]{employee1, employee2, employee3}, schoolID, "'Ski lessons'");
+        makeIncomeSourceRecords(dbconn, rand, new int[]{employee4, employee5}, schoolID, "'Gift shop'");
+
+        // * Add snowboard lessons (beginner, intermediate, advanced)
+        int boardBeginnerID = makeRandomLesson(dbconn, rand, "Snowboard Beginner", "PSIA-AASI I");
+        int boardIntermediateID = makeRandomLesson(dbconn, rand, "Snowboard Intermediate", "PSIA-AASI II");
+        int boardAdvancedID = makeRandomLesson(dbconn, rand, "Snowboard Advanced", "PSIA-AASI III");
+
+        // * add ski lessons (beginner, intermediate, advanced)
+        int skiBeginnerID = makeRandomLesson(dbconn, rand, "Ski Beginner", "PSIA-AASI I");
+        int skiIntermediateID = makeRandomLesson(dbconn, rand, "Ski Intermediate", "PSIA-AASI II");
+        int skiAdvancedID = makeRandomLesson(dbconn, rand, "Ski Advanced", "PSIA-AASI III");
+
+        // * add shuttles
+        int shuttle1 = addToTable(dbconn, "Shuttle", "shuttleID", new String[]{"'Shuttle 1'", "'active'"});
+        int shuttle2 = addToTable(dbconn, "Shuttle", "shuttleID", new String[]{"'Shuttle 2'", "'active'"});
+        int shuttle3 = addToTable(dbconn, "Shuttle", "shuttleID", new String[]{"'Shuttle 2'", "'inactive'"});
+
+        // Shuttle 1 goes to lodge 1 and lodge 2
+        rawAddToTable(dbconn, "ShuttleLodge", new String[]{String.valueOf(shuttle1), String.valueOf(visitorCenterID)});
+        rawAddToTable(dbconn, "ShuttleLodge", new String[]{String.valueOf(shuttle1), String.valueOf(restaurantID)});
+
+        // Shuttle 2 goes to lodge 2 and lodge 3
+        rawAddToTable(dbconn, "ShuttleLodge", new String[]{String.valueOf(shuttle2), String.valueOf(restaurantID)});
+        rawAddToTable(dbconn, "ShuttleLodge", new String[]{String.valueOf(shuttle2), String.valueOf(schoolID)});
+
+        // Shuttle 3 goes to lodge 3 and lodge 1
+        rawAddToTable(dbconn, "ShuttleLodge", new String[]{String.valueOf(shuttle3), String.valueOf(visitorCenterID)});
+        rawAddToTable(dbconn, "ShuttleLodge", new String[]{String.valueOf(shuttle3), String.valueOf(schoolID)});
+
+        // * add equipment
+        // make 50 of each equipment type
+        for (int i = 0; i < 50; i++) {
+            for (int j = 0; j < 5; j++) {
+                int equipmentID = addRandomEquipment(dbconn, rand, j);
+                if (equipmentID == -1) {
+                    System.err.println("Error adding random equipment to the database");
+                    status = -1; // error
+                }
+            }
         }
-        return id; // Return the generated ID
+
+        // * add lifts
+        addLift(dbconn, "Lift A", "Beginner-Intermediate", Time.valueOf("09:00:00"), Time.valueOf("16:00:00"), "Open");
+        addLift(dbconn, "Lift B", "Beginner-Intermediate", Time.valueOf("08:30:00"), Time.valueOf("16:30:00"), "Open");
+        addLift(dbconn, "Lift C", "Intermediate-Expert", Time.valueOf("10:00:00"), Time.valueOf("15:00:00"), "Closed");
+        addLift(dbconn, "Lift D", "Intermediate-Expert", Time.valueOf("09:00:00"), Time.valueOf("17:00:00"), "Open");
+        String[] liftNames = new String[]{"Lift A", "Lift B", "Lift C", "Lift D"};
+        
+        // * add trails
+        for (int i = 0; i < 48; i++) {
+            String trailID = addRandomTrail(dbconn, rand, liftNames);
+            if (trailID == "-1") {
+                System.err.println("Error adding random trail to the database");
+                status = -1; // error
+            }
+        }
+
+        // * member loop
+        // makes 20 members
+        //   makes ski passes (80% active, 20% inactive) <- seperate chances
+        //   makes lesson orders (40% chance)
+        for (int i = 0; i < 20; i++) {
+            int memberID = addRandomMember(dbconn, rand); // add a random member to the database
+
+            // 20% chance for inactive ski pass
+            if (rand.nextInt(100) < 20) {
+                int inactiveSkiPassID = addRandomSkiPass(dbconn, rand, memberID, false, liftNames);
+                if (inactiveSkiPassID == -1) {
+                    System.err.println("Error adding inactive ski pass for member " + memberID);
+                    status = -1; // error
+                }
+            }
+            // seperate 80% chance for active ski pass
+            if (rand.nextInt(100) < 80) {
+                int activeSkiPassID = addRandomSkiPass(dbconn, rand, memberID, true, liftNames);
+                if (activeSkiPassID == -1) {
+                    System.err.println("Error adding active ski pass for member " + memberID);
+                    status = -1; // error
+                }
+            }
+
+            int lessonOrderID = 0;
+            if (rand.nextInt(100) < 40) { // 40% chance to make an order
+                lessonOrderID = makeRandomLessonOrder(dbconn, rand, memberID, new int[]{boardBeginnerID, boardIntermediateID, boardAdvancedID, skiBeginnerID, skiIntermediateID, skiAdvancedID});
+            }
+
+            if (status == -1 || lessonOrderID == -1 || memberID == -1) {
+                System.err.println("Error adding random entities to the database");
+
+                status = -1; // error
+            }
+        }
+
+        // * adds an extra 10 general worker employees
+        for (int i = 0; i < 10; i++) {
+            int employeeID = addRandomEmployee(dbconn, rand, "General Workers");
+            if (employeeID == -1) {
+                System.err.println("Error adding random employee to the database");
+                status = -1; // error
+            }
+        }
+
+        return status;
     }
+
+    // * adds an income source with random daily income for a given lodge and with given employees
+    // also creates EmployeeIncomeSource records for each employee for 30 days
+    private static int makeIncomeSourceRecords(Connection dbconn, Random rand, int[] employees, int lodgeID, String sourceName) {
+        int sourceID = -1;
+        for (int i = 0; i < 30; i++) {
+            long dayOffset = i * 24L * 60 * 60 * 1000; // Offset in milliseconds for each day
+            java.sql.Date day = new java.sql.Date(System.currentTimeMillis() - dayOffset);
+            sourceID = addRandomIncomeSource(dbconn, rand, lodgeID, sourceName, day);
+
+            if (sourceID == -1) {
+                System.err.println("Error adding income source for lodge " + lodgeID + " on day " + day + " for source " + sourceName);
+                return -1;
+            }
+
+            int[] pickedEmployees = new int[employees.length];
+            for (int j = 0; j < rand.nextInt(employees.length) + 1; j++) { // Pick a random number of employees
+                int employee;
+                while (true) {
+                    employee = rand.nextInt(employees.length);
+                    if (pickedEmployees[employee] == 0) { // Check if the employee has already been picked
+                        pickedEmployees[employee] = 1; // Mark as picked
+                        break;
+                    }
+                }
+                employee = employees[employee]; // Get the actual employee ID
+
+                int employeeIncomeSource = rawAddToTable(dbconn, "EmployeeIncomeSource", new String[]{
+                    String.valueOf(employee), String.valueOf(sourceID)});
+
+                if (employeeIncomeSource == -1) {
+                    System.err.println("Error adding employee income source for employee " + employee + " on day " + day);
+                    return -1;
+                }
+            }
+        }
+
+        return sourceID;
+    }
+
+    // * adds weekly sessions with random days and times (but same days/times per week); makes 5 weeks of sessions (2 back, current, and 2 forward)
+    private static int addRandomSessions(Connection dbconn, Random rand, int lessonID) {
+        // LessonSession: sessionID, startTime, endTime, lessonID
+
+        // Generate two random days of the week
+        int day1 = rand.nextInt(7) - 3; // Random day between -3 and 3 (3 days forward)
+        int day2 = rand.nextInt(7) - 3; // Random day between -3 and 3 (3 days forward)
+        while (day1 == day2) {
+            day2 = rand.nextInt(7) - 3; // Ensure the two days are different
+        }
+
+        int startHour = 10 + rand.nextInt(5); // Random hour between 10 and 14 (2 PM)
+        String startTime = String.format("%02d:00:00", startHour);
+        String endTime = String.format("%02d:00:00", startHour + 3); // 3 hours later
+
+        if (printDebug) {
+            System.out.println("Session Details: Day1: " + day1 + ", Day2: " + day2 + ", StartTime: " + startTime + ", EndTime: " + endTime);
+        }
+
+        int sessionID = -1;
+        // * add lesson sessions to the database for the past 2 weeks to 2 weeks forward
+        // * returns the number of sessions added
+        for (int i = -2; i <= 3; i++) { // Loop from 2 weeks ago (-14) to 2 weeks forward (+14)
+            // current day + i weeks + day days
+            java.sql.Date sessionDate1 = new java.sql.Date(System.currentTimeMillis() + i * 24L * 60 * 60 * 1000 * 7 + day1 * 24L * 60 * 60 * 1000); // Calculate the session date
+            java.sql.Date sessionDate2 = new java.sql.Date(System.currentTimeMillis() + i * 24L * 60 * 60 * 1000 * 7 + day2 * 24L * 60 * 60 * 1000); // Calculate the session date
+
+            // Add session for day 1
+            sessionID = addToTable(dbconn, "LessonSession", "sessionID", new String[]{
+                "TO_DATE('" + sessionDate1 + " " + startTime + "', 'YYYY-MM-DD HH24:MI:SS')",
+                "TO_DATE('" + sessionDate1 + " " + endTime + "', 'YYYY-MM-DD HH24:MI:SS')",
+                String.valueOf(lessonID)
+            });
+
+            if (sessionID == -1) {
+                System.err.println("Error adding session for lesson " + lessonID + " on date " + sessionDate1 + " or " + sessionDate2);
+                return -1; // error
+            }
+
+            // Add session for day 2
+            sessionID = addToTable(dbconn, "LessonSession", "sessionID", new String[]{
+                "TO_DATE('" + sessionDate2 + " " + startTime + "', 'YYYY-MM-DD HH24:MI:SS')",
+                "TO_DATE('" + sessionDate2 + " " + endTime + "', 'YYYY-MM-DD HH24:MI:SS')",
+                String.valueOf(lessonID)
+            });
+
+            if (sessionID == -1) {
+                System.err.println("Error adding session for lesson " + lessonID + " on date " + sessionDate1 + " or " + sessionDate2);
+                return -1; // error
+            }
+        }
+
+        return sessionID;
+    }
+
+    // * makes lesson orders for a member (and their lessonToOrders)
+    private static int makeRandomLessonOrder(Connection dbconn, Random rand, int memberID, int[] lessons) {
+        // LessonOrder: lessonOrderID, memberID, lessonsPurchased, remainingSessions
+        int lessonOrderID = -1;
+        int lessonAmount = rand.nextInt(10) + 1; // Random number of lessons between 1 and 10
+
+        int lessonsPurchased = lessonAmount; // Lessons purchased start as the total lessons purchased
+        int remainingSessions = rand.nextInt(lessonAmount); // Random number of remaining sessions
+
+        lessonOrderID = addToTable(dbconn, "LessonOrder", "lessonOrderID",
+                new String[]{
+                    String.valueOf(memberID),
+                    String.valueOf(lessonsPurchased),
+                    String.valueOf(remainingSessions)});
+        int i = 0;
+        boolean[] pickedLessons = new boolean[lessons.length]; // Track picked lessons
+        while (i < lessonAmount) {
+            int lessonIndex = rand.nextInt(lessons.length); // Pick a random lesson index
+
+            if (!pickedLessons[lessonIndex]) { // Check if the lesson has already been picked
+                pickedLessons[lessonIndex] = true; // Mark the lesson as picked
+
+                // add lesson to the order
+                int lessonID = lessons[lessonIndex];
+                int lessonToOrderID = rawAddToTable(dbconn, "LessonToOrder", new String[]{String.valueOf(lessonID), String.valueOf(lessonOrderID)});
+
+                if (lessonToOrderID == -1) {
+                    System.err.println("Error adding lesson to order for member " + memberID);
+                    return -1; // error
+                }
+            }
+
+            i++; // increment whether or not we end up adding a lesson to the order (for variety)
+        }
+
+        return lessonOrderID;
+    }
+
+    // * makes a lesson with a new random instructor, and returns the lessonID
+    private static int makeRandomLesson(Connection dbconn, Random rand, String lessonName, String certification) {
+        int instructorID = addRandomEmployee(dbconn, rand, "Instructor");
+        rawAddToTable(dbconn, "Instructor", new String[]{String.valueOf(instructorID), "'" + certification + "'"});
+        
+        int lessonID = addToTable(dbconn, "Lesson", "lessonID", new String[]{"'" + lessonName + "'", String.valueOf(instructorID)});
+
+        if (lessonID == -1) {
+            System.err.println("Error adding lesson: " + lessonName);
+            return -1;
+        }
+
+        int sessionID = addRandomSessions(dbconn, rand, lessonID);
+        if (sessionID == -1) {
+            System.err.println("Error adding sessions for lesson: " + lessonName);
+            return -1;
+        }
+
+        return lessonID;
+    }
+
 
     // * add lift to the database
     // * Lift: liftName, ability level, openTime, closeTime, status
@@ -1501,6 +1484,7 @@ public class DBMSSetup {
     }
 
     // * types: [0]ski boots [1]ski poles [2]skis [3]snowboards [4]helmet
+    // * adds an equipment of a given type, with a random size and status
     private static int addRandomEquipment(Connection dbconn, Random rand, int eqType) {
         // equipment: equipmentID, type, size, status
         // int eqType = rand.nextInt(types.length);
@@ -1612,22 +1596,15 @@ public class DBMSSetup {
         return result;
     }
 
-    private static String nextName() {
-        if (currentName >= names.length) {
-            return "outOfNames" + currentName; // if we run out of names, just return bob + number
-        }
-        return names[currentName++];
-    }
-
-    // * generic helper for adding random entities
+    
+    // * Random populate helpers!
     // * generates a random string of lowercase letters of the given length
-    // * if length is -1, generates a random length between 4 and 10
-    // * the first letter is capitalized
+    // if length is -1, generates a random length between 4 and 10, 1st letter capitalized
     private static String randStr(Random rand, int length) {
         if (length == -1) {
             length = rand.nextInt(7) + 4; // generate random length between 4 and 10
         }
-
+        
         char[] randomChars = new char[length];
         for (int i = 0; i < length; i++) {
             randomChars[i] = (char) ('a' + rand.nextInt(26)); // generate random lowercase letter
@@ -1635,571 +1612,50 @@ public class DBMSSetup {
         randomChars[0] = Character.toUpperCase(randomChars[0]); // capitalize the first letter
         return new String(randomChars);
     }
-
+    
+    // * gets the next name from the list of names
+    private static String nextName() {
+        if (currentName >= names.length) {
+            return "outOfNames" + currentName; // if we run out of names, just return bob + number
+        }
+        return names[currentName++];
+    }
+    
+    // * generates a random ID for the given table and ID name
     private static long randLong(Random rand, long min, long max) {
         return min + (long) (rand.nextDouble() * (max - min)); // generate random long between min and max
     }
+    
+    // * Adds a row to the table, creates a random primary key for it and returns it
+    // doesn't work on lift and trail tables (bc. no id primary key)
+    private static int addToTable(Connection dbconn, String tableName, String idName, String[] values) {
+        int id = generateRandomID(dbconn, tableName, idName); // Generate a random ID for the new entry
+
+        String sql = "INSERT INTO " + tableName + " VALUES (" + id + ", " + String.join(", ", values) + ")";
+        try (Statement stmt = dbconn.createStatement()) {
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            System.err.println("Error adding to table " + tableName + ": " + e.getMessage());
+            System.out.println("SQL Statement: " + sql);
+            return -1; // Return -1 in case of an error
+        }
+        return id; // Return the generated ID
+    }
+
+    // * adds a row to the table (doesn't generate a random ID for it)
+    private static int rawAddToTable(Connection dbconn, String tableName, String[] values) {
+        String sql = "INSERT INTO " + tableName + " VALUES (" + String.join(", ", values) + ")";
+        try (Statement stmt = dbconn.createStatement()) {
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            System.err.println("Error adding to table " + tableName + ": " + e.getMessage());
+            System.out.println("SQL Statement: " + sql);
+            return -1; // Return -1 in case of an error
+        }
+        return 0;
+    }
     // * random entity generator (end)
     // ---------------------------------------------------------------------------
-    // #endregion Populate tables
-
-    // #endregion Populate tables
-    // region // * update
-    // * update member in the database
-    public static boolean updateMember(Connection conn, int memberId, String newPhone, String newEmail,
-            String newEmergencyContact) {
-        String sql = "UPDATE Member SET phoneNumber = ?, email = ?, emergencyContact = ? WHERE memberID = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, newPhone);
-            pstmt.setString(2, newEmail);
-            pstmt.setString(3, newEmergencyContact);
-            pstmt.setInt(4, memberId);
-            return pstmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            System.err.println("Error updating member: " + e.getMessage());
-            return false;
-        }
-    }
-
-    public static boolean updateSkiPassUsage(Connection conn, int skiPassId, int newRemainingUses) {
-        // Check if pass is valid
-        String sqlCheck = "SELECT expirationDate, remainingUses FROM SkiPass WHERE skiPassID = ? AND expirationDate >= CURRENT_DATE";
-        try (PreparedStatement pstmt = conn.prepareStatement(sqlCheck)) {
-            pstmt.setInt(1, skiPassId); // get ski pass ID to update
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    Date expirationDate = rs.getDate("expirationDate");
-                    int remainingUses = rs.getInt("remainingUses");
-
-                    // Check if the pass is valid
-                    if (expirationDate.after(new java.util.Date()) && remainingUses >= 0 && newRemainingUses >= 0) {
-                        // update remaining uses, make sure then new value is non negative
-                        String updateSql = "UPDATE SkiPass SET remainingUses = ? WHERE skiPassID = ?";
-                        try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
-                            updateStmt.setInt(1, newRemainingUses); // Set the new remaining uses value
-                            updateStmt.setInt(2, skiPassId); // Set the ski pass ID
-                            return updateStmt.executeUpdate() > 0; // Execute the update
-                        }
-                    } else {
-                        System.out.println("Ski pass is either expired or has no remaining uses.");
-                        return false;
-                    }
-                } else {
-                    System.out.println("Ski pass not found.");
-                    return false;
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error updating ski pass usage: " + e.getMessage());
-            return false;
-        }
-    }
-
-    // Updates equipment type and size, and logs the change
-    public static boolean updateEquipment(Connection conn, int equipmentId, String newType, String newSize) {
-        String sql = "UPDATE Equipment SET type = ?, size = ? WHERE equipmentID = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, newType);
-            pstmt.setString(2, newSize);
-            pstmt.setInt(3, equipmentId);
-
-            int rowsAffected = pstmt.executeUpdate();
-            if (rowsAffected > 0) {
-                // Log the update in the equipmentUpdate table
-                String note = String.format("Updated equipment type to '%s' and size to '%s'", newType, newSize);
-                logEquipmentUpdate(conn, equipmentId, "UPDATE", note);
-                return true;
-            } else {
-                System.out.println("No equipment found with ID: " + equipmentId);
-                return false;
-            }
-        } catch (SQLException e) {
-            System.err.println("Error updating equipment: " + e.getMessage());
-            return false;
-        }
-    }
-
-    // * update lesson order in the database
-    public static boolean updateLessonUsage(Connection conn, int lessonOrderId, int newRemainingSessions) {
-        // Check if lesson order is valid
-        String sql = "UPDATE LessonOrder SET remainingSessions = ? WHERE orderID = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, newRemainingSessions); // Set the new remaining sessions value
-            pstmt.setInt(2, lessonOrderId); // Set the lesson order ID
-            return pstmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            System.err.println("Error updating lesson usage: " + e.getMessage());
-            return false;
-        }
-    }
-
-    // * update rental in the database
-    public static boolean updateEquipmentRental(Connection conn, int rentalId, boolean isReturned) {
-        String updateSql = "UPDATE EquipmentRental SET returnStatus = ? WHERE rentalID = ?";
-        // Check if rental is valid
-        try (PreparedStatement pstmt = conn.prepareStatement(updateSql)) {
-            // get rental ID to update and set return status
-            pstmt.setBoolean(1, isReturned);
-            pstmt.setInt(2, rentalId);
-            int rowsUpdated = pstmt.executeUpdate();
-            // if updated successfully, log the change
-            if (rowsUpdated > 0) {
-                logGearRentalUpdate(conn, rentalId, "UPDATE", "Return status updated to " + isReturned);
-                return true;
-            } else {
-                System.out.println("No rental record updated.");
-                return false;
-            }
-        } catch (SQLException e) {
-            System.err.println("Error updating equipment rental: " + e.getMessage());
-            return false;
-        }
-    }
-
-    // #endregion update
-    // #region // * delete
-    // * delete member in the database
-    public static boolean deleteMember(Connection conn, int memberId) {
-        try {
-            // Check active ski passes, rentals, lessons
-            String activeSkiPass = "SELECT COUNT(*) FROM SkiPass WHERE memberID = ? AND expirationDate >= CURRENT_DATE";
-            String activeRental = "SELECT COUNT(*) FROM EquipmentRental WHERE memberID = ? AND returnStatus = 'not returned'";
-            String activeLesson = "SELECT COUNT(*) FROM LessonOrder WHERE memberID = ? AND usedStatus = 'unused'";
-
-            if (hasOpenRecords(conn, activeSkiPass, memberId) ||
-                    hasOpenRecords(conn, activeRental, memberId) ||
-                    hasOpenRecords(conn, activeLesson, memberId)) {
-                System.out.println("Cannot delete member: active ski passes, open rentals, or unused lessons exist.");
-                return false;
-            }
-
-            conn.setAutoCommit(false);
-            try {
-                // Delete lessons
-                try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM LessonOrder WHERE memberID = ?")) {
-                    stmt.setInt(1, memberId);
-                    stmt.executeUpdate();
-                }
-
-                // Delete rentals
-                try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM EquipmentRental WHERE memberID = ?")) {
-                    stmt.setInt(1, memberId);
-                    stmt.executeUpdate();
-                }
-
-                // Delete ski passes
-                try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM SkiPass WHERE memberID = ?")) {
-                    stmt.setInt(1, memberId);
-                    stmt.executeUpdate();
-                }
-
-                // Delete member
-                try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM Member WHERE memberID = ?")) {
-                    stmt.setInt(1, memberId);
-                    stmt.executeUpdate();
-                }
-
-                conn.commit();
-                return true;
-            } catch (SQLException e) {
-                conn.rollback();
-                System.err.println("Error during deletion: " + e.getMessage());
-                return false;
-            } finally {
-                conn.setAutoCommit(true);
-            }
-        } catch (SQLException e) {
-            System.err.println("Error checking/deleting member: " + e.getMessage());
-            return false;
-        }
-    }
-
-    public static boolean deleteSkiPass(Connection conn, int skiPassId) {
-        // Check if pass is not expired and has remaining uses
-        String checkPassSql = "SELECT expirationDate, remainingUses, status FROM SkiPass WHERE skiPassID = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(checkPassSql)) {
-            pstmt.setInt(1, skiPassId); // Select the ski pass ID for review
-            try (ResultSet res = pstmt.executeQuery()) {
-                if (res.next()) {
-                    Date expirationDate = res.getDate("expirationDate"); // Get the expiration date
-                    int remainingUses = res.getInt("remainingUses"); // Get the remaining uses
-                    String status = res.getString("status"); // Get the current status
-
-                    // Check if the pass is already archived
-                    if ("archived".equals(status)) {
-                        System.out.println("Ski pass is already archived.");
-                        return true; // No further action needed
-                    }
-
-                    // Check if the ski pass is still valid (has remaining uses or not expired)
-                    if (remainingUses > 0 || expirationDate.after(new java.util.Date())) {
-                        System.out.println(
-                                "Ski pass cannot be archived. It is either still valid or has remaining uses.");
-                        return false;
-                    }
-
-                    // Archive the ski pass by updating the status to 'archived'
-                    String archiveSql = "UPDATE SkiPass SET status = 'archived' WHERE skiPassID = ?";
-                    try (PreparedStatement archiveStmt = conn.prepareStatement(archiveSql)) {
-                        archiveStmt.setInt(1, skiPassId);
-                        int rowsUpdated = archiveStmt.executeUpdate();
-                        return rowsUpdated > 0; // Return true if the pass was successfully archived
-                    }
-                } else {
-                    System.out.println("Ski pass not found.");
-                    return false;
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error archiving ski pass: " + e.getMessage());
-            return false;
-        }
-    }
-
-    public static boolean deleteEquipment(Connection conn, int equipmentId) {
-        String checkSql = "SELECT rentalStatus FROM EquipmentInventory WHERE equipmentID = ?";
-        try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
-            checkStmt.setInt(1, equipmentId);
-            try (ResultSet rs = checkStmt.executeQuery()) {
-                if (rs.next()) {
-                    String status = rs.getString("rentalStatus");
-                    if ("rented".equalsIgnoreCase(status) || "reserved".equalsIgnoreCase(status)) {
-                        System.out.println("Cannot delete equipment: it is currently rented or reserved.");
-                        return false;
-                    }
-
-                    // Archive equipment
-                    String archiveSql = "UPDATE EquipmentInventory SET status = 'archived' WHERE equipmentID = ?";
-                    try (PreparedStatement archiveStmt = conn.prepareStatement(archiveSql)) {
-                        archiveStmt.setInt(1, equipmentId);
-                        int updated = archiveStmt.executeUpdate();
-                        if (updated > 0) {
-                            logEquipmentUpdate(conn, equipmentId, "DELETE", "Equipment marked as archived.");
-                            return true;
-                        } else {
-                            System.out.println("Equipment deletion failed.");
-                            return false;
-                        }
-                    }
-                } else {
-                    System.out.println("Equipment not found.");
-                    return false;
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error deleting equipment: " + e.getMessage());
-            return false;
-        }
-    }
-
-    // * delete lesson order in the database
-    public static boolean deleteLessonOrder(Connection conn, int orderId) {
-        String checkSql = "SELECT remainingSessions, totalSessions FROM LessonOrder WHERE orderID = ?";
-        try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
-            checkStmt.setInt(1, orderId);
-            try (ResultSet rs = checkStmt.executeQuery()) {
-                if (rs.next()) {
-                    int remaining = rs.getInt("remainingSessions");
-                    int total = rs.getInt("totalSessions");
-                    if (remaining != total) {
-                        System.out.println("Cannot delete: some sessions have already been used.");
-                        return false;
-                    }
-
-                    String deleteSql = "DELETE FROM LessonOrder WHERE orderID = ?";
-                    try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
-                        deleteStmt.setInt(1, orderId);
-                        return deleteStmt.executeUpdate() > 0;
-                    }
-                } else {
-                    System.out.println("Lesson Order not found.");
-                    return false;
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error deleting lesson order: " + e.getMessage());
-            return false;
-        }
-    }
-
-    // * delete rental in the database
-    public static boolean deleteEquipmentRental(Connection conn, int rentalId) {
-        String checkSql = "SELECT returnStatus FROM EquipmentRental WHERE rentalID = ?";
-        try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
-            checkStmt.setInt(1, rentalId);
-            try (ResultSet rs = checkStmt.executeQuery()) {
-                if (rs.next()) {
-                    String status = rs.getString("returnStatus");
-                    if (!"not returned".equalsIgnoreCase(status)) {
-                        System.out.println("Cannot delete rental: equipment has already been returned/used.");
-                        return false;
-                    }
-                } else {
-                    System.out.println("Rental record not found.");
-                    return false;
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error checking rental status: " + e.getMessage());
-            return false;
-        }
-
-        // Proceed to delete
-        String deleteSql = "DELETE FROM EquipmentRental WHERE rentalID = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(deleteSql)) {
-            pstmt.setInt(1, rentalId);
-            int rowsDeleted = pstmt.executeUpdate();
-            if (rowsDeleted > 0) {
-                logGearRentalUpdate(conn, rentalId, "DELETE", "Rental record deleted.");
-                return true;
-            } else {
-                System.out.println("No rental record deleted.");
-                return false;
-            }
-        } catch (SQLException e) {
-            System.err.println("Error deleting equipment rental: " + e.getMessage());
-            return false;
-        }
-    }
-
-    // #endregion delete
-    // #region // * update/delete/helpers + logging
-    // checks if the member has open records in the database
-    // returns true if there are open records, false otherwise
-    private static boolean hasOpenRecords(Connection conn, String sql, int memberId) throws SQLException {
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, memberId); // Set the member ID in the prepared statement
-            try (ResultSet res = pstmt.executeQuery()) {
-                res.next();
-                return res.getInt(1) > 0; // Check if there are any open records
-            }
-        }
-    }
-
-    // Logs the gear rental update in the gearRentalUpdate table
-    public static void logGearRentalUpdate(Connection conn, int rentalId, String type, String notes) {
-        // Generate a new record ID for the gear rental update
-        int nextId = generateRandomID(conn, "GearRentalUpdate", "rentalUpdateID");
-        if (nextId == -1) {
-            System.err.println("Failed to generate a unique gear rental update ID.");
-            return;
-        }
-
-        String sql = "INSERT INTO GearRentalUpdate (rentalUpdateID, rentalID, type, notes, updateDate) VALUES (?, ?, ?, ?, CURRENT_DATE)";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, nextId); // Unique update ID
-            pstmt.setInt(2, rentalId); // Rental ID
-            pstmt.setString(3, type); // Type of update ("ADD", "UPDATE", "DELETE")
-            pstmt.setString(4, notes); // Description of change
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("Error logging gear rental update: " + e.getMessage());
-        }
-    }
-
-    // logs changes in the equipment in the equipmentUpdate table
-    public static void logEquipmentUpdate(Connection conn, int equipmentId, String type, String note) {
-        int nextId = generateRandomID(conn, "EquipmentUpdate", "equipmentUpdateID");
-        if (nextId == -1) {
-            System.err.println("Failed to generate a unique equipment update ID.");
-            return;
-        }
-
-        String sql = "INSERT INTO EquipmentUpdate (equipmentUpdateID, equipmentID, type, notes, updateDate) VALUES (?, ?, ?, ?, CURRENT_DATE)";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, nextId); // Unique update ID
-            pstmt.setInt(2, equipmentId); // Equipment ID
-            pstmt.setString(3, type); // Type of update ("ADD", "UPDATE", "DELETE")
-            pstmt.setString(4, note); // Description of what changed
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("Error logging equipment update: " + e.getMessage());
-        }
-    }
-
-    // #endregion // * update/delete/helpers + logging
-    // region // * queries
-
-    // for a member, get all purchased ski lessons, the number of remaining
-    // sessions, the lesson time, and lesson instructor
-    public static void getMemberLessons(Connection conn, int memberId) {
-        String sql = """
-                    SELECT
-                        LessonOrder.remainingSessions,
-                        Instructor.name,
-                        LessonOrder.scheduledTime
-                    FROM
-                        LessonOrder
-                    JOIN LessonToOrder ON LessonOrder.orderID = LessonToOrder.orderID
-                    JOIN Lesson ON LessonToOrder.LessonID = Lesson.LessonID
-                    JOIN Instructor ON Lesson.instructorID = Instructor.instructorID
-                    WHERE
-                        LessonOrder.memberID = ?
-                """;
-
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, memberId);
-
-            try (ResultSet res = pstmt.executeQuery()) {
-                System.out.println("Lessons for member ID " + memberId + ":");
-                while (res.next()) {
-                    int remaining = res.getInt("remainingSessions");
-                    String instructor = res.getString("instructorName");
-                    Timestamp time = res.getTimestamp("scheduledTime");
-
-                    System.out.println("Sessions remaining: " + remaining + ", Instructor: " + instructor
-                            + ", Scheduled at: " + time);
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error fetching member lessons: " + e.getMessage());
-        }
-    }
-
-    // for a ski pass, list all lift usage, and gear rentals with timestamps and
-    // return status
-    public static void getSkiPassInfo(Connection conn, int skiPassID) {
-        // get
-        String sql = """
-                    SELECT
-                        LiftPassUsage.liftName,
-                        LiftPassUsage.timeUsed
-                    FROM
-                        LiftPassUsage
-                    WHERE
-                        LiftPassUsage.skiPassID = ?
-                """;
-        String sql2 = """
-                    SELECT
-                        GearRental.startDate,
-                        GearRental.returnStatus,
-                    FROM
-                        GearRental
-                    WHERE
-                        GearRental.skiPassID = ?
-                """;
-
-        try (
-                PreparedStatement pstmt = conn.prepareStatement(sql);
-                PreparedStatement pstmt2 = conn.prepareStatement(sql2);) {
-            pstmt.setInt(1, skiPassID);
-            pstmt2.setInt(1, skiPassID);
-
-            try (ResultSet res = pstmt.executeQuery()) {
-                System.out.println("Lift usage for ski pass ID " + skiPassID + ":");
-                while (res.next()) {
-                    String liftName = res.getString("liftName");
-                    Timestamp timeUsed = res.getTimestamp("timeUsed");
-
-                    System.out.println("Lift: " + liftName + ", Time used: " + timeUsed);
-                }
-            }
-
-            try (ResultSet res2 = pstmt2.executeQuery()) {
-                System.out.println("Gear rentals for ski pass ID " + skiPassID + ":");
-                while (res2.next()) {
-                    Date startDate = res2.getDate("startDate");
-                    String returnStatus = res2.getString("returnStatus");
-
-                    System.out.println("Start date: " + startDate + ", Return status: " + returnStatus);
-                }
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Error fetching ski pass info: " + e.getMessage());
-        }
-    }
-
-    // for intermediates, list all open trails, their category, and the lifts that
-    // service them
-    public static void getTrailINfo(Connection conn) {
-        String sql = """
-                    SELECT
-                        Trail.trailName,
-                        Trail.category,
-                        Lift.liftName
-                    FROM
-                        Trail
-                    JOIN TrailLift ON Trail.trailName = TrailLift.trailName
-                    JOIN Lift ON TrailLift.liftName = Lift.liftName
-                    WHERE
-                        (Trail.difficulty = 'Beginner-Intermediate' OR Trail.difficulty = 'Intermediate-Expert')
-                        AND Trail.status = 'Open'
-                        AND Lift.status = 'Open'
-                """;
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            ResultSet res = pstmt.executeQuery();
-            while (res.next()) {
-                String trailName = res.getString("trailName");
-                String category = res.getString("category");
-                String liftName = res.getString("liftName");
-
-                System.out.println("Trail: " + trailName + ", Category: " + category + ", Lift: " + liftName);
-            }
-        } catch (SQLException e) {
-            System.err.println("Error fetching trail info: " + e.getMessage());
-        }
-    }
-
-    // given a memberID, do they have a ski pass?, do they have a rental?, if so
-    // what equipment do they own?
-    public static void getMemberInfo(Connection conn, int MemberID) {
-        String sql = """
-                    SELECT
-                        SkiPass.skiPassID
-                    FROM
-                        SkiPass
-                    WHERE
-                        SkiPass.memberID = ?
-                """;
-        String sql2 = """
-                Select
-                    GearRental.RentalID
-                FROM
-                    GEAR
-                WhHERE
-                    GearRental.memberID = ?
-                """;
-        String sql3 = """
-                    SELECT
-                        Equipment.type,
-                        Equipment.size
-                    FROM
-                        Equipment
-                    JOIN GearRental ON RentalEquipment.rentalID = GearRental.rentalID
-                    WHERE
-                        GearRental.memberID = ?
-                """;
-        boolean hasSkiPass = false;
-        boolean hasRental = false;
-
-        try (
-                PreparedStatement pstmt = conn.prepareStatement(sql);) {
-            hasSkiPass = true;
-        } catch (SQLException e) {
-            System.err.println("Error fetching skiPass: " + e.getMessage());
-        }
-        if (hasSkiPass) {
-            try (
-                    PreparedStatement pstmt2 = conn.prepareStatement(sql2);) {
-                hasRental = true;
-            } catch (SQLException e) {
-                System.err.println("Error fetching rental: " + e.getMessage());
-            }
-        } else {
-            System.out.println("Member does not have a ski pass.");
-        }
-        if (hasRental) {
-            try (
-                    PreparedStatement pstmt3 = conn.prepareStatement(sql3);) {
-
-            } catch (SQLException e) {
-                System.err.println("Error fetching equipment: " + e.getMessage());
-            }
-        } else {
-            System.out.println("Member does not have a rental.");
-        }
-    }
+    // #endregion // * Populate tables
 
 }
