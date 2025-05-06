@@ -1,4 +1,3 @@
-
 import java.sql.*;
 import java.util.Scanner;
 
@@ -546,7 +545,7 @@ public class Interface {
             // int equipmentID = generateRandomID(conn, "Equipment", "equipmentID"); //
             // generate ID for the new equipment
 
-            String sql = "INSERT INTO Equipment (equipmentID, type, size, status) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO Equipment (equipmentID, type, eSize, status) VALUES (?, ?, ?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setInt(1, equipmentID);
                 pstmt.setString(2, type);
@@ -635,7 +634,7 @@ public class Interface {
     // * update member in the database
     public static boolean updateMember(Connection conn, int memberId, String newPhone, String newEmail,
             String newEmergencyContact) {
-        String sql = "UPDATE Member SET phoneNumber = ?, email = ?, emergencyContact = ? WHERE memberID = ?";
+        String sql = "UPDATE Member SET phone = ?, email = ?, emergencyContact = ? WHERE memberID = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, newPhone);
             pstmt.setString(2, newEmail);
@@ -685,7 +684,7 @@ public class Interface {
 
     // Updates equipment type and size, and logs the change
     public static boolean updateEquipment(Connection conn, int equipmentId, String newType, String newSize) {
-        String sql = "UPDATE Equipment SET type = ?, size = ? WHERE equipmentID = ?";
+        String sql = "UPDATE Equipment SET type = ?, eSize = ? WHERE equipmentID = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, newType);
             pstmt.setString(2, newSize);
@@ -710,7 +709,7 @@ public class Interface {
     // * update lesson order in the database
     public static boolean updateLessonUsage(Connection conn, int lessonOrderId, int newRemainingSessions) {
         // Check if lesson order is valid
-        String sql = "UPDATE LessonOrder SET remainingSessions = ? WHERE orderID = ?";
+        String sql = "UPDATE LessonOrder SET remainingSessions = ? WHERE lessonOrderID = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, newRemainingSessions); // Set the new remaining sessions value
             pstmt.setInt(2, lessonOrderId); // Set the lesson order ID
@@ -723,7 +722,7 @@ public class Interface {
 
     // * update rental in the database
     public static boolean updateEquipmentRental(Connection conn, int rentalId, boolean isReturned) {
-        String updateSql = "UPDATE EquipmentRental SET returnStatus = ? WHERE rentalID = ?";
+        String updateSql = "UPDATE GearRental SET returnStatus = ? WHERE rentalID = ?";
         // Check if rental is valid
         try (PreparedStatement pstmt = conn.prepareStatement(updateSql)) {
             // get rental ID to update and set return status
@@ -751,7 +750,7 @@ public class Interface {
         try {
             // Check active ski passes, rentals, lessons
             String activeSkiPass = "SELECT COUNT(*) FROM SkiPass WHERE memberID = ? AND expirationDate >= CURRENT_DATE";
-            String activeRental = "SELECT COUNT(*) FROM EquipmentRental WHERE memberID = ? AND returnStatus = 'not returned'";
+            String activeRental = "SELECT COUNT(*) FROM GearRental WHERE memberID = ? AND returnStatus = 'not returned'";
             String activeLesson = "SELECT COUNT(*) FROM LessonOrder WHERE memberID = ? AND usedStatus = 'unused'";
 
             if (hasOpenRecords(conn, activeSkiPass, memberId)
@@ -770,7 +769,7 @@ public class Interface {
                 }
 
                 // Delete rentals
-                try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM EquipmentRental WHERE memberID = ?")) {
+                try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM GearRental WHERE memberID = ?")) {
                     stmt.setInt(1, memberId);
                     stmt.executeUpdate();
                 }
@@ -845,19 +844,19 @@ public class Interface {
     }
 
     public static boolean deleteEquipment(Connection conn, int equipmentId) {
-        String checkSql = "SELECT rentalStatus FROM EquipmentInventory WHERE equipmentID = ?";
+        String checkSql = "SELECT status FROM Equipment WHERE equipmentID = ?";
         try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
             checkStmt.setInt(1, equipmentId);
             try (ResultSet rs = checkStmt.executeQuery()) {
                 if (rs.next()) {
-                    String status = rs.getString("rentalStatus");
+                    String status = rs.getString("status");
                     if ("rented".equalsIgnoreCase(status) || "reserved".equalsIgnoreCase(status)) {
                         System.out.println("Cannot delete equipment: it is currently rented or reserved.");
                         return false;
                     }
 
                     // Archive equipment
-                    String archiveSql = "UPDATE EquipmentInventory SET status = 'archived' WHERE equipmentID = ?";
+                    String archiveSql = "UPDATE Equipment SET status = 'archived' WHERE equipmentID = ?";
                     try (PreparedStatement archiveStmt = conn.prepareStatement(archiveSql)) {
                         archiveStmt.setInt(1, equipmentId);
                         int updated = archiveStmt.executeUpdate();
@@ -882,7 +881,7 @@ public class Interface {
 
     // * delete lesson order in the database
     public static boolean deleteLessonOrder(Connection conn, int orderId) {
-        String checkSql = "SELECT remainingSessions, totalSessions FROM LessonOrder WHERE orderID = ?";
+        String checkSql = "SELECT remainingSessions, totalSessions FROM LessonOrder WHERE lessonOrderID = ?";
         try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
             checkStmt.setInt(1, orderId);
             try (ResultSet rs = checkStmt.executeQuery()) {
@@ -894,7 +893,7 @@ public class Interface {
                         return false;
                     }
 
-                    String deleteSql = "DELETE FROM LessonOrder WHERE orderID = ?";
+                    String deleteSql = "DELETE FROM LessonOrder WHERE lessonOrderID = ?";
                     try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
                         deleteStmt.setInt(1, orderId);
                         return deleteStmt.executeUpdate() > 0;
@@ -912,7 +911,7 @@ public class Interface {
 
     // * delete rental in the database
     public static boolean deleteEquipmentRental(Connection conn, int rentalId) {
-        String checkSql = "SELECT returnStatus FROM EquipmentRental WHERE rentalID = ?";
+        String checkSql = "SELECT returnStatus FROM GearRental WHERE rentalID = ?";
         try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
             checkStmt.setInt(1, rentalId);
             try (ResultSet rs = checkStmt.executeQuery()) {
@@ -933,7 +932,7 @@ public class Interface {
         }
 
         // Proceed to delete
-        String deleteSql = "DELETE FROM EquipmentRental WHERE rentalID = ?";
+        String deleteSql = "DELETE FROM GearRental WHERE rentalID = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(deleteSql)) {
             pstmt.setInt(1, rentalId);
             int rowsDeleted = pstmt.executeUpdate();
