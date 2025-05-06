@@ -5,7 +5,7 @@ This is the final project for our Database Design class.
 We were given an application domain and a list of queries that must be possible.
 The Schema, planning, and application were done without further assistance.
 
-To run in lectura:
+To run in lectura (start lectura first):
 
     Add the Oracle JDBC driver to your CLASSPATH environment variable using:
         export CLASSPATH=/usr/lib/oracle/19.8/client64/lib/ojdbc8.jar:${CLASSPATH}

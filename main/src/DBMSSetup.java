@@ -1088,48 +1088,6 @@ public class DBMSSetup {
         }
     }
 
-    /*
-     * public static void addMyEntities(Connection dbconn) {
-     * // * John doe
-     * int mID1 = addMember(dbconn, "John Doe", "2344234234", "johnDoe@gmail.com",
-     * java.sql.Date.valueOf("1990-05-15"),
-     * "1234567890");
-     * 
-     * // ski pass: skiPassID, price, timeOfPurchase, expDate, totalUses,
-     * // remainingUses, passType, status, memberID, rentalID
-     * // int skiPass1 = addSkiPass(dbconn, 300, java.sql.Date.valueOf("2025-3-01"),
-     * // java.sql.Date.valueOf("2026-3-01"), 10, 2,
-     * // "Season", "Active", mID1, -1);
-     * addMember(dbconn, "Gavin Borquez", "5202629618", "gavin.borquez@gmail.com",
-     * java.sql.Date.valueOf("2006-10-17"),
-     * "borquezgabriel@gmail.com");
-     * addMember(dbconn, "Ahen Dridman", "5120000100",
-     * "we.will.lose.wahwahwah@gmail.com",
-     * java.sql.Date.valueOf("2000-01-01"), "1234567890");
-     * addMember(dbconn, "Thegor Rilla", "5329999999", "a.whole.gorilla@gmail.com",
-     * java.sql.Date.valueOf("2000-01-01"), "1234567890");
-     * addMember(dbconn, "Andrew Johnson", "5206683030", "ajbecerra@arizona.edu",
-     * java.sql.Date.valueOf("2000-05-14"),
-     * "lmusngi@arizona.edu");
-     * addMember(dbconn, "Steve Jobs", "5551234567", "appleinc@gmail.com",
-     * java.sql.Date.valueOf("1957-01-01"),
-     * "Mike Wazowski");
-     * addMember(dbconn, "Dennis Rodman", "5552345678", "bulls96@gmail.com",
-     * java.sql.Date.valueOf("1970-01-01"),
-     * "Mike Wazowski");
-     * addMember(dbconn, "Stephen Curry", "5553456789", "chefCurry@gmail.com",
-     * java.sql.Date.valueOf("1987-01-01"),
-     * "Mike Wazowski");
-     * addMember(dbconn, "LeBron James", "5554567890", "kingJames@gmail.com",
-     * java.sql.Date.valueOf("1960-01-01"),
-     * "Mike Wazowski");
-     * addMember(dbconn, "Zebulon Powell", "5555678901", "steezLord@gmail.com",
-     * java.sql.Date.valueOf("2000-01-01"),
-     * "Mike Wazowski");
-     * 
-     * // *
-     * }
-     */
     // * random entity generator
     // ------------------------------------------------------------------------------
     // rand param for seeding

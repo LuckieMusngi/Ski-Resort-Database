@@ -1426,7 +1426,7 @@ public class Interface {
 
                 }
                 if (!hasRentals) {
-                    System.out.println("No gear rentals found for ski pass ID " + skiPassID);
+                    System.out.println("No active gear rentals found for ski pass ID " + skiPassID);
                 }
             }
 
@@ -1484,7 +1484,7 @@ public class Interface {
                     FROM
                         SkiPass
                     WHERE
-                        memberID = ?
+                        memberID = ? AND SkiPass.status = 'Active'
                 """;
 
         String sql2 = """
@@ -1495,6 +1495,8 @@ public class Interface {
                     JOIN GearRental ON SkiPass.skiPassID = GearRental.skiPassID
                     WHERE
                         SkiPass.memberID = ?
+                        AND SkiPass.status = 'Active'
+                        AND GearRental.status = 'Active'
                 """;
 
         String sql3 = "SELECT Equipment.type, Equipment.eSize, GearRental.returnStatus "
