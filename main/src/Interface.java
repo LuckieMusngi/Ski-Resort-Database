@@ -41,6 +41,8 @@ public class Interface {
         }
     }
 
+    
+
     private static int prepareModifyRecords(Connection dbconn, Scanner scanner) {
         System.out.println("Which record would you like to add/update/delete?");
         char entity = ' '; // arbitrary, gets set in following loop
