@@ -1122,7 +1122,7 @@ public class Interface {
                         LessonOrder.scheduledTime
                     FROM
                         LessonOrder
-                    JOIN LessonToOrder ON LessonOrder.orderID = LessonToOrder.orderID
+                    JOIN LessonToOrder ON LessonOrder.lessonOrderID = LessonToOrder.lessonOrderID
                     JOIN Lesson ON LessonToOrder.LessonID = Lesson.LessonID
                     JOIN Instructor ON Lesson.instructorID = Instructor.instructorID
                     JOIN Employee ON Instructor.employeeID = Employee.employeeID
