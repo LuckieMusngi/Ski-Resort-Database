@@ -1,9 +1,13 @@
 # Ski-Resort-Database
-Collaborative database project between Luckie Musngi and Aj Becerra
+Collaborative JDBC Oracle database project between Luckie Musngi and Aj Becerra
 
-This is the final project for our Database Design class.
+This is the final project for our Database Design class, where we build a database–driven information management system from ground
+up.
+
+This project contains a script that creates tables (with a function to populate it with random valid tuples), and another containing a user interface that can queuer the database.
+
 We were given an application domain and a list of queries that must be possible.
-The Schema, planning, and application were done without further assistance.
+The Schema, planning, and application were all done without further assistance.
 
 To run in lectura (start lectura first):
 
