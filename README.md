@@ -1,8 +1,7 @@
 # Ski-Resort-Database
 Collaborative JDBC Oracle database project between Luckie Musngi and Aj Becerra
 
-This is the final project for our Database Design class, where we build a database–driven information management system from ground
-up.
+We built a database–driven information management system from the ground up.
 
 This project contains a script that creates tables (with a function to populate it with random valid tuples), and another containing a user interface that can queuer the database.
 
@@ -11,29 +10,34 @@ The Schema, planning, and application were all done without further assistance.
 
 To run in lectura (start lectura first):
 
-    Add the Oracle JDBC driver to your CLASSPATH environment variable using:
-        export CLASSPATH=/usr/lib/oracle/19.8/client64/lib/ojdbc8.jar:${CLASSPATH}
+To run the project:
 
-    Compile DBMSetup.java using:
+    Ensure you have Java (JDK 8+) installed
+
+    Ensure you have access to an Oracle database
+        (local installation or remote server)
+
+    Download the Oracle JDBC driver (ojdbc8.jar)
+
+    Add the Oracle JDBC driver to your CLASSPATH environment variable:
+        export CLASSPATH=/path/to/ojdbc8.jar:${CLASSPATH}
+
+    Compile DBMSSetup.java and Interface.java:
         javac DBMSSetup.java
-
-    Compile Interface.java using:
         javac Interface.java
-    
-    Run DBMSSetup.java
+
+    Run DBMSSetup.java:
         java DBMSSetup
 
-    This will both create the tables and populate them with values
+        This will create the tables and populate them with sample data
 
-    Run Interface.java
+    Note: You can also populate them yourself within Interface.java
+
+    Run Interface.java:
         java Interface
 
-    Follow the instructions of this interface to modify and query the database
-
-
-    For both of these, you will need to sign in with your oracle username and password
-
-    I highly recommend u take advantage of print tables!
+    Follow the instructions in the command-line interface to
+    query and modify the database
 
 Workload Distribution:
     
