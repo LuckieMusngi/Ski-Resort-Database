@@ -1,5 +1,5 @@
 # Ski-Resort-Database
-Collaborative JDBC Oracle database project by Luckie Musngi and Aj Becerra
+Complete Mock-Ski-Resort SQL JDBC Oracle database by Luckie Musngi and Aj Becerra, complete with an interface and diagrams
 
 We built a database–driven information management system from the ground up.
 
